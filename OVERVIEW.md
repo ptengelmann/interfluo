@@ -30,6 +30,30 @@ Interfluo automates 2 and 3. The fee-earner uploads the pack, the model produces
 - Case management (LEAP, Actionstep — Interfluo integrates, doesn't replace).
 - Completion ledger / SDLT filing / Land Registry submission.
 
+### Liability positioning
+
+Interfluo is **drafting infrastructure for a regulated professional**. The product, the marketing, and the in-product copy must all consistently say the same thing:
+
+| Interfluo IS | Interfluo is NOT |
+|---|---|
+| A drafting aid | A source of legal advice |
+| A first-draft generator the fee-earner reviews | A reviewer or decision-maker |
+| A grounded summariser with citations to source pages | A substitute for reading the pack |
+| A defensible audit trail of what the fee-earner accepted, edited, or rejected, when | The accountable professional under the SRA Code of Conduct |
+
+**Operational consequence:**
+
+- The Report on Title and any enquiries Interfluo drafts are **the fee-earner's work product the moment they accept, edit, or send them**. The act of acceptance is logged in the audit table with `who / what / when` — this is the firm's record of professional review.
+- Every export carries a footer disclaimer that the document was drafted by Interfluo and that review by the supervising fee-earner is required before issue.
+- The UI footer and the matter workspace both surface the same disclaimer at all times.
+- In the COLP/COFA pilot conversation, the answer to *"what happens when the AI misses something material and the fee-earner accepts the draft?"* is: *the fee-earner is the responsible professional, the same way they would be if a paralegal had prepared the first draft. The audit trail proves the order and timing of every action. Interfluo doesn't sign anything, doesn't send anything, doesn't certify anything.*
+
+What this means for sales copy:
+
+- Never describe Interfluo as "drafting Reports on Title for the client" — it drafts **for the fee-earner**, who reviews and adopts.
+- Never claim regulatory compliance for the fee-earner — Interfluo's compliance (ISO 27001, Cyber Essentials Plus, GDPR) is about Interfluo's *own* posture as a data processor.
+- Never use the word "approve" for any AI action. The fee-earner approves; Interfluo proposes.
+
 ---
 
 ## 2. Architecture
@@ -178,6 +202,8 @@ Public:
 - **Reasoning fallback**: `claude-opus-4-7` configurable for complex leasehold / commercial matters (not yet auto-triggered).
 - **No fine-tuning at MVP** — entirely prompt engineering + structured outputs (tool use) + retrieval-free context.
 
+> **In customer-facing materials:** abstract these IDs. Use "frontier LLM with cross-document reasoning" or "industry-leading large language model" rather than naming the specific provider or version. The capabilities here will evolve faster than any pitch deck.
+
 ### Stage-by-stage
 
 #### Classification (`packages/ai/src/classify.ts`)
@@ -239,7 +265,7 @@ The single biggest prompt-quality lever. The prompts contain **strict anti-patte
 | Concern | Today | Production target (per `README.md`) |
 |---|---|---|
 | **Hosting** | Local dev (Mac/Linux) | AWS `eu-west-2` (London) — UK data residency for SRA compliance |
-| **API runtime** | `tsx watch` on Node 24 | ECS Fargate containers; queue-driven workers (SQS) |
+| **API runtime** | `tsx watch` on Node 20+ | ECS Fargate containers; queue-driven workers (SQS) |
 | **Web hosting** | `next dev` | Vercel or Fargate behind ALB |
 | **Database** | Neon Postgres (eu-west-2 pooler) | RDS Postgres Multi-AZ |
 | **Blob storage** | Local filesystem (`.data/blobs`) | S3 (SSE-KMS, per-firm prefix; Glacier after 7 years) |
