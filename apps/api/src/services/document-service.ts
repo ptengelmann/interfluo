@@ -10,9 +10,27 @@ export interface IngestedDocument {
   pages: PageContent[];
 }
 
-// If average chars per page is below this, the PDF is most likely scanned
-// (no text layer) and we fall back to vision OCR.
-const OCR_TRIGGER_AVG_CHARS_PER_PAGE = 60;
+// Per-page threshold — a page below this is treated as scanned / no text layer.
+// Picking a low number favours over-triggering OCR (cost ~$0.005/page) over
+// silently missing critical pages buried in a mixed-mode pack.
+const OCR_PAGE_CHAR_THRESHOLD = 60;
+
+interface OcrDecision {
+  shouldOcr: boolean;
+  reason: 'all_pages_dense' | 'low_density_pages_detected';
+  lowDensityPages: { pageNumber: number; chars: number }[];
+}
+
+function decideOcr(pages: PageContent[]): OcrDecision {
+  const lowDensityPages = pages
+    .filter((p) => p.text.length < OCR_PAGE_CHAR_THRESHOLD)
+    .map((p) => ({ pageNumber: p.pageNumber, chars: p.text.length }));
+  return {
+    shouldOcr: lowDensityPages.length > 0,
+    reason: lowDensityPages.length > 0 ? 'low_density_pages_detected' : 'all_pages_dense',
+    lowDensityPages,
+  };
+}
 
 export async function ingestDocument(
   ctx: AppContext,
@@ -46,13 +64,19 @@ export async function ingestDocument(
   }));
 
   let extractionMethod: 'text' | 'ocr' = 'text';
-  const averageChars =
-    pages.length > 0 ? extraction.totalCharacters / pages.length : 0;
+  const decision = pages.length > 0 ? decideOcr(pages) : { shouldOcr: false, reason: 'all_pages_dense' as const, lowDensityPages: [] };
 
-  if (averageChars < OCR_TRIGGER_AVG_CHARS_PER_PAGE && pages.length > 0) {
+  if (decision.shouldOcr) {
     ctx.logger.info(
-      { documentId, filename, averageChars, pageCount: pages.length },
-      'Low text density — falling back to vision OCR',
+      {
+        documentId,
+        filename,
+        pageCount: pages.length,
+        lowDensityCount: decision.lowDensityPages.length,
+        lowDensityPages: decision.lowDensityPages,
+        averageChars: pages.length > 0 ? extraction.totalCharacters / pages.length : 0,
+      },
+      'Low-density pages detected — running vision OCR on the document',
     );
     try {
       const dimensions = pages.map((p) => ({
@@ -60,17 +84,35 @@ export async function ingestDocument(
         width: p.width,
         height: p.height,
       }));
-      pages = await ocrPdf(ctx.ai, buffer, dimensions);
+      const ocrPages = await ocrPdf(ctx.ai, buffer, dimensions);
+      // Prefer the OCR text on pages that originally had low density; keep the
+      // existing text-layer content on pages that already had good text (it's
+      // usually more accurate than vision OCR for native digital text).
+      const lowPages = new Set(decision.lowDensityPages.map((p) => p.pageNumber));
+      const ocrByPage = new Map(ocrPages.map((p) => [p.pageNumber, p]));
+      pages = pages.map((p) => {
+        if (!lowPages.has(p.pageNumber)) return p;
+        const ocr = ocrByPage.get(p.pageNumber);
+        return ocr && ocr.text.length > p.text.length ? ocr : p;
+      });
       extractionMethod = 'ocr';
-      const ocrChars = pages.reduce((s, p) => s + p.text.length, 0);
+      const ocrCharGains = decision.lowDensityPages.reduce((s, lp) => {
+        const ocrText = ocrByPage.get(lp.pageNumber)?.text ?? '';
+        return s + Math.max(0, ocrText.length - lp.chars);
+      }, 0);
       ctx.logger.info(
-        { documentId, filename, ocrChars, pageCount: pages.length },
+        {
+          documentId,
+          filename,
+          pagesEnhanced: decision.lowDensityPages.length,
+          charsRecovered: ocrCharGains,
+        },
         'OCR complete',
       );
     } catch (err) {
-      ctx.logger.error({ err, documentId, filename }, 'OCR failed — using empty text');
-      // Keep the (effectively empty) text-layer pages; downstream extraction
-      // will simply produce 0 facts for this doc.
+      ctx.logger.error({ err, documentId, filename }, 'OCR failed — using existing text');
+      // Keep whatever text we had; downstream extraction may still produce
+      // useful results from the readable pages.
     }
   }
 
