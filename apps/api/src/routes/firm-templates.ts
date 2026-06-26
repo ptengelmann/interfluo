@@ -8,6 +8,7 @@ import {
   listTemplates,
   uploadTemplate,
 } from '../services/firm-template-service';
+import { recordAudit } from '../services/audit-service';
 
 export function buildFirmTemplatesRouter(ctx: AppContext) {
   const app = new Hono();
@@ -19,7 +20,7 @@ export function buildFirmTemplatesRouter(ctx: AppContext) {
   });
 
   app.post('/', async (c) => {
-    const { firmId } = getAuth(c);
+    const { firmId, userId } = getAuth(c);
     const form = await c.req.formData();
     const file = form.get('file');
     const rawKind = form.get('kind');
@@ -32,16 +33,32 @@ export function buildFirmTemplatesRouter(ctx: AppContext) {
     }
     const buffer = Buffer.from(await file.arrayBuffer());
     const template = await uploadTemplate(ctx, firmId, kindResult.data, file.name, buffer);
+    await recordAudit(ctx, {
+      firmId,
+      userId,
+      eventType: 'firm_template.uploaded',
+      targetType: 'firm_template',
+      targetId: template.id,
+      payload: { kind: template.kind, filename: template.filename, sizeBytes: template.sizeBytes },
+    });
     return c.json({ template }, 201);
   });
 
   app.delete('/:kind', async (c) => {
-    const { firmId } = getAuth(c);
+    const { firmId, userId } = getAuth(c);
     const kindResult = firmTemplateKindSchema.safeParse(c.req.param('kind'));
     if (!kindResult.success) {
       throw new ApiError('invalid_kind', 'kind must be "report" or "enquiries"', 422);
     }
     await deleteTemplate(ctx, firmId, kindResult.data);
+    await recordAudit(ctx, {
+      firmId,
+      userId,
+      eventType: 'firm_template.deleted',
+      targetType: 'firm_template',
+      targetId: kindResult.data,
+      payload: { kind: kindResult.data },
+    });
     return c.body(null, 204);
   });
 

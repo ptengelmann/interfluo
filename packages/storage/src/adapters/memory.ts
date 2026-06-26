@@ -1,4 +1,5 @@
 import type {
+  AuditEvent,
   Document,
   Enquiry,
   ExtractedFact,
@@ -21,6 +22,7 @@ export function createInMemoryRepository(): MatterRepository {
   const reports = new Map<string, ReportOnTitle>();
   const pipelines = new Map<string, MatterPipelineStatus>();
   const firmTemplates = new Map<string, FirmTemplate>(); // key: firmId:kind
+  const auditEvents: AuditEvent[] = [];
 
   const indexEnquiry = (e: Enquiry) => {
     let set = enquiryByMatter.get(e.matterId);
@@ -187,6 +189,17 @@ export function createInMemoryRepository(): MatterRepository {
       if (!existing) return null;
       firmTemplates.delete(key);
       return existing;
+    },
+
+    async appendAuditEvent(event) {
+      auditEvents.push(event);
+    },
+    async listAuditEvents({ firmId, matterId, limit }) {
+      const filtered = auditEvents.filter(
+        (e) => e.firmId === firmId && (matterId === undefined || e.matterId === matterId),
+      );
+      filtered.sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+      return typeof limit === 'number' ? filtered.slice(0, limit) : filtered;
     },
   };
 }

@@ -1,5 +1,7 @@
 import { and, asc, desc, eq } from 'drizzle-orm';
 import type {
+  AuditEvent,
+  AuditEventType,
   Citation,
   Document,
   DocumentType,
@@ -19,6 +21,7 @@ import type {
 import type { MatterRepository } from '../types';
 import { createDatabase, type Database } from '../db/client';
 import {
+  auditEvents as auditEventsTable,
   documents as documentsTable,
   enquiries as enquiriesTable,
   extractedFacts as factsTable,
@@ -27,6 +30,7 @@ import {
   pipelineStatus as pipelineTable,
   reports as reportsTable,
   riskFlags as risksTable,
+  type DbAuditEvent,
   type DbDocument,
   type DbEnquiry,
   type DbFact,
@@ -133,6 +137,20 @@ function toFirmTemplate(row: DbFirmTemplate): FirmTemplate {
     storageKey: row.storageKey,
     sizeBytes: row.sizeBytes,
     uploadedAt: iso(row.uploadedAt) ?? row.uploadedAt,
+  };
+}
+
+function toAuditEvent(row: DbAuditEvent): AuditEvent {
+  return {
+    id: row.id,
+    firmId: row.firmId,
+    matterId: row.matterId,
+    userId: row.userId,
+    eventType: row.eventType as AuditEventType,
+    targetType: row.targetType,
+    targetId: row.targetId,
+    payload: row.payload as Record<string, unknown> | null,
+    createdAt: iso(row.createdAt) ?? row.createdAt,
   };
 }
 
@@ -506,6 +524,33 @@ function makeRepository(db: Database['db']): MatterRepository {
         .returning();
       const row = rows[0];
       return row ? toFirmTemplate(row) : null;
+    },
+
+    async appendAuditEvent(event) {
+      await db.insert(auditEventsTable).values({
+        id: event.id,
+        firmId: event.firmId,
+        matterId: event.matterId,
+        userId: event.userId,
+        eventType: event.eventType,
+        targetType: event.targetType,
+        targetId: event.targetId,
+        payload: event.payload,
+        createdAt: event.createdAt,
+      });
+    },
+
+    async listAuditEvents({ firmId, matterId, limit }) {
+      const where = matterId
+        ? and(eq(auditEventsTable.firmId, firmId), eq(auditEventsTable.matterId, matterId))
+        : eq(auditEventsTable.firmId, firmId);
+      const base = db
+        .select()
+        .from(auditEventsTable)
+        .where(where)
+        .orderBy(desc(auditEventsTable.createdAt));
+      const rows = typeof limit === 'number' ? await base.limit(limit) : await base;
+      return rows.map(toAuditEvent);
     },
   };
 }

@@ -134,6 +134,38 @@ export interface FirmTemplate {
   uploadedAt: string;
 }
 
+export type AuditEventType =
+  | 'matter.created'
+  | 'matter.updated'
+  | 'matter.deleted'
+  | 'document.uploaded'
+  | 'document.reclassified'
+  | 'document.deleted'
+  | 'pipeline.started'
+  | 'pipeline.completed'
+  | 'pipeline.failed'
+  | 'enquiry.accepted'
+  | 'enquiry.rejected'
+  | 'enquiry.suggested'
+  | 'enquiry.edited'
+  | 'enquiry.reverted'
+  | 'export.enquiries'
+  | 'export.report'
+  | 'firm_template.uploaded'
+  | 'firm_template.deleted';
+
+export interface AuditEvent {
+  id: string;
+  firmId: string;
+  matterId: string | null;
+  userId: string;
+  eventType: AuditEventType;
+  targetType: string | null;
+  targetId: string | null;
+  payload: Record<string, unknown> | null;
+  createdAt: string;
+}
+
 export type ApiError = {
   code: string;
   message: string;

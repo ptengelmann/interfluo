@@ -127,6 +127,22 @@ export const firmTemplates = pgTable('firm_templates', {
     .default(sql`now()`),
 });
 
+// Append-only. The application never UPDATEs or DELETEs rows in this table.
+// The audit trail is the firm's liability shield for the COLP conversation.
+export const auditEvents = pgTable('audit_events', {
+  id: text('id').primaryKey(),
+  firmId: text('firm_id').notNull(),
+  matterId: text('matter_id'),
+  userId: text('user_id').notNull(),
+  eventType: text('event_type').notNull(),
+  targetType: text('target_type'),
+  targetId: text('target_id'),
+  payload: jsonb('payload'),
+  createdAt: timestamp('created_at', { withTimezone: true, mode: 'string' })
+    .notNull()
+    .default(sql`now()`),
+});
+
 export type DbMatter = typeof matters.$inferSelect;
 export type DbDocument = typeof documents.$inferSelect;
 export type DbFact = typeof extractedFacts.$inferSelect;
@@ -135,3 +151,4 @@ export type DbEnquiry = typeof enquiries.$inferSelect;
 export type DbReport = typeof reports.$inferSelect;
 export type DbPipelineStatus = typeof pipelineStatus.$inferSelect;
 export type DbFirmTemplate = typeof firmTemplates.$inferSelect;
+export type DbAuditEvent = typeof auditEvents.$inferSelect;

@@ -1,4 +1,5 @@
 import type {
+  AuditEvent,
   CreateMatterInput,
   Document,
   Enquiry,
@@ -129,6 +130,9 @@ export function createInterfluoClient(opts: InterfluoClientOptions) {
 
     deleteFirmTemplate: (kind: FirmTemplateKind) =>
       request<void>(`/v1/firm-templates/${kind}`, { method: 'DELETE' }),
+
+    listAuditEvents: (matterId: string) =>
+      request<{ events: AuditEvent[] }>(`/v1/matters/${matterId}/audit`),
   };
 }
 

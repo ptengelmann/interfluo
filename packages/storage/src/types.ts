@@ -1,4 +1,5 @@
 import type {
+  AuditEvent,
   Document,
   Enquiry,
   ExtractedFact,
@@ -45,6 +46,14 @@ export interface MatterRepository {
   getFirmTemplate(firmId: string, kind: FirmTemplateKind): Promise<FirmTemplate | null>;
   upsertFirmTemplate(template: FirmTemplate): Promise<FirmTemplate>;
   deleteFirmTemplate(firmId: string, kind: FirmTemplateKind): Promise<FirmTemplate | null>;
+
+  // Append-only. Never expose update/delete.
+  appendAuditEvent(event: AuditEvent): Promise<void>;
+  listAuditEvents(opts: {
+    firmId: string;
+    matterId?: string;
+    limit?: number;
+  }): Promise<AuditEvent[]>;
 }
 
 export interface BlobStore {

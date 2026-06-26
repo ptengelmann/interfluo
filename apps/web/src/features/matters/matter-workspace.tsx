@@ -19,11 +19,12 @@ import { DocumentsPanel } from './documents-panel';
 import { RisksPanel } from './risks-panel';
 import { MatterProvider } from './matter-context';
 import { EditMatterDialog } from './edit-matter-dialog';
+import { AuditPanel } from './audit-panel';
 import { ViewerProvider } from '@/features/viewer/viewer-context';
 import { DocumentViewerDrawer } from '@/features/viewer/document-viewer-drawer';
 import { formatDateTime } from '@/lib/format';
 
-type Tab = 'enquiries' | 'report' | 'risks' | 'documents';
+type Tab = 'enquiries' | 'report' | 'risks' | 'documents' | 'activity';
 
 const POLL_INTERVAL_MS = 2500;
 
@@ -242,6 +243,9 @@ function MatterWorkspaceInner({ matterId }: { matterId: string }) {
             {documents.length}
           </Badge>
         </TabButton>
+        <TabButton active={tab === 'activity'} onClick={() => setTab('activity')}>
+          Activity
+        </TabButton>
       </div>
 
       <div>
@@ -282,6 +286,7 @@ function MatterWorkspaceInner({ matterId }: { matterId: string }) {
         {tab === 'documents' && (
           <DocumentsPanel matterId={matterId} documents={documents} onChanged={load} />
         )}
+        {tab === 'activity' && <AuditPanel matterId={matterId} />}
       </div>
 
       <EditMatterDialog
