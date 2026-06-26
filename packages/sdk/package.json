@@ -1,0 +1,23 @@
+{
+  "name": "@interfluo/sdk",
+  "version": "0.0.0",
+  "private": true,
+  "type": "module",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "scripts": {
+    "typecheck": "tsc --noEmit",
+    "lint": "biome check src",
+    "clean": "rm -rf dist .turbo"
+  },
+  "dependencies": {
+    "@interfluo/core": "workspace:*"
+  },
+  "devDependencies": {
+    "@interfluo/tsconfig": "workspace:*",
+    "typescript": "^5.7.3"
+  }
+}

@@ -1,0 +1,71 @@
+export const DOCUMENT_TYPES = [
+  'draft_contract',
+  'tr1',
+  'title_register',
+  'title_plan',
+  'ta6',
+  'ta7',
+  'ta10',
+  'lease',
+  'llc1',
+  'con29',
+  'drainage_water_search',
+  'environmental_search',
+  'chancel_search',
+  'mining_search',
+  'flood_search',
+  'mortgage_offer',
+  'epc',
+  'unknown',
+] as const;
+
+export const DOCUMENT_TYPE_LABELS: Record<(typeof DOCUMENT_TYPES)[number], string> = {
+  draft_contract: 'Draft Contract',
+  tr1: 'TR1 Transfer Deed',
+  title_register: 'Title Register',
+  title_plan: 'Title Plan',
+  ta6: 'TA6 Property Information Form',
+  ta7: 'TA7 Leasehold Information Form',
+  ta10: 'TA10 Fittings & Contents Form',
+  lease: 'Lease',
+  llc1: 'LLC1 Local Land Charges Search',
+  con29: 'CON29 Enquiries of Local Authority',
+  drainage_water_search: 'Drainage & Water Search',
+  environmental_search: 'Environmental Search',
+  chancel_search: 'Chancel Repair Search',
+  mining_search: 'Mining Search',
+  flood_search: 'Flood Risk Search',
+  mortgage_offer: 'Mortgage Offer',
+  epc: 'Energy Performance Certificate',
+  unknown: 'Unclassified Document',
+};
+
+export const RISK_SEVERITIES = ['critical', 'high', 'medium', 'low', 'informational'] as const;
+
+export const ENQUIRY_CATEGORIES = [
+  'title',
+  'boundaries',
+  'covenants',
+  'easements',
+  'planning',
+  'building_regulations',
+  'environmental',
+  'utilities',
+  'leasehold',
+  'searches',
+  'fixtures',
+  'occupiers',
+  'disputes',
+  'other',
+] as const;
+
+export const MATTER_STATUSES = [
+  'draft',
+  'ingesting',
+  'extracting',
+  'analysing',
+  'generating',
+  'ready_for_review',
+  'completed',
+  'failed',
+] as const;

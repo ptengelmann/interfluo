@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <defs>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@1&amp;display=swap');
+      .mk { font-family: 'Instrument Serif', Georgia, serif; font-style: italic; }
+    </style>
+  </defs>
+  <text class="mk" x="52" y="70" font-size="82" text-anchor="middle" fill="#17181C" letter-spacing="-2">if</text>
+</svg>

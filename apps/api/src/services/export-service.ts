@@ -1,0 +1,511 @@
+import {
+  AlignmentType,
+  Document as DocxDocument,
+  Footer,
+  Header,
+  HeadingLevel,
+  LevelFormat,
+  Packer,
+  PageOrientation,
+  Paragraph,
+  TextRun,
+} from 'docx';
+import Docxtemplater from 'docxtemplater';
+import PizZip from 'pizzip';
+import type {
+  Citation,
+  Enquiry,
+  Matter,
+  ReportOnTitle,
+} from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS } from '@interfluo/core';
+import type { AppContext } from '../context';
+import { ApiError } from '../errors';
+import { loadTemplateBuffer } from './firm-template-service';
+
+const TITLE_FONT = 'Calibri';
+const BODY_FONT = 'Calibri';
+
+const CATEGORY_LABELS: Record<Enquiry['category'], string> = {
+  title: 'Title',
+  boundaries: 'Boundaries',
+  covenants: 'Covenants',
+  easements: 'Easements',
+  planning: 'Planning',
+  building_regulations: 'Building Regulations',
+  environmental: 'Environmental',
+  utilities: 'Utilities',
+  leasehold: 'Leasehold',
+  searches: 'Searches',
+  fixtures: 'Fixtures',
+  occupiers: 'Occupiers',
+  disputes: 'Disputes',
+  other: 'Other',
+};
+
+function citationText(c: Citation): string {
+  return `${DOCUMENT_TYPE_LABELS[c.documentType]}, p. ${c.pageNumber}`;
+}
+
+function todayUk(): string {
+  return new Date().toLocaleDateString('en-GB', {
+    day: '2-digit',
+    month: 'long',
+    year: 'numeric',
+  });
+}
+
+function matterHeading(matter: Matter, subtitle: string): Paragraph[] {
+  return [
+    new Paragraph({
+      alignment: AlignmentType.LEFT,
+      children: [
+        new TextRun({
+          text: matter.reference,
+          font: TITLE_FONT,
+          size: 28,
+          bold: true,
+        }),
+      ],
+      spacing: { after: 80 },
+    }),
+    new Paragraph({
+      alignment: AlignmentType.LEFT,
+      children: [
+        new TextRun({
+          text: subtitle,
+          font: TITLE_FONT,
+          size: 22,
+          color: '4A4842',
+        }),
+      ],
+      spacing: { after: 60 },
+    }),
+    new Paragraph({
+      alignment: AlignmentType.LEFT,
+      children: [
+        new TextRun({
+          text: `${matter.propertyAddress ?? 'No property address provided'}  ·  ${
+            matter.tenure[0]?.toUpperCase() + matter.tenure.slice(1)
+          }  ·  Drafted ${todayUk()}`,
+          font: BODY_FONT,
+          size: 18,
+          color: '736F64',
+        }),
+      ],
+      spacing: { after: 320 },
+    }),
+  ];
+}
+
+function footer() {
+  return new Footer({
+    children: [
+      new Paragraph({
+        alignment: AlignmentType.CENTER,
+        children: [
+          new TextRun({
+            text:
+              'Drafted by Interfluo from the contract pack. Review by the supervising fee-earner required before issue.',
+            font: BODY_FONT,
+            size: 16,
+            color: '736F64',
+            italics: true,
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
+function header(matter: Matter) {
+  return new Header({
+    children: [
+      new Paragraph({
+        alignment: AlignmentType.RIGHT,
+        children: [
+          new TextRun({
+            text: matter.reference,
+            font: TITLE_FONT,
+            size: 18,
+            color: '736F64',
+          }),
+        ],
+      }),
+    ],
+  });
+}
+
+function buildEnquiriesDoc(matter: Matter, enquiries: Enquiry[]): DocxDocument {
+  const sendable = enquiries.filter((e) => e.status === 'accepted' || e.status === 'edited');
+  const byCategory = new Map<Enquiry['category'], Enquiry[]>();
+  for (const e of sendable) {
+    const list = byCategory.get(e.category) ?? [];
+    list.push(e);
+    byCategory.set(e.category, list);
+  }
+
+  const children: Paragraph[] = [
+    ...matterHeading(matter, 'Enquiries to seller’s solicitor'),
+  ];
+
+  if (sendable.length === 0) {
+    children.push(
+      new Paragraph({
+        children: [
+          new TextRun({
+            text:
+              'No enquiries have been accepted for issue. Review and accept the drafted enquiries in Interfluo before exporting.',
+            font: BODY_FONT,
+            size: 22,
+            italics: true,
+            color: '736F64',
+          }),
+        ],
+      }),
+    );
+  } else {
+    let counter = 0;
+    for (const [category, list] of byCategory) {
+      children.push(
+        new Paragraph({
+          heading: HeadingLevel.HEADING_2,
+          spacing: { before: 320, after: 120 },
+          children: [
+            new TextRun({
+              text: CATEGORY_LABELS[category],
+              font: TITLE_FONT,
+              size: 26,
+              bold: true,
+            }),
+          ],
+        }),
+      );
+
+      for (const e of list) {
+        counter += 1;
+        const question = e.editedQuestion ?? e.question;
+        children.push(
+          new Paragraph({
+            spacing: { before: 160, after: 80 },
+            children: [
+              new TextRun({
+                text: `${counter}. `,
+                font: BODY_FONT,
+                size: 22,
+                bold: true,
+              }),
+              new TextRun({
+                text: question,
+                font: BODY_FONT,
+                size: 22,
+              }),
+            ],
+          }),
+        );
+
+        if (e.citations.length > 0) {
+          children.push(
+            new Paragraph({
+              spacing: { after: 40 },
+              children: [
+                new TextRun({
+                  text: `Sources: ${e.citations.map(citationText).join('; ')}`,
+                  font: BODY_FONT,
+                  size: 18,
+                  italics: true,
+                  color: '736F64',
+                }),
+              ],
+            }),
+          );
+        }
+      }
+    }
+  }
+
+  return new DocxDocument({
+    creator: 'Interfluo',
+    title: `${matter.reference} — Enquiries`,
+    description: 'Enquiries drafted from contract pack',
+    styles: {
+      default: {
+        document: {
+          run: { font: BODY_FONT, size: 22 },
+        },
+      },
+    },
+    numbering: {
+      config: [
+        {
+          reference: 'enquiries-numbering',
+          levels: [{ level: 0, format: LevelFormat.DECIMAL, text: '%1.', alignment: AlignmentType.LEFT }],
+        },
+      ],
+    },
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { orientation: PageOrientation.PORTRAIT },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
+          },
+        },
+        headers: { default: header(matter) },
+        footers: { default: footer() },
+        children,
+      },
+    ],
+  });
+}
+
+function buildReportDoc(matter: Matter, report: ReportOnTitle): DocxDocument {
+  const children: Paragraph[] = [
+    ...matterHeading(matter, 'Report on Title — draft'),
+    new Paragraph({
+      heading: HeadingLevel.HEADING_2,
+      spacing: { before: 0, after: 120 },
+      children: [
+        new TextRun({
+          text: 'Executive summary',
+          font: TITLE_FONT,
+          size: 26,
+          bold: true,
+        }),
+      ],
+    }),
+    new Paragraph({
+      spacing: { after: 240 },
+      children: [
+        new TextRun({
+          text: report.summary,
+          font: BODY_FONT,
+          size: 22,
+        }),
+      ],
+    }),
+  ];
+
+  for (const section of report.sections) {
+    children.push(
+      new Paragraph({
+        heading: HeadingLevel.HEADING_2,
+        spacing: { before: 320, after: 120 },
+        children: [
+          new TextRun({
+            text: section.heading,
+            font: TITLE_FONT,
+            size: 26,
+            bold: true,
+          }),
+        ],
+      }),
+    );
+
+    for (const para of section.body.split(/\n{2,}/)) {
+      const text = para.trim();
+      if (!text) continue;
+      children.push(
+        new Paragraph({
+          spacing: { after: 160 },
+          children: [
+            new TextRun({
+              text,
+              font: BODY_FONT,
+              size: 22,
+            }),
+          ],
+        }),
+      );
+    }
+
+    if (section.citations.length > 0) {
+      children.push(
+        new Paragraph({
+          spacing: { after: 80 },
+          children: [
+            new TextRun({
+              text: `Sources: ${section.citations.map(citationText).join('; ')}`,
+              font: BODY_FONT,
+              size: 18,
+              italics: true,
+              color: '736F64',
+            }),
+          ],
+        }),
+      );
+    }
+  }
+
+  return new DocxDocument({
+    creator: 'Interfluo',
+    title: `${matter.reference} — Report on Title`,
+    description: 'Report on Title drafted from contract pack',
+    styles: {
+      default: {
+        document: {
+          run: { font: BODY_FONT, size: 22 },
+        },
+      },
+    },
+    sections: [
+      {
+        properties: {
+          page: {
+            size: { orientation: PageOrientation.PORTRAIT },
+            margin: { top: 1440, right: 1440, bottom: 1440, left: 1440 },
+          },
+        },
+        headers: { default: header(matter) },
+        footers: { default: footer() },
+        children,
+      },
+    ],
+  });
+}
+
+export interface DocxArtifact {
+  filename: string;
+  buffer: Buffer;
+}
+
+function safeFilename(reference: string, suffix: string): string {
+  const cleaned = reference
+    .replace(/[^A-Za-z0-9\-_. ]+/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+  const base = cleaned.length > 0 ? cleaned : 'matter';
+  return `${base} — ${suffix}.docx`;
+}
+
+export async function exportEnquiries(ctx: AppContext, matterId: string): Promise<DocxArtifact> {
+  const matter = await ctx.repo.getMatter(matterId);
+  if (!matter) throw new ApiError('matter_not_found', 'Matter not found', 404);
+  const enquiries = await ctx.repo.listEnquiries(matterId);
+  const doc = buildEnquiriesDoc(matter, enquiries);
+  const buffer = await Packer.toBuffer(doc);
+  return {
+    filename: safeFilename(matter.reference, 'Enquiries'),
+    buffer,
+  };
+}
+
+export async function exportReport(ctx: AppContext, matterId: string): Promise<DocxArtifact> {
+  const matter = await ctx.repo.getMatter(matterId);
+  if (!matter) throw new ApiError('matter_not_found', 'Matter not found', 404);
+  const report = await ctx.repo.getReport(matterId);
+  if (!report) {
+    throw new ApiError(
+      'report_not_ready',
+      'No Report on Title has been generated yet. Run the pipeline first.',
+      409,
+    );
+  }
+
+  const templateBuffer = await loadTemplateBuffer(ctx, matter.firmId, 'report');
+  if (templateBuffer) {
+    try {
+      const enquiries = await ctx.repo.listEnquiries(matterId);
+      const buffer = renderFirmReportTemplate(templateBuffer, matter, report, enquiries);
+      return {
+        filename: safeFilename(matter.reference, 'Report on Title'),
+        buffer,
+      };
+    } catch (err) {
+      ctx.logger.error({ err, firmId: matter.firmId, matterId }, 'Firm template render failed; falling back to house template');
+    }
+  }
+
+  const doc = buildReportDoc(matter, report);
+  const buffer = await Packer.toBuffer(doc);
+  return {
+    filename: safeFilename(matter.reference, 'Report on Title'),
+    buffer,
+  };
+}
+
+interface TemplateMergeData {
+  matter: {
+    reference: string;
+    propertyAddress: string;
+    buyerName: string;
+    sellerName: string;
+    tenure: string;
+  };
+  report: {
+    summary: string;
+    generatedAt: string;
+    modelVersion: string;
+    sections: { heading: string; body: string; sources: string }[];
+  };
+  enquiries: {
+    number: number;
+    category: string;
+    question: string;
+    rationale: string;
+    sources: string;
+    priority: number;
+  }[];
+  meta: {
+    draftedDate: string;
+    enquiriesCount: number;
+    sectionCount: number;
+  };
+}
+
+function buildMergeData(
+  matter: Matter,
+  report: ReportOnTitle,
+  enquiries: Enquiry[],
+): TemplateMergeData {
+  const sendable = enquiries.filter((e) => e.status === 'accepted' || e.status === 'edited');
+  return {
+    matter: {
+      reference: matter.reference,
+      propertyAddress: matter.propertyAddress ?? '',
+      buyerName: matter.buyerName ?? '',
+      sellerName: matter.sellerName ?? '',
+      tenure: matter.tenure,
+    },
+    report: {
+      summary: report.summary,
+      generatedAt: report.generatedAt,
+      modelVersion: report.modelVersion,
+      sections: report.sections.map((s) => ({
+        heading: s.heading,
+        body: s.body,
+        sources: s.citations.map(citationText).join('; '),
+      })),
+    },
+    enquiries: sendable.map((e, i) => ({
+      number: i + 1,
+      category: CATEGORY_LABELS[e.category],
+      question: e.editedQuestion ?? e.question,
+      rationale: e.rationale,
+      sources: e.citations.map(citationText).join('; '),
+      priority: e.priority,
+    })),
+    meta: {
+      draftedDate: todayUk(),
+      enquiriesCount: sendable.length,
+      sectionCount: report.sections.length,
+    },
+  };
+}
+
+function renderFirmReportTemplate(
+  templateBuffer: Buffer,
+  matter: Matter,
+  report: ReportOnTitle,
+  enquiries: Enquiry[],
+): Buffer {
+  const zip = new PizZip(templateBuffer);
+  const doc = new Docxtemplater(zip, {
+    paragraphLoop: true,
+    linebreaks: true,
+    delimiters: { start: '{{', end: '}}' },
+    nullGetter: () => '',
+  });
+  doc.render(buildMergeData(matter, report, enquiries));
+  return doc.getZip().generate({ type: 'nodebuffer', compression: 'DEFLATE' });
+}
