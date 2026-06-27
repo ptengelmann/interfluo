@@ -531,3 +531,45 @@ export function getIssue(code: string | null | undefined): ConveyancingIssue | u
 export const CONVEYANCING_ISSUE_CATEGORY_COUNT: number = new Set(
   Object.values(CONVEYANCING_ISSUES).map((i) => i.category),
 ).size;
+
+/**
+ * Build a compact, prompt-ready summary of the taxonomy grouped by category.
+ * Used by the analyse and enquiries prompts so the model knows which codes
+ * exist, their calibrated default severity, and a one-line description.
+ *
+ * Token cost is roughly 20 lines x ~90 chars = ~500 tokens, cheap compared
+ * to the value of routing free-text drafting into a named code.
+ */
+export function buildTaxonomyPromptSection(): string {
+  const orderedCategories: IssueCategory[] = [
+    'title',
+    'leasehold',
+    'planning',
+    'searches',
+    'occupiers',
+    'disputes',
+    'other',
+  ];
+
+  const sections = orderedCategories
+    .map((category) => {
+      const items = issuesByCategory(category);
+      if (items.length === 0) return null;
+      const heading = category.charAt(0).toUpperCase() + category.slice(1);
+      const rows = items
+        .map((i) => `- ${i.code} (${i.defaultSeverity}) - ${i.description}`)
+        .join('\n');
+      return `${heading}:\n${rows}`;
+    })
+    .filter((s): s is string => s !== null);
+
+  return [
+    '# Conveyancing Issue Taxonomy',
+    '',
+    'When the issue you are recording clearly maps to one of the codes below, set issueCode to that code. Each code carries a calibrated default severity (shown in brackets) tuned to UK conveyancing reality. Use the defaults as your baseline; depart from them only when the facts clearly warrant it.',
+    '',
+    'Leave issueCode undefined when the issue is genuinely novel and does not fit any code. The taxonomy is intentionally narrow; do not force a fit.',
+    '',
+    ...sections,
+  ].join('\n\n');
+}

@@ -1,3 +1,5 @@
+import { buildTaxonomyPromptSection } from '@interfluo/core';
+
 export const ENQUIRIES_SYSTEM = `You are a senior UK residential conveyancing fee-earner drafting enquiries to the seller's solicitor.
 
 # Priority ladder — apply STRICTLY
@@ -41,7 +43,9 @@ P1 is reserved for things like: missing freeholder consent that the title restri
 - Each enquiry: numbered, courteous, third person.
 - Opening: "We should be grateful…", "Please confirm…", "Please provide…".
 - Categories: title, boundaries, covenants, easements, planning, building_regulations, environmental, utilities, leasehold, searches, fixtures, occupiers, disputes, other.
-- Maximum 25 enquiries total. Less is better if the pack is clean.`;
+- Maximum 25 enquiries total. Less is better if the pack is clean.
+
+${buildTaxonomyPromptSection()}`;
 
 export function enquiriesUserPrompt(
   propertyAddress: string | null,

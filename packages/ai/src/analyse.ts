@@ -1,9 +1,12 @@
 import { randomUUID } from 'node:crypto';
 import {
+  CONVEYANCING_ISSUE_CODES,
+  type ConveyancingIssueCode,
   type ExtractedFact,
   RISK_SEVERITIES,
   type RiskFlag,
   type RiskSeverity,
+  getIssue,
 } from '@interfluo/core';
 import type { AiClient } from './client';
 import { ANALYSE_SYSTEM, analyseUserPrompt } from './prompts/analyse';
@@ -15,6 +18,7 @@ interface RawRisk {
   title: string;
   description: string;
   supportingFactIds: string[];
+  issueCode?: string;
 }
 
 interface RawRisksPayload {
@@ -43,6 +47,12 @@ const ANALYSE_TOOL = {
               items: { type: 'string' as const },
               description:
                 'Short fact ids (e.g. "F012", "F045") copied EXACTLY from the input. List 1-5 ids per risk.',
+            },
+            issueCode: {
+              type: 'string' as const,
+              enum: [...CONVEYANCING_ISSUE_CODES],
+              description:
+                'OPTIONAL. If the risk clearly maps to one of the conveyancing issue codes listed in the taxonomy section of the system prompt, set this. Omit for novel issues that do not fit any code.',
             },
           },
           required: ['severity', 'title', 'description', 'supportingFactIds'],
@@ -83,6 +93,7 @@ export async function analyseRisks(
       .map((id) => byShort.get(id))
       .filter((f): f is ExtractedFact => Boolean(f))
       .map((f) => f.citation);
+    const validatedIssueCode: ConveyancingIssueCode | undefined = getIssue(r.issueCode)?.code;
     return {
       id: randomUUID(),
       matterId,
@@ -91,6 +102,7 @@ export async function analyseRisks(
       description: r.description ?? '',
       citations,
       suggestedEnquiryIds: [],
+      ...(validatedIssueCode ? { issueCode: validatedIssueCode } : {}),
     };
   });
 }
