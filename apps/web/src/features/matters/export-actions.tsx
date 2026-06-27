@@ -3,7 +3,7 @@
 import { useAuth } from '@clerk/nextjs';
 import { useCallback, useState } from 'react';
 import type { Enquiry, EnquiryCategory, ReportOnTitle } from '@interfluo/core';
-import { DOCUMENT_TYPE_LABELS } from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
 import { Button } from '@/components/ui/button';
 import { API_BASE_URL } from '@/lib/api';
 
@@ -46,7 +46,7 @@ function formatEnquiriesAsText(enquiries: Enquiry[]): string {
       lines.push(`${counter}. ${question}`);
       if (e.citations.length > 0) {
         const sources = e.citations
-          .map((c) => `${DOCUMENT_TYPE_LABELS[c.documentType]}, p. ${c.pageNumber}`)
+          .map((c) => `${DOCUMENT_TYPE_LABELS[c.documentType]}, ${formatPages(c.pageNumbers)}`)
           .join('; ');
         lines.push(`   Sources: ${sources}`);
       }

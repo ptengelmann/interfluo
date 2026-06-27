@@ -118,7 +118,7 @@ export async function generateEnquiries(
     const allCitations: Citation[] = [...factCitations, ...riskCitations];
     const seen = new Set<string>();
     const citations = allCitations.filter((c) => {
-      const key = `${c.documentId}:${c.pageNumber}`;
+      const key = `${c.documentId}:${c.pageNumbers.join('-')}`;
       if (seen.has(key)) return false;
       seen.add(key);
       return true;

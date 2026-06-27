@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import type { Citation } from '@interfluo/core';
-import { DOCUMENT_TYPE_LABELS } from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
 import { cn } from '@/lib/cn';
 import { useCurrentMatterId } from '@/features/matters/matter-context';
 import { useViewer } from '@/features/viewer/viewer-context';
@@ -11,7 +11,7 @@ export function CitationChip({ citation }: { citation: Citation }) {
   const [hover, setHover] = useState(false);
   const matterId = useCurrentMatterId();
   const { open: openViewer } = useViewer();
-  const label = `${DOCUMENT_TYPE_LABELS[citation.documentType]} · p.${citation.pageNumber}`;
+  const label = `${DOCUMENT_TYPE_LABELS[citation.documentType]} · ${formatPages(citation.pageNumbers)}`;
   const canOpen = Boolean(matterId);
 
   return (

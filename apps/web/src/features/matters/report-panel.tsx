@@ -36,7 +36,7 @@ export function ReportPanel({
               {s.citations.length > 0 && (
                 <div className="mt-3 flex flex-wrap gap-2">
                   {s.citations.map((c, idx) => (
-                    <CitationChip key={`${c.documentId}-${c.pageNumber}-${idx}`} citation={c} />
+                    <CitationChip key={`${c.documentId}-${c.pageNumbers.join("_")}-${idx}`} citation={c} />
                   ))}
                 </div>
               )}

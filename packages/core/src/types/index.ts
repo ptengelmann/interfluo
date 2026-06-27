@@ -47,8 +47,30 @@ export interface Citation {
   documentId: string;
   documentName: string;
   documentType: DocumentType;
-  pageNumber: number;
+  /**
+   * Pages the cited material appears on. A single integer for most
+   * citations; multiple ascending integers when a clause spans pages
+   * (eg a covenant that starts on page 14 and continues on page 15).
+   */
+  pageNumbers: number[];
   quote: string;
+}
+
+/** Display helper — returns the first cited page (used when jumping to a single page). */
+export function primaryPage(citation: Citation): number {
+  return citation.pageNumbers[0] ?? 1;
+}
+
+/** Display helper — "p. 5", "pp. 14–15", "pp. 14, 18, 22" depending on shape. */
+export function formatPages(pageNumbers: number[]): string {
+  if (pageNumbers.length === 0) return '';
+  if (pageNumbers.length === 1) return `p. ${pageNumbers[0]}`;
+  const sorted = [...pageNumbers].sort((a, b) => a - b);
+  const isContiguousRange = sorted.every(
+    (n, i) => i === 0 || n === (sorted[i - 1] ?? n) + 1,
+  );
+  if (isContiguousRange) return `pp. ${sorted[0]}–${sorted[sorted.length - 1]}`;
+  return `pp. ${sorted.join(', ')}`;
 }
 
 export interface ExtractedFact {

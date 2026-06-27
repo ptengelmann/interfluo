@@ -18,7 +18,7 @@ export function shortenFacts(facts: ExtractedFact[]): ShortIdMap<ExtractedFact> 
     summaries.push({
       id: shortId,
       doc: f.citation.documentType,
-      page: f.citation.pageNumber,
+      pages: f.citation.pageNumbers,
       category: f.category,
       key: f.key,
       value: f.value,

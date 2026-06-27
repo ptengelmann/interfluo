@@ -151,7 +151,7 @@ async function main() {
     log(`[${r.severity.toUpperCase()}] ${r.title}`);
     log(`  ${r.description}`);
     log(
-      `  Cites: ${r.citations.map((c) => `${shorten(c.documentName)} p${c.pageNumber}`).join(' · ') || '(none)'}\n`,
+      `  Cites: ${r.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => "p" + p).join(",")}`).join(' · ') || '(none)'}\n`,
     );
   }
 
@@ -160,7 +160,7 @@ async function main() {
     log(`[P${e.priority} · ${e.category}] ${e.question}`);
     log(`  Why: ${e.rationale}`);
     log(
-      `  Cites: ${e.citations.map((c) => `${shorten(c.documentName)} p${c.pageNumber}`).join(' · ') || '(none)'}\n`,
+      `  Cites: ${e.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => "p" + p).join(",")}`).join(' · ') || '(none)'}\n`,
     );
   }
 
@@ -170,7 +170,7 @@ async function main() {
     log(`\n## ${s.heading}\n`);
     log(s.body);
     log(
-      `\nCites: ${s.citations.map((c) => `${shorten(c.documentName)} p${c.pageNumber}`).join(' · ') || '(none)'}`,
+      `\nCites: ${s.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => "p" + p).join(",")}`).join(' · ') || '(none)'}`,
     );
   }
 }

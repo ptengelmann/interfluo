@@ -3,6 +3,7 @@ import { RISK_SEVERITIES, type ExtractedFact, type RiskFlag, type RiskSeverity }
 import type { AiClient } from './client';
 import { ANALYSE_SYSTEM, analyseUserPrompt } from './prompts/analyse';
 import { extractToolUse, truncate } from './util/json';
+import { shortenFacts } from './util/short-ids';
 
 interface RawRisk {
   severity: RiskSeverity;
@@ -35,7 +36,8 @@ const ANALYSE_TOOL = {
             supportingFactIds: {
               type: 'array' as const,
               items: { type: 'string' as const },
-              description: 'fact ids from the input that evidence this risk',
+              description:
+                'Short fact ids (e.g. "F012", "F045") copied EXACTLY from the input. List 1-5 ids per risk.',
             },
           },
           required: ['severity', 'title', 'description', 'supportingFactIds'],
@@ -53,19 +55,13 @@ export async function analyseRisks(
   facts: ExtractedFact[],
 ): Promise<RiskFlag[]> {
   if (facts.length === 0) return [];
-  const factsSummary = facts.map((f) => ({
-    id: f.id,
-    documentType: f.citation.documentType,
-    category: f.category,
-    key: f.key,
-    value: f.value,
-    page: f.citation.pageNumber,
-  }));
-  const factsJson = truncate(JSON.stringify(factsSummary), 90_000);
+
+  const { byShort, summaries } = shortenFacts(facts);
+  const factsJson = truncate(JSON.stringify(summaries), 90_000);
 
   const response = await client.anthropic.messages.create({
     model: client.defaultModel,
-    max_tokens: 4096,
+    max_tokens: 6000,
     temperature: 0,
     system: ANALYSE_SYSTEM,
     tools: [ANALYSE_TOOL],
@@ -77,11 +73,9 @@ export async function analyseRisks(
   const rawRisks = parsed?.risks ?? [];
   if (rawRisks.length === 0) return [];
 
-  const factsById = new Map(facts.map((f) => [f.id, f]));
-
   return rawRisks.map<RiskFlag>((r) => {
     const citations = (r.supportingFactIds ?? [])
-      .map((id) => factsById.get(id))
+      .map((id) => byShort.get(id))
       .filter((f): f is ExtractedFact => Boolean(f))
       .map((f) => f.citation);
     return {

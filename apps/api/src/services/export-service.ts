@@ -18,7 +18,7 @@ import type {
   Matter,
   ReportOnTitle,
 } from '@interfluo/core';
-import { DOCUMENT_TYPE_LABELS } from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';
 import { loadTemplateBuffer } from './firm-template-service';
@@ -44,7 +44,7 @@ const CATEGORY_LABELS: Record<Enquiry['category'], string> = {
 };
 
 function citationText(c: Citation): string {
-  return `${DOCUMENT_TYPE_LABELS[c.documentType]}, p. ${c.pageNumber}`;
+  return `${DOCUMENT_TYPE_LABELS[c.documentType]}, ${formatPages(c.pageNumbers)}`;
 }
 
 function todayUk(): string {

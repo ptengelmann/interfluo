@@ -248,7 +248,7 @@ export function EnquiriesPanel({
                   {e.citations.length > 0 && (
                     <div className="flex flex-wrap gap-2 pt-1">
                       {e.citations.map((c, idx) => (
-                        <CitationChip key={`${c.documentId}-${c.pageNumber}-${idx}`} citation={c} />
+                        <CitationChip key={`${c.documentId}-${c.pageNumbers.join("_")}-${idx}`} citation={c} />
                       ))}
                     </div>
                   )}

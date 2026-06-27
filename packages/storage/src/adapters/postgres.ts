@@ -47,6 +47,32 @@ function iso(value: string | null): string | null {
   return Number.isNaN(d.getTime()) ? value : d.toISOString();
 }
 
+/**
+ * Normalise a citation read from JSONB. Older rows used `pageNumber: number`
+ * before the schema moved to `pageNumbers: number[]`. This keeps existing
+ * data readable without a migration.
+ */
+function normaliseCitation(raw: unknown): Citation {
+  const c = raw as Citation & { pageNumber?: number };
+  const pageNumbers = Array.isArray(c.pageNumbers)
+    ? c.pageNumbers
+    : typeof c.pageNumber === 'number'
+      ? [c.pageNumber]
+      : [];
+  return {
+    documentId: c.documentId,
+    documentName: c.documentName,
+    documentType: c.documentType,
+    pageNumbers,
+    quote: c.quote,
+  };
+}
+
+function normaliseCitations(raw: unknown): Citation[] {
+  if (!Array.isArray(raw)) return [];
+  return raw.map(normaliseCitation);
+}
+
 function toMatter(row: DbMatter): Matter {
   return {
     id: row.id,
@@ -85,7 +111,7 @@ function toFact(row: DbFact): ExtractedFact {
     category: row.category,
     key: row.key,
     value: row.value as ExtractedFact['value'],
-    citation: row.citation as Citation,
+    citation: normaliseCitation(row.citation),
     extractedAt: iso(row.extractedAt) ?? row.extractedAt,
   };
 }
@@ -97,7 +123,7 @@ function toRisk(row: DbRisk): RiskFlag {
     severity: row.severity as RiskSeverity,
     title: row.title,
     description: row.description,
-    citations: row.citations as Citation[],
+    citations: normaliseCitations(row.citations),
     suggestedEnquiryIds: row.suggestedEnquiryIds as string[],
   };
 }
@@ -110,7 +136,7 @@ function toEnquiry(row: DbEnquiry): Enquiry {
     question: row.question,
     rationale: row.rationale,
     priority: row.priority,
-    citations: row.citations as Citation[],
+    citations: normaliseCitations(row.citations),
     status: row.status as Enquiry['status'],
     editedQuestion: row.editedQuestion,
     createdAt: iso(row.createdAt) ?? row.createdAt,
@@ -118,11 +144,17 @@ function toEnquiry(row: DbEnquiry): Enquiry {
 }
 
 function toReport(row: DbReport): ReportOnTitle {
+  const rawSections = (row.sections as { heading: string; body: string; citations?: unknown }[]) ?? [];
+  const sections: ReportSection[] = rawSections.map((s) => ({
+    heading: s.heading,
+    body: s.body,
+    citations: normaliseCitations(s.citations),
+  }));
   return {
     id: row.id,
     matterId: row.matterId,
     summary: row.summary,
-    sections: row.sections as ReportSection[],
+    sections,
     generatedAt: iso(row.generatedAt) ?? row.generatedAt,
     modelVersion: row.modelVersion,
   };

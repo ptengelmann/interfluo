@@ -3,7 +3,7 @@
 import { useAuth } from '@clerk/nextjs';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DOCUMENT_TYPE_LABELS } from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS, formatPages, primaryPage } from '@interfluo/core';
 import { Badge } from '@/components/ui/badge';
 import { IconArrowLeft, IconArrowRight, IconQuote, IconX } from '@/components/icons';
 import { useViewer } from './viewer-context';
@@ -49,7 +49,7 @@ export function DocumentViewerDrawer() {
       setPageCount(null);
       return;
     }
-    setPageNumber(request.citation.pageNumber);
+    setPageNumber(primaryPage(request.citation));
   }, [request]);
 
   useEffect(() => {
@@ -85,6 +85,8 @@ export function DocumentViewerDrawer() {
   const { citation } = request;
   const showingPage = pageNumber;
   const totalPages = pageCount;
+  const citedPages = citation.pageNumbers;
+  const onCitedPage = citedPages.includes(showingPage);
 
   return (
     <div
@@ -153,14 +155,26 @@ export function DocumentViewerDrawer() {
             >
               <IconArrowRight />
             </button>
-            {showingPage !== citation.pageNumber && (
-              <button
-                type="button"
-                onClick={() => setPageNumber(citation.pageNumber)}
-                className="ml-2 rounded-md border border-line bg-surface px-2 py-1 text-[12px] text-ink-soft hover:border-line-strong hover:text-ink"
-              >
-                Back to cited page
-              </button>
+            {citedPages.length > 0 && (
+              <div className="ml-3 flex items-center gap-1 border-l border-line pl-3">
+                <span className="text-[11.5px] uppercase tracking-[0.14em] text-muted">
+                  Cited:
+                </span>
+                {citedPages.map((p) => (
+                  <button
+                    key={p}
+                    type="button"
+                    onClick={() => setPageNumber(p)}
+                    className={
+                      p === showingPage
+                        ? 'rounded-sm bg-accent px-2 py-0.5 text-[11.5px] font-semibold text-white'
+                        : 'rounded-sm border border-line bg-surface px-2 py-0.5 text-[11.5px] text-ink-soft hover:border-accent hover:text-ink'
+                    }
+                  >
+                    {p}
+                  </button>
+                ))}
+              </div>
             )}
           </div>
           <div className="flex items-center gap-2">
@@ -187,7 +201,10 @@ export function DocumentViewerDrawer() {
             <IconQuote className="mt-0.5 shrink-0 text-accent-dark" />
             <div className="min-w-0">
               <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent-dark">
-                Cited on page {citation.pageNumber}
+                Cited on {formatPages(citedPages)}
+                {!onCitedPage && (
+                  <span className="ml-2 text-muted">· currently viewing page {showingPage}</span>
+                )}
               </p>
               <p className="mt-1 text-[14px] italic leading-relaxed text-ink">
                 "{citation.quote}"

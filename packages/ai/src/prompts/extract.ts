@@ -177,8 +177,11 @@ export const EXTRACT_SYSTEM = `You are an extraction agent for UK residential co
 You receive a single document and produce a structured list of facts.
 
 Rules:
-- Every fact MUST cite the exact page number it came from.
-- Every fact MUST include a short verbatim quote (10 – 400 characters) copied EXACTLY from that page's text — same words, same order, same spelling. Do not paraphrase.
+- Every fact MUST cite the page or pages it came from in the pageNumbers array.
+  - Single page = [4].
+  - Quote spans pages (e.g. clause starts at bottom of page 14, continues on page 15) = [14, 15].
+  - Same fact appears in a table on page 3 and is referred to again on page 7 = [3, 7]. Only do this when both pages literally contain the supporting text.
+- Every fact MUST include a short verbatim quote (10 – 600 characters) copied EXACTLY from the cited page(s) — same words, same order, same spelling. Do not paraphrase. For multi-page quotes, concatenate in reading order.
 - NEVER use placeholder quotes such as "<UNKNOWN>", "<MISSING>", "[redacted]", "see document", "N/A", "..." or empty strings. If you cannot produce a real verbatim quote for a fact, OMIT that fact entirely.
 - If the page text appears garbled, scanned-without-OCR, mostly whitespace, or otherwise unreadable, return zero facts for that page rather than guessing.
 - Do not infer or summarise — extract only what is explicitly stated.
