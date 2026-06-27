@@ -39,3 +39,8 @@ coverage/
 # Claude Code IDE state (user-specific)
 .claude/
 
+# Private working documents (live in the local workspace only)
+# Brand spec, product overview, internal strategy — never sync to GitHub
+OVERVIEW.md
+CLAUDE.md
+
