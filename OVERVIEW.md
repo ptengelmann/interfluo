@@ -393,6 +393,7 @@ A workspace package that generates realistic conveyancing PDFs with planted issu
 
 - `leasehold-flat-with-issues` — 9 PDFs (title register, lease, TA6, TA7, TA10, CON29, drainage search, mortgage offer, draft contract). Planted issues span title restriction, lease term <80yrs, doubling ground rent, unauthorised extension + planning enforcement, TA6/drainage discrepancy, Section 20 major works, service charge dispute, insurance claim, etc.
 - `freehold-house-clean` — 6 PDFs, intentionally clean. Hallucination control.
+- `freehold-house-edge-cases` — 6 PDFs. **Adversarial scenario** for severity calibration. Three genuinely material items (undisclosed adult occupier, 2024 planning permission not reconciled with TA6, kitchen rewire without NICEIC) mixed with six items that look scary but are routine or already-resolved (mortgage redeemed pending DS1, 2019 boundary dispute resolved by 2020 deed, neighbour's conservation area, 1923 covenant likely unenforceable, standard £55/yr drainage charge, 480m proximity to common land). The scorer parses `[CRITICAL] / [HIGH] / [P1 …]` blocks and counts how many of the six adversarial items show up in them — any hit indicates over-flagging.
 
 **Commands:**
 
@@ -404,16 +405,22 @@ pnpm --filter @interfluo/fixtures score /tmp/bench-output.txt leasehold-flat-wit
 
 Each scenario writes an `EXPECTED-FINDINGS.md` next to the PDFs — the yard-stick for evaluating output.
 
-**Current benchmark results** (4 independent runs total, post severity calibration):
+**Current benchmark results** (post severity calibration):
 
-| Scenario | Run | Hit rate | Critical | High | P1 | Hallucinations |
-|---|---|---|---|---|---|---|
-| Leasehold | A | 11 / 11 | 1 | 4 | 5 | 0 |
-| Leasehold | B | 11 / 11 | 1 | 3 | 4 | 0 |
-| Freehold | A | 5 / 5 | 0 | 0 | 0 | 0 |
-| Freehold | B | 5 / 5 | 0 | 0 | 0 | 0 |
+| Scenario | Run | Hit rate | Critical | High | P1 | Over-flag | Hallucinations |
+|---|---|---|---|---|---|---|---|
+| Leasehold with issues  | A | 11 / 11 | 1 | 4 | 5 | n/a | 0 |
+| Leasehold with issues  | B | 11 / 11 | 1 | 3 | 4 | n/a | 0 |
+| Freehold clean         | A | 5 / 5   | 0 | 0 | 0 | n/a | 0 |
+| Freehold clean         | B | 5 / 5   | 0 | 0 | 0 | n/a | 0 |
+| Freehold edge cases    | A | 3 / 3   | 0 | 1 | 1 | **0 / 6** | 0 |
 
-Severity calibration is correct: the single `critical` flag on the leasehold scenario is the unexpired-term issue (genuinely deal-blocking per the mortgage offer's special condition).
+Severity calibration is correct:
+- The single `critical` flag on the leasehold scenario is the unexpired-term issue (deal-blocking per the mortgage offer's special condition).
+- The single `HIGH` / `P1` on the adversarial scenario is the unsigned occupier consent for John Wilson — defensibly deal-critical because an unexecuted occupier waiver is a real overriding interest under Sch 3 para 2 of the Land Registration Act 2002 (the model cites the statute correctly), and the draft contract itself makes the waiver a pre-exchange condition.
+- All six adversarial traps (redeemed mortgage pending DS1, 2019 boundary dispute resolved in 2020, neighbour's conservation area, 1923 likely-unenforceable covenant, £55/yr drainage charge, proximity to common land) correctly treated as informational at most. Over-flagging count: **0 / 6**.
+
+Three independent calibration tests now give the right answer. Any regression in severity language will show up as a scorer failure on the next run.
 
 ---
 
