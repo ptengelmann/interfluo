@@ -33,7 +33,8 @@ export function BuiltFor() {
             Trusted across the conveyancing practice.
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.55] text-ink-soft">
-            From the partner signing off the file to the fee-earner doing the drafting to the COLP under audit. Each role gets what they actually need.
+            From the partner signing off the file to the fee-earner doing the drafting to the COLP
+            under audit. Each role gets what they actually need.
           </p>
         </div>
 

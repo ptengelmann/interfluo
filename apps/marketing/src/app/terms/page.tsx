@@ -8,22 +8,34 @@ export default function TermsPage() {
         Drafting infrastructure, not legal advice.
       </h1>
       <p className="mt-6 max-w-2xl italic text-muted text-[14px]">
-        Formal terms will be agreed in writing with each pilot firm before any matter data is uploaded. Substantive terms summarised below.
+        Formal terms will be agreed in writing with each pilot firm before any matter data is
+        uploaded. Substantive terms summarised below.
       </p>
 
       <div className="mt-12 divide-y divide-line border-y border-line">
         <Sec title="Nature of the service">
-          Interfluo is drafting infrastructure for UK residential conveyancing. It is not legal advice and does not replace the professional judgement of the supervising fee-earner. The fee-earner remains the responsible professional under the SRA Code of Conduct for any work product they adopt.
+          Interfluo is drafting infrastructure for UK residential conveyancing. It is not legal
+          advice and does not replace the professional judgement of the supervising fee-earner. The
+          fee-earner remains the responsible professional under the SRA Code of Conduct for any work
+          product they adopt.
         </Sec>
         <Sec title="Acceptable use">
-          For use by SRA-regulated firms (or equivalent regulator) in the ordinary course of conveyancing practice. No upload of data subject to legal privilege you do not control. No use for purposes outside conveyancing without prior written agreement.
+          For use by SRA-regulated firms (or equivalent regulator) in the ordinary course of
+          conveyancing practice. No upload of data subject to legal privilege you do not control. No
+          use for purposes outside conveyancing without prior written agreement.
         </Sec>
         <Sec title="Liability">
-          Liability is limited to direct damages capped at fees paid in the preceding twelve months. Interfluo&rsquo;s output is reviewed and adopted (or rejected) by the fee-earner. The audit log records this. Indirect, consequential, and reputational damages are excluded to the maximum extent permitted by law.
+          Liability is limited to direct damages capped at fees paid in the preceding twelve months.
+          Interfluo&rsquo;s output is reviewed and adopted (or rejected) by the fee-earner. The
+          audit log records this. Indirect, consequential, and reputational damages are excluded to
+          the maximum extent permitted by law.
         </Sec>
         <Sec title="Contact">
           Contract queries:{' '}
-          <a className="font-semibold text-accent-dark hover:underline" href="mailto:legal@interfluo.co">
+          <a
+            className="font-semibold text-accent-dark hover:underline"
+            href="mailto:legal@interfluo.co"
+          >
             legal@interfluo.co
           </a>
           .

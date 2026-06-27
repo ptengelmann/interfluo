@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
-@import 'tailwindcss';
-@import '../brand/tokens.css';
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+@import "tailwindcss";
+@import "../brand/tokens.css";
 
 @theme {
   --color-ink: #17181c;
@@ -19,8 +19,8 @@
   --color-on-ink: #f5f1e9;
   --color-on-ink-soft: rgba(245, 241, 233, 0.6);
 
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
 }
 
 * {
@@ -32,7 +32,7 @@ body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
-  font-feature-settings: 'ss01' 1, 'cv11' 1, 'lnum' 1;
+  font-feature-settings: "ss01" 1, "cv11" 1, "lnum" 1;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
@@ -60,7 +60,8 @@ body {
 }
 
 @keyframes cursor-to-new-matter {
-  0%, 18% {
+  0%,
+  18% {
     transform: translate(-220px, 30px);
     opacity: 0;
   }
@@ -71,7 +72,8 @@ body {
     transform: translate(-20px, -2px);
     opacity: 1;
   }
-  72%, 100% {
+  72%,
+  100% {
     transform: translate(0, 0);
     opacity: 0;
   }

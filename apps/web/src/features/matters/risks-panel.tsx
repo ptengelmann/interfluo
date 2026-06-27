@@ -1,8 +1,8 @@
-import type { RiskFlag } from '@interfluo/core';
-import { Card, CardBody } from '@/components/ui/card';
 import { CitationChip } from '@/components/citation-chip';
-import { EmptyState } from '@/components/ui/empty-state';
 import { SeverityBadge } from '@/components/severity-badge';
+import { Card, CardBody } from '@/components/ui/card';
+import { EmptyState } from '@/components/ui/empty-state';
+import type { RiskFlag } from '@interfluo/core';
 
 const SEVERITY_ORDER: Record<RiskFlag['severity'], number> = {
   critical: 0,
@@ -36,7 +36,10 @@ export function RisksPanel({ risks }: { risks: RiskFlag[] }) {
               {r.citations.length > 0 && (
                 <div className="flex flex-wrap gap-2">
                   {r.citations.map((c, idx) => (
-                    <CitationChip key={`${c.documentId}-${c.pageNumbers.join("_")}-${idx}`} citation={c} />
+                    <CitationChip
+                      key={`${c.documentId}-${c.pageNumbers.join('_')}-${idx}`}
+                      citation={c}
+                    />
                   ))}
                 </div>
               )}

@@ -19,9 +19,7 @@ export type Scenario = () => Promise<ScenarioBundle>;
 export async function writeScenario(name: string, outputDir: string): Promise<ScenarioBundle> {
   const builder = scenarios[name];
   if (!builder) {
-    throw new Error(
-      `Unknown scenario "${name}". Available: ${Object.keys(scenarios).join(', ')}`,
-    );
+    throw new Error(`Unknown scenario "${name}". Available: ${Object.keys(scenarios).join(', ')}`);
   }
   const bundle = await builder();
   const resolved = resolve(outputDir);

@@ -7,10 +7,10 @@ import type {
   ReportOnTitle,
   RiskFlag,
 } from '@interfluo/core';
-import type { AiClient } from './client';
 import { analyseRisks } from './analyse';
-import { extractFacts } from './extract';
+import type { AiClient } from './client';
 import { generateEnquiries } from './enquiries';
+import { extractFacts } from './extract';
 import { generateReportOnTitle } from './report';
 
 export interface PipelineInput {
@@ -25,12 +25,7 @@ export interface PipelineResult {
   report: ReportOnTitle;
 }
 
-export type PipelineStage =
-  | 'extraction'
-  | 'analysis'
-  | 'enquiries'
-  | 'report'
-  | 'done';
+export type PipelineStage = 'extraction' | 'analysis' | 'enquiries' | 'report' | 'done';
 
 export interface PipelineProgressEvent {
   stage: PipelineStage;

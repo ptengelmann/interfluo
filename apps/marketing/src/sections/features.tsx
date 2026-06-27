@@ -1,6 +1,6 @@
+import { ActivityMock } from '@/mocks/activity-mock';
 import { DocumentsMock } from '@/mocks/documents-mock';
 import { ViewerMock } from '@/mocks/viewer-mock';
-import { ActivityMock } from '@/mocks/activity-mock';
 
 export function Features() {
   return (
@@ -12,7 +12,10 @@ export function Features() {
             One screen. One verb.
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.55] text-ink-soft">
-            <em className="font-display not-italic-tight italic text-ink">Draft my enquiries and Report on Title from this pack.</em> The whole product fits behind that sentence.
+            <em className="font-display not-italic-tight italic text-ink">
+              Draft my enquiries and Report on Title from this pack.
+            </em>{' '}
+            The whole product fits behind that sentence.
           </p>
         </div>
 

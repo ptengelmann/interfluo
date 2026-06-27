@@ -14,7 +14,9 @@
       "**/dist",
       "**/build",
       "**/coverage",
+      "**/public/pdf.worker*",
       "**/*.min.js",
+      "**/*.min.mjs",
       "**/*.min.css"
     ]
   },
@@ -37,7 +39,8 @@
         "useImportType": "warn"
       },
       "suspicious": {
-        "noExplicitAny": "warn"
+        "noExplicitAny": "warn",
+        "noArrayIndexKey": "warn"
       },
       "correctness": {
         "noUnusedImports": "warn",
@@ -45,6 +48,10 @@
       },
       "complexity": {
         "noBannedTypes": "off"
+      },
+      "a11y": {
+        "noSvgWithoutTitle": "off",
+        "useSemanticElements": "warn"
       }
     }
   },

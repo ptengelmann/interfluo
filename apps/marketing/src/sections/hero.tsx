@@ -1,6 +1,6 @@
-import Link from 'next/link';
 import { IconArrowRight } from '@/components/icons';
 import { HeroDemo } from '@/mocks/hero-demo';
+import Link from 'next/link';
 
 export function Hero() {
   return (
@@ -17,7 +17,9 @@ export function Hero() {
             Draft your enquiries and Report on Title in 60 seconds.
           </h1>
           <p className="mx-auto mt-7 max-w-2xl text-[17px] leading-[1.55] text-ink-soft">
-            Upload the contract pack. Interfluo drafts the enquiries to the seller&rsquo;s solicitor and the first Report on Title for your client. Every line is cited back to its source page. Your fee-earner reviews and adopts.
+            Upload the contract pack. Interfluo drafts the enquiries to the seller&rsquo;s solicitor
+            and the first Report on Title for your client. Every line is cited back to its source
+            page. Your fee-earner reviews and adopts.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
             <Link

@@ -18,8 +18,8 @@
   --divider-paper: #d8d1c2;
   --divider-ink: rgba(245, 241, 233, 0.25);
 
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
 
   --text-display: 56px;
   --text-h1: 40px;

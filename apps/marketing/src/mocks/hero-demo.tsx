@@ -124,7 +124,9 @@ function DashboardFrame() {
     <div className="relative h-full px-6 py-5">
       <div className="flex items-end justify-between">
         <div>
-          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">Workspace</p>
+          <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
+            Workspace
+          </p>
           <h3 className="font-display mt-1 text-[26px] leading-none text-ink">Matters</h3>
         </div>
         <div className="relative">
@@ -140,9 +142,23 @@ function DashboardFrame() {
       </div>
 
       <div className="mt-5 flex flex-col gap-2.5">
-        <MatterRow ref_="MAT-2026-0142" addr="Flat 3, 24 Wynyard Terrace, London SE17 3JL" status="Ready" />
-        <MatterRow ref_="MAT-2026-0138" addr="47 Beechwood Avenue, Sheffield S11 9EE" status="Drafting" subtle />
-        <MatterRow ref_="MAT-2026-0131" addr="12 Crown Mews, Cambridge CB2 1TN" status="Completed" subtle />
+        <MatterRow
+          ref_="MAT-2026-0142"
+          addr="Flat 3, 24 Wynyard Terrace, London SE17 3JL"
+          status="Ready"
+        />
+        <MatterRow
+          ref_="MAT-2026-0138"
+          addr="47 Beechwood Avenue, Sheffield S11 9EE"
+          status="Drafting"
+          subtle
+        />
+        <MatterRow
+          ref_="MAT-2026-0131"
+          addr="12 Crown Mews, Cambridge CB2 1TN"
+          status="Completed"
+          subtle
+        />
       </div>
 
       {/* Cursor that floats toward New matter */}
@@ -163,9 +179,18 @@ function MatterRow({
   subtle?: boolean;
 }) {
   return (
-    <div className={subtle ? 'rounded-lg border border-line bg-surface/70 p-3.5' : 'rounded-lg border border-line bg-surface p-3.5'}>
+    <div
+      className={
+        subtle
+          ? 'rounded-lg border border-line bg-surface/70 p-3.5'
+          : 'rounded-lg border border-line bg-surface p-3.5'
+      }
+    >
       <div className="flex items-center gap-4">
-        <span className="font-display italic text-[20px] text-ink" style={{ letterSpacing: '-0.02em' }}>
+        <span
+          className="font-display italic text-[20px] text-ink"
+          style={{ letterSpacing: '-0.02em' }}
+        >
           if
         </span>
         <div className="flex-1 min-w-0">
@@ -278,9 +303,7 @@ function PipelineFrame({ play }: { play: boolean }) {
       <p className="text-[10px] font-semibold uppercase tracking-[0.18em] text-muted">
         MAT-2026-0142 · Pipeline
       </p>
-      <h3 className="font-display mt-1 text-[22px] leading-none text-ink">
-        Reading the pack
-      </h3>
+      <h3 className="font-display mt-1 text-[22px] leading-none text-ink">Reading the pack</h3>
 
       <div className="mt-6 rounded-xl border border-line bg-surface p-6">
         <div className="flex items-baseline justify-between">
@@ -459,14 +482,7 @@ function EnquiryCard({
 
 function Cursor({ className }: { className?: string }) {
   return (
-    <svg
-      width="20"
-      height="20"
-      viewBox="0 0 20 20"
-      fill="none"
-      className={className}
-      aria-hidden
-    >
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" className={className} aria-hidden>
       <path
         d="M3 2 L17 9 L10 11 L8 18 Z"
         fill="#17181c"

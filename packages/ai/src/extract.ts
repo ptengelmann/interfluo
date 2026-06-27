@@ -124,9 +124,9 @@ function normalisePageNumbers(f: RawFact & { pageNumber?: number }): RawFact {
     : typeof f.pageNumber === 'number'
       ? [f.pageNumber]
       : [];
-  const cleaned = Array.from(
-    new Set(raw.filter((n) => Number.isInteger(n) && n > 0)),
-  ).sort((a, b) => a - b);
+  const cleaned = Array.from(new Set(raw.filter((n) => Number.isInteger(n) && n > 0))).sort(
+    (a, b) => a - b,
+  );
   return { ...f, pageNumbers: cleaned };
 }
 
@@ -137,10 +137,15 @@ function joinPagesText(pageNumbers: number[], pages: PageContent[]): string {
     .join('\n');
 }
 
-const PLACEHOLDER_QUOTE = /^\s*(<[A-Z_ ]+>|\[[^\]]+\]|n\/?a|tbc|tbd|see (the )?document|unknown|not (?:stated|provided|specified|applicable|available)|\.{3,}|—+|-+)\s*$/i;
+const PLACEHOLDER_QUOTE =
+  /^\s*(<[A-Z_ ]+>|\[[^\]]+\]|n\/?a|tbc|tbd|see (the )?document|unknown|not (?:stated|provided|specified|applicable|available)|\.{3,}|—+|-+)\s*$/i;
 
 const normaliseForCompare = (s: string): string =>
-  s.toLowerCase().replace(/\s+/g, ' ').replace(/[^a-z0-9 ]/g, '').trim();
+  s
+    .toLowerCase()
+    .replace(/\s+/g, ' ')
+    .replace(/[^a-z0-9 ]/g, '')
+    .trim();
 
 function isUsableQuote(quote: string, pageText: string): boolean {
   if (!quote) return false;

@@ -1,11 +1,10 @@
 'use client';
 
-import { useEffect, useState } from 'react';
-import type { Matter } from '@interfluo/core';
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { Input } from '@/components/ui/input';
 import { useApi } from '@/lib/api';
+import type { Matter } from '@interfluo/core';
+import { useEffect, useState } from 'react';
 
 interface Props {
   open: boolean;
@@ -82,11 +81,7 @@ export function EditMatterDialog({ open, matter, onClose, onSaved }: Props) {
           onChange={(e) => setPropertyAddress(e.target.value)}
         />
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <Input
-            label="Buyer"
-            value={buyerName}
-            onChange={(e) => setBuyerName(e.target.value)}
-          />
+          <Input label="Buyer" value={buyerName} onChange={(e) => setBuyerName(e.target.value)} />
           <Input
             label="Seller"
             value={sellerName}

@@ -1,11 +1,11 @@
 'use client';
 
-import { useAuth } from '@clerk/nextjs';
-import { useCallback, useState } from 'react';
-import type { Enquiry, EnquiryCategory, ReportOnTitle } from '@interfluo/core';
-import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
 import { Button } from '@/components/ui/button';
 import { API_BASE_URL } from '@/lib/api';
+import { useAuth } from '@clerk/nextjs';
+import type { Enquiry, EnquiryCategory, ReportOnTitle } from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
+import { useCallback, useState } from 'react';
 
 const CATEGORY_LABELS: Record<EnquiryCategory, string> = {
   title: 'Title',
@@ -148,9 +148,7 @@ export function EnquiriesExport({
   }, [download, matterId]);
 
   if (sendableCount === 0) {
-    return (
-      <p className="text-[12.5px] italic text-muted">Accept enquiries to enable export.</p>
-    );
+    return <p className="text-[12.5px] italic text-muted">Accept enquiries to enable export.</p>;
   }
 
   return (

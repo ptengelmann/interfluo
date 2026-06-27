@@ -7,11 +7,7 @@ export default function SignInPage() {
         <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
           Sign in to Interfluo
         </p>
-        <SignIn
-          signUpUrl="/sign-up"
-          forceRedirectUrl="/"
-          fallbackRedirectUrl="/"
-        />
+        <SignIn signUpUrl="/sign-up" forceRedirectUrl="/" fallbackRedirectUrl="/" />
       </div>
     </div>
   );

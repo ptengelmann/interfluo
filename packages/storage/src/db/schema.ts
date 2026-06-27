@@ -1,13 +1,5 @@
 import { sql } from 'drizzle-orm';
-import {
-  bigint,
-  integer,
-  jsonb,
-  pgTable,
-  real,
-  text,
-  timestamp,
-} from 'drizzle-orm/pg-core';
+import { bigint, integer, jsonb, pgTable, real, text, timestamp } from 'drizzle-orm/pg-core';
 
 export const matters = pgTable('matters', {
   id: text('id').primaryKey(),

@@ -1,14 +1,14 @@
 'use client';
 
-import { useMemo, useState } from 'react';
-import type { Enquiry, EnquiryCategory } from '@interfluo/core';
+import { CitationChip } from '@/components/citation-chip';
+import { PriorityBadge } from '@/components/severity-badge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody } from '@/components/ui/card';
-import { CitationChip } from '@/components/citation-chip';
-import { PriorityBadge } from '@/components/severity-badge';
 import { EnquiriesExport } from '@/features/matters/export-actions';
 import { useApi } from '@/lib/api';
+import type { Enquiry, EnquiryCategory } from '@interfluo/core';
+import { useMemo, useState } from 'react';
 
 const CATEGORY_LABELS: Record<EnquiryCategory, string> = {
   title: 'Title',
@@ -187,7 +187,6 @@ export function EnquiriesPanel({
                   {isEditing ? (
                     <div className="flex flex-col gap-3">
                       <textarea
-                        autoFocus
                         rows={Math.min(12, Math.max(4, Math.ceil(draft.length / 90)))}
                         value={draft}
                         onChange={(ev) => setDraft(ev.target.value)}
@@ -248,7 +247,10 @@ export function EnquiriesPanel({
                   {e.citations.length > 0 && (
                     <div className="flex flex-wrap gap-2 pt-1">
                       {e.citations.map((c, idx) => (
-                        <CitationChip key={`${c.documentId}-${c.pageNumbers.join("_")}-${idx}`} citation={c} />
+                        <CitationChip
+                          key={`${c.documentId}-${c.pageNumbers.join('_')}-${idx}`}
+                          citation={c}
+                        />
                       ))}
                     </div>
                   )}

@@ -1,7 +1,7 @@
-import { config as loadDotenv } from 'dotenv';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve } from 'node:path';
 import { existsSync } from 'node:fs';
+import { dirname, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { config as loadDotenv } from 'dotenv';
 import { z } from 'zod';
 
 const here = dirname(fileURLToPath(import.meta.url));
@@ -30,7 +30,9 @@ export type AppConfig = z.infer<typeof configSchema>;
 export function loadConfig(): AppConfig {
   const result = configSchema.safeParse(process.env);
   if (!result.success) {
-    const issues = result.error.issues.map((i) => `  - ${i.path.join('.')}: ${i.message}`).join('\n');
+    const issues = result.error.issues
+      .map((i) => `  - ${i.path.join('.')}: ${i.message}`)
+      .join('\n');
     throw new Error(`Invalid configuration:\n${issues}`);
   }
   return result.data;

@@ -1,12 +1,13 @@
-import Link from 'next/link';
 import { IconArrowRight, IconCheck } from '@/components/icons';
+import Link from 'next/link';
 
 const TIERS = [
   {
     label: 'Pilot',
     price: 'Free',
     sub: 'first 3 matters · end-to-end',
-    description: 'Run your first three matters at no cost. The maths is obvious before any commitment.',
+    description:
+      'Run your first three matters at no cost. The maths is obvious before any commitment.',
     features: [
       'White-glove onboarding',
       'Up to 3 matters at zero cost',
@@ -33,7 +34,8 @@ const TIERS = [
     label: 'Subscription',
     price: '£500–2,000',
     sub: 'per month · 50+ matters',
-    description: 'Predictable monthly cost replaces per-matter billing. Priority support and quarterly calibration review.',
+    description:
+      'Predictable monthly cost replaces per-matter billing. Priority support and quarterly calibration review.',
     features: [
       'Everything in per-matter',
       'Priority support SLA',
@@ -54,7 +56,8 @@ export function Pricing() {
             Per matter. The arithmetic does itself.
           </h2>
           <p className="mt-5 text-[16.5px] leading-[1.55] text-ink-soft">
-            A firm charges the client £800–1,500 per matter. Recovering four hours of fee-earner time for £50 is the easiest spreadsheet in legal tech.
+            A firm charges the client £800–1,500 per matter. Recovering four hours of fee-earner
+            time for £50 is the easiest spreadsheet in legal tech.
           </p>
         </div>
 
@@ -69,7 +72,9 @@ export function Pricing() {
               }
             >
               <p className="eyebrow">{t.label}</p>
-              <p className="mt-5 text-[44px] font-semibold leading-none tracking-tight text-ink tnum">{t.price}</p>
+              <p className="mt-5 text-[44px] font-semibold leading-none tracking-tight text-ink tnum">
+                {t.price}
+              </p>
               <p className="mt-2 text-[12.5px] text-muted">{t.sub}</p>
               <p className="mt-6 text-[14px] leading-[1.6] text-ink-soft">{t.description}</p>
               <ul className="mt-6 flex flex-col gap-2.5">

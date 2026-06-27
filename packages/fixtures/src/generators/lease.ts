@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 export interface LeaseInput {
   propertyAddress: string;
@@ -31,21 +31,36 @@ export async function generateLease(input: LeaseInput): Promise<Buffer> {
     { kind: 'page-break' },
 
     { kind: 'h2', text: '1. DEFINITIONS' },
-    { kind: 'p', text: '"Building" means the block of which the Property forms part. "Common Parts" means the parts of the Building not let to any lessee. "Service Charge" has the meaning given in clause 5.' },
+    {
+      kind: 'p',
+      text: '"Building" means the block of which the Property forms part. "Common Parts" means the parts of the Building not let to any lessee. "Service Charge" has the meaning given in clause 5.',
+    },
 
     { kind: 'h2', text: '2. DEMISE AND TERM' },
-    { kind: 'p', text: `The Lessor demises the Property to the Lessee TO HOLD the same for a term of ${input.termYears} years from and including ${input.termStartDate} YIELDING AND PAYING during the term the rents reserved by clauses 3 and 5.` },
+    {
+      kind: 'p',
+      text: `The Lessor demises the Property to the Lessee TO HOLD the same for a term of ${input.termYears} years from and including ${input.termStartDate} YIELDING AND PAYING during the term the rents reserved by clauses 3 and 5.`,
+    },
 
     { kind: 'h2', text: '3. GROUND RENT' },
-    { kind: 'p', text: `The Lessee shall pay to the Lessor the Initial Ground Rent of ${input.initialGroundRent} payable annually in advance on each Rent Payment Date.` },
+    {
+      kind: 'p',
+      text: `The Lessee shall pay to the Lessor the Initial Ground Rent of ${input.initialGroundRent} payable annually in advance on each Rent Payment Date.`,
+    },
     { kind: 'p', text: input.groundRentReviewClause },
 
     { kind: 'page-break' },
 
     { kind: 'h2', text: '4. LESSEE COVENANTS' },
     { kind: 'h3', text: 'Maintenance and use' },
-    { kind: 'p', text: '4.1 The Lessee shall keep the interior of the Property in good and substantial repair and condition.' },
-    { kind: 'p', text: '4.2 The Lessee shall use the Property only as a single private residence in the occupation of one household.' },
+    {
+      kind: 'p',
+      text: '4.1 The Lessee shall keep the interior of the Property in good and substantial repair and condition.',
+    },
+    {
+      kind: 'p',
+      text: '4.2 The Lessee shall use the Property only as a single private residence in the occupation of one household.',
+    },
     { kind: 'h3', text: 'Alterations' },
     { kind: 'p', text: input.alterationsRestriction },
     { kind: 'h3', text: 'Alienation (assignment, subletting, charging)' },
@@ -63,8 +78,14 @@ export async function generateLease(input: LeaseInput): Promise<Buffer> {
     },
 
     { kind: 'h2', text: '6. LESSOR COVENANTS' },
-    { kind: 'p', text: '6.1 The Lessor covenants to insure the Building against the Insured Risks for the full reinstatement value and to maintain the structure and Common Parts.' },
-    { kind: 'p', text: '6.2 The Lessor covenants with the Lessee to enforce the covenants on the part of the lessees in every other Lease of a flat in the Building so as to ensure mutual benefit.' },
+    {
+      kind: 'p',
+      text: '6.1 The Lessor covenants to insure the Building against the Insured Risks for the full reinstatement value and to maintain the structure and Common Parts.',
+    },
+    {
+      kind: 'p',
+      text: '6.2 The Lessor covenants with the Lessee to enforce the covenants on the part of the lessees in every other Lease of a flat in the Building so as to ensure mutual benefit.',
+    },
 
     { kind: 'page-break' },
 
@@ -72,7 +93,10 @@ export async function generateLease(input: LeaseInput): Promise<Buffer> {
     { kind: 'p', text: input.forfeitureClause },
 
     { kind: 'h2', text: '8. NOTICES' },
-    { kind: 'p', text: 'Any notice under this Lease shall be in writing and may be served by first-class post to the Lessor at the address given in the Particulars or to the Lessee at the Property.' },
+    {
+      kind: 'p',
+      text: 'Any notice under this Lease shall be in writing and may be served by first-class post to the Lessor at the address given in the Particulars or to the Lessee at the Property.',
+    },
 
     { kind: 'h2', text: '9. EXECUTED AS A DEED' },
     { kind: 'p', text: `Executed as a deed by the parties on ${input.dateOfLease}.` },

@@ -1,4 +1,4 @@
-import { createClerkClient, verifyToken, type ClerkClient } from '@clerk/backend';
+import { type ClerkClient, createClerkClient, verifyToken } from '@clerk/backend';
 import type { Context, MiddlewareHandler } from 'hono';
 import { ApiError } from './errors';
 

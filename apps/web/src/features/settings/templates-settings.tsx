@@ -1,16 +1,16 @@
 'use client';
 
-import Link from 'next/link';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import type { FirmTemplate, FirmTemplateKind } from '@interfluo/core';
+import { IconArrowLeft, IconFileText, IconX } from '@/components/icons';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardHeader } from '@/components/ui/card';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Spinner } from '@/components/ui/spinner';
-import { IconArrowLeft, IconFileText, IconX } from '@/components/icons';
 import { useApi } from '@/lib/api';
 import { formatBytes, formatDateTime } from '@/lib/format';
+import type { FirmTemplate, FirmTemplateKind } from '@interfluo/core';
+import Link from 'next/link';
+import { useCallback, useEffect, useRef, useState } from 'react';
 
 const KIND_LABELS: Record<FirmTemplateKind, string> = {
   report: 'Report on Title',
@@ -20,8 +20,7 @@ const KIND_LABELS: Record<FirmTemplateKind, string> = {
 const KIND_DESCRIPTIONS: Record<FirmTemplateKind, string> = {
   report:
     'Upload a Word (.docx) template with {{placeholders}}. On export, Interfluo merges the drafted report into your firm template instead of using the house style.',
-  enquiries:
-    'Reserved for a future release. Enquiries export currently uses the house style.',
+  enquiries: 'Reserved for a future release. Enquiries export currently uses the house style.',
 };
 
 const SUPPORTED_KINDS: FirmTemplateKind[] = ['report'];
@@ -73,9 +72,7 @@ export function TemplatesSettings() {
           <IconArrowLeft /> Back
         </Link>
         <span className="label mt-4 block">Firm settings</span>
-        <h1 className="font-display mt-2 text-[36px] leading-[1.1] text-ink">
-          Document templates
-        </h1>
+        <h1 className="font-display mt-2 text-[36px] leading-[1.1] text-ink">Document templates</h1>
         <p className="mt-2 max-w-2xl text-[14.5px] text-ink-soft">
           Upload your firm's Word template for the Report on Title. Interfluo will merge each
           matter's drafted report into your template on export — your house typography, headers,
@@ -87,11 +84,11 @@ export function TemplatesSettings() {
         <CardHeader title="Available placeholders" />
         <CardBody className="text-[13.5px] text-ink-soft">
           <p className="mb-3">
-            Insert these tokens anywhere in your <code>.docx</code> file. Loops use the same
-            syntax — wrap the repeating block with the opening and closing markers.
+            Insert these tokens anywhere in your <code>.docx</code> file. Loops use the same syntax
+            — wrap the repeating block with the opening and closing markers.
           </p>
           <pre className="rounded-md border border-line bg-paper-dim/40 p-4 text-[12.5px] leading-relaxed text-ink overflow-x-auto">
-{`{{matter.reference}}        {{matter.propertyAddress}}
+            {`{{matter.reference}}        {{matter.propertyAddress}}
 {{matter.buyerName}}        {{matter.sellerName}}
 {{matter.tenure}}           {{meta.draftedDate}}
 

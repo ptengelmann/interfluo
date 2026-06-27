@@ -1,10 +1,10 @@
-import { Hero } from '@/sections/hero';
 import { BuiltFor } from '@/sections/built-for';
-import { Features } from '@/sections/features';
-import { Trust } from '@/sections/trust';
-import { Pricing } from '@/sections/pricing';
 import { Faq } from '@/sections/faq';
+import { Features } from '@/sections/features';
 import { FinalCta } from '@/sections/final-cta';
+import { Hero } from '@/sections/hero';
+import { Pricing } from '@/sections/pricing';
+import { Trust } from '@/sections/trust';
 
 export default function HomePage() {
   return (

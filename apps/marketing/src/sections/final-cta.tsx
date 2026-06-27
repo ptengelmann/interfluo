@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { IconArrowRight } from '@/components/icons';
+import Link from 'next/link';
 
 export function FinalCta() {
   return (
@@ -17,7 +17,9 @@ export function FinalCta() {
             Your first three matters cost nothing.
           </h2>
           <p className="mx-auto mt-6 max-w-2xl text-[17px] leading-[1.55] text-on-ink-soft">
-            We provision your firm, walk you through the workspace, and sit on the call while a fee-earner uploads a real pack. Convert when (and only when) the maths is obvious to your partners.
+            We provision your firm, walk you through the workspace, and sit on the call while a
+            fee-earner uploads a real pack. Convert when (and only when) the maths is obvious to
+            your partners.
           </p>
           <div className="mt-10 flex flex-wrap items-center justify-center gap-2">
             <Link

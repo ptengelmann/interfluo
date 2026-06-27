@@ -4,7 +4,6 @@ import type {
   Enquiry,
   ExtractedFact,
   FirmTemplate,
-  FirmTemplateKind,
   Matter,
   MatterPipelineStatus,
   ReportOnTitle,

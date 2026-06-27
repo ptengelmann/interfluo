@@ -25,8 +25,12 @@ export function ViewerMock() {
           <span className="text-ink-soft">→</span>
           <div className="ml-3 flex items-center gap-1 border-l border-line pl-3">
             <span className="text-[10.5px] uppercase tracking-[0.14em] text-muted">Cited:</span>
-            <span className="rounded-sm bg-accent px-2 py-0.5 text-[11px] font-semibold text-white">1</span>
-            <span className="rounded-sm border border-line bg-surface px-2 py-0.5 text-[11px] text-ink-soft">2</span>
+            <span className="rounded-sm bg-accent px-2 py-0.5 text-[11px] font-semibold text-white">
+              1
+            </span>
+            <span className="rounded-sm border border-line bg-surface px-2 py-0.5 text-[11px] text-ink-soft">
+              2
+            </span>
           </div>
         </div>
         <span className="text-[12px] text-muted">125%</span>
@@ -38,7 +42,8 @@ export function ViewerMock() {
           Cited on pp. 1, 2
         </p>
         <p className="mt-1 text-[13px] italic leading-snug text-ink">
-          "The Lease was granted on 1 January 1998 for a term of 99 years … the Ground Rent shall double on each 25th anniversary of the commencement of the term."
+          "The Lease was granted on 1 January 1998 for a term of 99 years … the Ground Rent shall
+          double on each 25th anniversary of the commencement of the term."
         </p>
       </div>
 

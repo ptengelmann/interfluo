@@ -23,7 +23,11 @@ export async function buildPdf(meta: PdfMeta, blocks: Block[]): Promise<Buffer> 
     const doc = new PDFDocument({
       size: 'A4',
       margin: 56,
-      info: { Title: meta.title, Author: meta.author ?? 'Interfluo Fixtures', Subject: meta.subject ?? '' },
+      info: {
+        Title: meta.title,
+        Author: meta.author ?? 'Interfluo Fixtures',
+        Subject: meta.subject ?? '',
+      },
     });
     const chunks: Buffer[] = [];
     doc.on('data', (c: Buffer) => chunks.push(c));
@@ -90,7 +94,12 @@ function renderBlock(doc: PDFKit.PDFDocument, b: Block) {
       break;
     case 'rule':
       ensureSpace(doc, 10);
-      doc.moveTo(56, doc.y).lineTo(doc.page.width - 56, doc.y).strokeColor('#c9c2b2').lineWidth(0.5).stroke();
+      doc
+        .moveTo(56, doc.y)
+        .lineTo(doc.page.width - 56, doc.y)
+        .strokeColor('#c9c2b2')
+        .lineWidth(0.5)
+        .stroke();
       doc.moveDown(0.5);
       break;
     case 'page-break':

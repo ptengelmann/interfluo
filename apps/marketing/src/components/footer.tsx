@@ -1,5 +1,5 @@
-import Link from 'next/link';
 import { Logo } from '@/brand/Logo';
+import Link from 'next/link';
 
 const NAV_GROUPS: { title: string; links: { href: string; label: string }[] }[] = [
   {
@@ -44,11 +44,10 @@ export function Footer() {
           <div className="flex flex-col gap-6">
             <Logo size={28} tone="paper" />
             <p className="max-w-xs text-[14px] leading-[1.6] text-on-ink-soft">
-              Latin <em className="font-display not-italic">interfluo</em>, to flow between. Drafting infrastructure for UK residential conveyancing fee-earners.
+              Latin <em className="font-display not-italic">interfluo</em>, to flow between.
+              Drafting infrastructure for UK residential conveyancing fee-earners.
             </p>
-            <span
-              className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-on-ink"
-            >
+            <span className="inline-flex w-fit items-center gap-2 rounded-full border border-white/10 bg-white/5 px-2.5 py-1 text-[11px] font-medium text-on-ink">
               <span className="relative flex size-1.5">
                 <span className="absolute inline-flex size-full animate-ping rounded-full bg-accent-on-dark opacity-60" />
                 <span className="relative inline-flex size-1.5 rounded-full bg-accent-on-dark" />
@@ -125,7 +124,8 @@ export function Footer() {
         </div>
 
         <p className="mt-6 text-[11px] leading-[1.6] text-on-ink-soft">
-          Set in Hanken Grotesk and Instrument Serif. UK English throughout. Interfluo is drafting infrastructure for a regulated professional and is not a source of legal advice.
+          Set in Hanken Grotesk and Instrument Serif. UK English throughout. Interfluo is drafting
+          infrastructure for a regulated professional and is not a source of legal advice.
         </p>
       </div>
     </footer>

@@ -72,7 +72,7 @@ const SIGNALS: Record<string, SignalCheck[]> = {
       patterns: ['halifax', 'redemption', 'DS1', 'discharge'],
     },
     {
-      label: 'TPO on neighbour\'s tree, not subject property',
+      label: "TPO on neighbour's tree, not subject property",
       patterns: ['TPO', 'tree preservation', '49 beechwood', 'neighbour'],
     },
     {
@@ -87,7 +87,7 @@ const SIGNALS: Record<string, SignalCheck[]> = {
   'freehold-house-edge-cases': [
     // Genuine items the model SHOULD raise
     {
-      label: 'Adult occupier John Wilson — Occupier\'s Consent',
+      label: "Adult occupier John Wilson — Occupier's Consent",
       patterns: ['john wilson', 'occupier', 'consent'],
     },
     {
@@ -165,7 +165,9 @@ async function main() {
   }
 
   console.log('');
-  console.log(`Hit rate: ${hits} / ${checks.length} (${Math.round((hits / checks.length) * 100)}%)`);
+  console.log(
+    `Hit rate: ${hits} / ${checks.length} (${Math.round((hits / checks.length) * 100)}%)`,
+  );
 
   // Severity calibration
   const critical = countOccurrences(content, '[CRITICAL]');
@@ -180,7 +182,9 @@ async function main() {
   const p5 = countOccurrences(content, '[P5 ');
 
   console.log('');
-  console.log(`Risk severity distribution: CRITICAL=${critical} HIGH=${high} MEDIUM=${medium} LOW=${low} INFO=${info}`);
+  console.log(
+    `Risk severity distribution: CRITICAL=${critical} HIGH=${high} MEDIUM=${medium} LOW=${low} INFO=${info}`,
+  );
   console.log(`Enquiry priorities: P1=${p1} P2=${p2} P3=${p3} P4=${p4} P5=${p5}`);
 
   // Surface counts
@@ -189,7 +193,9 @@ async function main() {
   const sectionsMatch = content.match(/Report with (\d+) sections/);
   if (risksMatch || enquiriesMatch || sectionsMatch) {
     console.log('');
-    console.log(`Counts: risks=${risksMatch?.[1] ?? '?'} enquiries=${enquiriesMatch?.[1] ?? '?'} report-sections=${sectionsMatch?.[1] ?? '?'}`);
+    console.log(
+      `Counts: risks=${risksMatch?.[1] ?? '?'} enquiries=${enquiriesMatch?.[1] ?? '?'} report-sections=${sectionsMatch?.[1] ?? '?'}`,
+    );
   }
 
   // Adversarial over-flagging check — only fires on adversarial scenarios.
@@ -206,7 +212,9 @@ async function main() {
       if (found) overFlagged += 1;
     }
     console.log('');
-    console.log(`Over-flagging count: ${overFlagged} / ${adversarial.length}  (lower is better; 0 is target)`);
+    console.log(
+      `Over-flagging count: ${overFlagged} / ${adversarial.length}  (lower is better; 0 is target)`,
+    );
   }
 }
 

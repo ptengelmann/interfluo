@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
-import type { Document, PageContent } from '@interfluo/core';
 import { classifyDocument, ocrPdf } from '@interfluo/ai';
+import type { Document, PageContent } from '@interfluo/core';
 import { extractPdfContent } from '@interfluo/pdf';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';
@@ -64,7 +64,10 @@ export async function ingestDocument(
   }));
 
   let extractionMethod: 'text' | 'ocr' = 'text';
-  const decision = pages.length > 0 ? decideOcr(pages) : { shouldOcr: false, reason: 'all_pages_dense' as const, lowDensityPages: [] };
+  const decision =
+    pages.length > 0
+      ? decideOcr(pages)
+      : { shouldOcr: false, reason: 'all_pages_dense' as const, lowDensityPages: [] };
 
   if (decision.shouldOcr) {
     ctx.logger.info(

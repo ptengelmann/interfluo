@@ -1,8 +1,8 @@
 import { generateCon29 } from '../generators/con29';
 import { generateDraftContract } from '../generators/draft-contract';
 import { generateDrainageSearch } from '../generators/drainage-search';
-import { generateTa10 } from '../generators/ta10';
 import { generateTa6 } from '../generators/ta6';
+import { generateTa10 } from '../generators/ta10';
 import { generateTitleRegister } from '../generators/title-register';
 import type { ScenarioBundle } from './index';
 
@@ -66,8 +66,7 @@ export async function freeholdHouseEdgeCases(): Promise<ScenarioBundle> {
       'A dispute arose in 2019 with the previous neighbour at 51 Beechwood Avenue regarding the precise line of the rear boundary. The matter was resolved amicably by a deed of variation dated 4 February 2020 (registered against both titles) which moved the boundary by approximately 30cm and was accepted by both parties. There are no current disputes or complaints.',
     alterationsDescription:
       'The kitchen was completely rewired in March 2022 by a local electrician (J. Patel of Wilmslow). No structural alterations or extensions have been carried out at the property.',
-    alterationsPlanningPermission:
-      'No planning permission was required for the kitchen rewire.',
+    alterationsPlanningPermission: 'No planning permission was required for the kitchen rewire.',
     alterationsBuildingRegs:
       'The seller does not have a NICEIC certificate or Part P building regulations notification in respect of the 2022 rewire. The electrician advised it was not required for the works carried out.',
     drainageMains: 'Yes — the property is connected to mains foul and surface water drainage.',
@@ -108,7 +107,8 @@ export async function freeholdHouseEdgeCases(): Promise<ScenarioBundle> {
     planningPermissions: [
       'Application reference 24/0918M dated 12 April 2024: planning permission GRANTED for a single-storey rear extension (8m x 4m), conditional on commencement within 3 years.',
     ],
-    planningEnforcement: 'No enforcement notices, stop notices, or breach of condition notices recorded.',
+    planningEnforcement:
+      'No enforcement notices, stop notices, or breach of condition notices recorded.',
     buildingRegsCertificates: [
       'Building Regulations completion certificate dated 22 October 2017 in respect of replacement windows (FENSA route).',
     ],
@@ -152,7 +152,7 @@ export async function freeholdHouseEdgeCases(): Promise<ScenarioBundle> {
     ],
     specialConditions: [
       'Completion shall take place 21 days after exchange of contracts unless otherwise agreed in writing.',
-      'The Seller warrants that any adult occupiers of the Property will sign an occupier consent / waiver in such form as is reasonably required by the Buyer\'s solicitors prior to exchange of contracts.',
+      "The Seller warrants that any adult occupiers of the Property will sign an occupier consent / waiver in such form as is reasonably required by the Buyer's solicitors prior to exchange of contracts.",
     ],
   });
 
@@ -162,7 +162,7 @@ export async function freeholdHouseEdgeCases(): Promise<ScenarioBundle> {
       'Adversarial freehold scenario designed to stress-test severity calibration. Most "scary-looking" items are routine or already-resolved; three items are genuinely material and must be raised. Failure mode: over-flagging routine items as critical/P1, OR missing the three genuine concerns.',
     expectedFindings: [
       'P2 — Undisclosed adult occupier "John Wilson" listed on TA6 9.1 with no stated relationship to the seller. Occupier\'s consent / waiver of overriding interest must be obtained before exchange (the draft contract already anticipates this in Special Condition 2 — raise to confirm form and timing).',
-      'P2 — Planning permission 24/0918M granted in 2024 for a rear extension, but TA6 declares no structural alterations. Clarify with the seller\'s solicitor whether the extension was built (and if so why TA6 was completed as it was), or whether the permission is unexercised and lapses in 2027.',
+      "P2 — Planning permission 24/0918M granted in 2024 for a rear extension, but TA6 declares no structural alterations. Clarify with the seller's solicitor whether the extension was built (and if so why TA6 was completed as it was), or whether the permission is unexercised and lapses in 2027.",
       'P3 — Kitchen rewire in March 2022 with no NICEIC certificate and no Part P notification. Raise an enquiry; an electrical indemnity policy may be appropriate.',
       'NOT material — Halifax mortgage was REDEEMED on 14 May 2026 and DS1 was issued by the lender on 16 May 2026. The entry remaining on the register is routine pending registration. Treat as informational only; do NOT flag as critical or P1.',
       'NOT material — The 2019 boundary dispute was resolved by deed of variation registered in 2020. Historical only. Note in the report; do NOT raise as a current dispute.',

@@ -1,10 +1,10 @@
 #!/usr/bin/env tsx
 import { randomUUID } from 'node:crypto';
-import { config as loadDotenv } from 'dotenv';
 import { existsSync } from 'node:fs';
-import { readdir, readFile } from 'node:fs/promises';
+import { readFile, readdir } from 'node:fs/promises';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { config as loadDotenv } from 'dotenv';
 
 const here = dirname(fileURLToPath(import.meta.url));
 const repoRoot = resolve(here, '../../../');
@@ -14,15 +14,15 @@ for (const filename of ['.env.local', '.env']) {
 }
 
 import {
-  createAiClient,
-  classifyDocument,
-  extractFacts,
   analyseRisks,
+  classifyDocument,
+  createAiClient,
+  extractFacts,
   generateEnquiries,
   generateReportOnTitle,
 } from '@interfluo/ai';
-import { extractPdfContent } from '@interfluo/pdf';
 import type { Document, Matter, PageContent } from '@interfluo/core';
+import { extractPdfContent } from '@interfluo/pdf';
 
 interface ScenarioMeta {
   reference: string;
@@ -151,14 +151,16 @@ async function main() {
     risks,
     enquiries,
   );
-  log(`  → Report with ${report.sections.length} sections (${((Date.now() - tRep) / 1000).toFixed(1)}s)`);
+  log(
+    `  → Report with ${report.sections.length} sections (${((Date.now() - tRep) / 1000).toFixed(1)}s)`,
+  );
 
   log('\n\n========== RISKS ==========\n');
   for (const r of risks) {
     log(`[${r.severity.toUpperCase()}] ${r.title}`);
     log(`  ${r.description}`);
     log(
-      `  Cites: ${r.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => "p" + p).join(",")}`).join(' · ') || '(none)'}\n`,
+      `  Cites: ${r.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => `p${p}`).join(',')}`).join(' · ') || '(none)'}\n`,
     );
   }
 
@@ -167,7 +169,7 @@ async function main() {
     log(`[P${e.priority} · ${e.category}] ${e.question}`);
     log(`  Why: ${e.rationale}`);
     log(
-      `  Cites: ${e.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => "p" + p).join(",")}`).join(' · ') || '(none)'}\n`,
+      `  Cites: ${e.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => `p${p}`).join(',')}`).join(' · ') || '(none)'}\n`,
     );
   }
 
@@ -177,7 +179,7 @@ async function main() {
     log(`\n## ${s.heading}\n`);
     log(s.body);
     log(
-      `\nCites: ${s.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => "p" + p).join(",")}`).join(' · ') || '(none)'}`,
+      `\nCites: ${s.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => `p${p}`).join(',')}`).join(' · ') || '(none)'}`,
     );
   }
 }

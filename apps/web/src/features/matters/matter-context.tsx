@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, useContext, type ReactNode } from 'react';
+import { type ReactNode, createContext, useContext } from 'react';
 
 interface MatterScope {
   matterId: string;
@@ -8,10 +8,7 @@ interface MatterScope {
 
 const MatterContext = createContext<MatterScope | null>(null);
 
-export function MatterProvider({
-  matterId,
-  children,
-}: MatterScope & { children: ReactNode }) {
+export function MatterProvider({ matterId, children }: MatterScope & { children: ReactNode }) {
   return <MatterContext.Provider value={{ matterId }}>{children}</MatterContext.Provider>;
 }
 

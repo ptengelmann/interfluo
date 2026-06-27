@@ -1,9 +1,9 @@
 'use client';
 
-import { useCallback, useRef, useState, type DragEvent } from 'react';
-import { Button } from '@/components/ui/button';
 import { IconUpload } from '@/components/icons';
+import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/cn';
+import { type DragEvent, useCallback, useRef, useState } from 'react';
 
 export function Dropzone({
   onFilesAdded,

@@ -45,7 +45,8 @@ export function Faq() {
               The questions a partner asks first.
             </h2>
             <p className="mt-6 max-w-sm text-[14.5px] leading-[1.65] text-ink-soft">
-              Conveyancing partners evaluate carefully. Below are the answers we give on the first call, written down so you can read them before booking it.
+              Conveyancing partners evaluate carefully. Below are the answers we give on the first
+              call, written down so you can read them before booking it.
             </p>
             <div className="mt-8 inline-flex items-center gap-2 text-[11.5px] uppercase tracking-[0.16em] text-muted">
               <span className="h-px w-8 bg-line-strong" />
@@ -66,9 +67,7 @@ export function Faq() {
                   <dt className="text-[17px] font-semibold leading-snug tracking-[-0.005em] text-ink">
                     {item.q}
                   </dt>
-                  <dd className="mt-3.5 text-[14.5px] leading-[1.7] text-ink-soft">
-                    {item.a}
-                  </dd>
+                  <dd className="mt-3.5 text-[14.5px] leading-[1.7] text-ink-soft">{item.a}</dd>
                 </div>
               </div>
             ))}

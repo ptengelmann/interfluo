@@ -1,16 +1,16 @@
 'use client';
 
-import { useCallback, useState } from 'react';
-import type { Document } from '@interfluo/core';
+import { IconFileText, IconX } from '@/components/icons';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardBody } from '@/components/ui/card';
-import { DocumentTypePicker } from './document-type-picker';
-import { IconFileText, IconX } from '@/components/icons';
-import { Dropzone } from '@/features/matters/dropzone';
-import { Spinner } from '@/components/ui/spinner';
 import { ConfirmDialog } from '@/components/ui/confirm-dialog';
+import { Spinner } from '@/components/ui/spinner';
+import { Dropzone } from '@/features/matters/dropzone';
 import { useApi } from '@/lib/api';
 import { formatBytes, formatDateTime, pluralise } from '@/lib/format';
+import type { Document } from '@interfluo/core';
+import { useCallback, useState } from 'react';
+import { DocumentTypePicker } from './document-type-picker';
 
 interface UploadingItem {
   id: string;

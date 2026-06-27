@@ -1,7 +1,7 @@
 'use client';
 
-import { useState, type FormEvent } from 'react';
 import { IconArrowRight } from '@/components/icons';
+import { type FormEvent, useState } from 'react';
 
 const PILOT_RECIPIENT = 'pilot@interfluo.co';
 
@@ -37,13 +37,18 @@ export function PilotForm() {
   if (submitted) {
     return (
       <div className="rounded-lg bg-accent-tint/60 p-6">
-        <p className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-accent-dark">Sent</p>
+        <p className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-accent-dark">
+          Sent
+        </p>
         <p className="mt-3 text-[20px] font-semibold tracking-tight text-ink">
           Your email client should have opened with your message.
         </p>
         <p className="mt-4 text-[14.5px] leading-relaxed text-ink-soft">
           If it didn&rsquo;t, write directly to{' '}
-          <a href={`mailto:${PILOT_RECIPIENT}`} className="font-semibold text-accent-dark hover:underline">
+          <a
+            href={`mailto:${PILOT_RECIPIENT}`}
+            className="font-semibold text-accent-dark hover:underline"
+          >
             {PILOT_RECIPIENT}
           </a>
           . We reply within one working day.
@@ -56,7 +61,13 @@ export function PilotForm() {
     <form onSubmit={handleSubmit} className="flex flex-col gap-5">
       <Field label="Your name" name="name" required placeholder="Anita Patel" />
       <Field label="Firm" name="firm" required placeholder="Patel & Co Solicitors" />
-      <Field label="Work email" name="email" type="email" required placeholder="anita@patel-co.example" />
+      <Field
+        label="Work email"
+        name="email"
+        type="email"
+        required
+        placeholder="anita@patel-co.example"
+      />
       <Field label="Role" name="role" placeholder="Partner, COLP, fee-earner…" />
       <Select label="Matters per month (typical)" name="volume">
         <option value="">Select</option>
@@ -65,7 +76,12 @@ export function PilotForm() {
         <option value="50-150">50 to 150</option>
         <option value="150+">150 or more</option>
       </Select>
-      <Field label="Anything we should know?" name="notes" multiline placeholder="Type of matters, current pain points…" />
+      <Field
+        label="Anything we should know?"
+        name="notes"
+        multiline
+        placeholder="Type of matters, current pain points…"
+      />
       <button
         type="submit"
         className="group mt-4 inline-flex h-10 items-center justify-center gap-1.5 rounded-full bg-accent pl-5 pr-1.5 text-[13.5px] font-semibold text-white transition-colors hover:bg-accent-dark"
@@ -99,7 +115,10 @@ function Field({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={name} className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+      <label
+        htmlFor={name}
+        className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-muted"
+      >
         {label}
         {required && <span className="ml-1 text-accent">*</span>}
       </label>
@@ -137,7 +156,10 @@ function Select({
 }) {
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor={name} className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-muted">
+      <label
+        htmlFor={name}
+        className="text-[11.5px] font-semibold uppercase tracking-[0.16em] text-muted"
+      >
         {label}
       </label>
       <select

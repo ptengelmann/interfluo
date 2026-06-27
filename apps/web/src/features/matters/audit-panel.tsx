@@ -1,13 +1,13 @@
 'use client';
 
-import { useCallback, useEffect, useState } from 'react';
-import type { AuditEvent, AuditEventType } from '@interfluo/core';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardBody } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Spinner } from '@/components/ui/spinner';
 import { useApi } from '@/lib/api';
 import { formatDateTime } from '@/lib/format';
+import type { AuditEvent, AuditEventType } from '@interfluo/core';
+import { useCallback, useEffect, useState } from 'react';
 
 const EVENT_LABEL: Record<AuditEventType, string> = {
   'matter.created': 'Matter created',
@@ -136,9 +136,9 @@ export function AuditPanel({ matterId }: { matterId: string }) {
       <Card>
         <CardBody className="text-[13.5px] text-ink-soft">
           <p>
-            Every state-changing action on this matter is recorded here. Entries are append-only
-            — the firm's record of who did what and when. Useful for COLP / COFA defensibility
-            and any post-matter file review.
+            Every state-changing action on this matter is recorded here. Entries are append-only —
+            the firm's record of who did what and when. Useful for COLP / COFA defensibility and any
+            post-matter file review.
           </p>
         </CardBody>
       </Card>
@@ -156,9 +156,7 @@ export function AuditPanel({ matterId }: { matterId: string }) {
                   </div>
                   <div className="flex-1 min-w-0 text-[13.5px] text-ink-soft">
                     {summary && <p className="leading-relaxed">{summary}</p>}
-                    <p className="mt-1 font-mono text-[11.5px] text-muted">
-                      by {e.userId}
-                    </p>
+                    <p className="mt-1 font-mono text-[11.5px] text-muted">by {e.userId}</p>
                   </div>
                 </CardBody>
               </Card>

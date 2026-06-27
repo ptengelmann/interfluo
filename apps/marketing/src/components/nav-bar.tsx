@@ -1,8 +1,8 @@
 'use client';
 
+import { Logo } from '@/brand/Logo';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
-import { Logo } from '@/brand/Logo';
 import { IconArrowRight } from './icons';
 
 const NAV_LINKS = [
@@ -26,12 +26,11 @@ export function NavBar() {
   return (
     <div className="sticky top-0 z-50 px-4 pt-3 sm:pt-4">
       <header
-        className={
-          'mx-auto flex max-w-[1120px] items-center gap-2 rounded-full border px-2 py-1.5 backdrop-blur-xl transition-all duration-300 sm:gap-3 sm:py-2 ' +
-          (scrolled
+        className={`mx-auto flex max-w-[1120px] items-center gap-2 rounded-full border px-2 py-1.5 backdrop-blur-xl transition-all duration-300 sm:gap-3 sm:py-2 ${
+          scrolled
             ? 'border-line bg-paper/90 shadow-[0_10px_28px_-14px_rgba(30,28,24,0.22)]'
-            : 'border-line/60 bg-paper/70 shadow-none')
-        }
+            : 'border-line/60 bg-paper/70 shadow-none'
+        }`}
       >
         <Link
           href="/"
@@ -70,10 +69,7 @@ export function NavBar() {
           ))}
         </nav>
 
-        <span
-          aria-hidden
-          className="ml-auto hidden lg:block lg:ml-2 h-5 w-px bg-line-strong/60"
-        />
+        <span aria-hidden className="ml-auto hidden lg:block lg:ml-2 h-5 w-px bg-line-strong/60" />
 
         <div className="ml-auto flex items-center gap-1 lg:ml-0">
           <a

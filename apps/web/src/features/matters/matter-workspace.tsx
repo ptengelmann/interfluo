@@ -1,28 +1,28 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { MatterDetail } from '@interfluo/core';
+import { IconArrowLeft } from '@/components/icons';
+import { StatusBadge } from '@/components/status-badge';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody } from '@/components/ui/card';
+import { ConfirmDialog } from '@/components/ui/confirm-dialog';
 import { EmptyState } from '@/components/ui/empty-state';
 import { ProgressBar } from '@/components/ui/progress-bar';
-import { ConfirmDialog } from '@/components/ui/confirm-dialog';
-import { StatusBadge } from '@/components/status-badge';
-import { IconArrowLeft } from '@/components/icons';
-import { useApi } from '@/lib/api';
-import { EnquiriesPanel } from './enquiries-panel';
-import { ReportPanel } from './report-panel';
-import { DocumentsPanel } from './documents-panel';
-import { RisksPanel } from './risks-panel';
-import { MatterProvider } from './matter-context';
-import { EditMatterDialog } from './edit-matter-dialog';
-import { AuditPanel } from './audit-panel';
-import { ViewerProvider } from '@/features/viewer/viewer-context';
 import { DocumentViewerDrawer } from '@/features/viewer/document-viewer-drawer';
+import { ViewerProvider } from '@/features/viewer/viewer-context';
+import { useApi } from '@/lib/api';
 import { formatDateTime } from '@/lib/format';
+import type { MatterDetail } from '@interfluo/core';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { AuditPanel } from './audit-panel';
+import { DocumentsPanel } from './documents-panel';
+import { EditMatterDialog } from './edit-matter-dialog';
+import { EnquiriesPanel } from './enquiries-panel';
+import { MatterProvider } from './matter-context';
+import { ReportPanel } from './report-panel';
+import { RisksPanel } from './risks-panel';
 
 type Tab = 'enquiries' | 'report' | 'risks' | 'documents' | 'activity';
 

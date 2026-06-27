@@ -1,7 +1,7 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
 import { Spinner } from '@/components/ui/spinner';
+import { useEffect, useRef, useState } from 'react';
 
 interface PdfRendererProps {
   url: string;
@@ -131,8 +131,7 @@ export function PdfRenderer({
         page.cleanup();
       } catch (e) {
         if (cancelled) return;
-        const isCancellation =
-          e instanceof Error && /cancelled|aborted/i.test(e.message);
+        const isCancellation = e instanceof Error && /cancelled|aborted/i.test(e.message);
         if (!isCancellation) {
           const message = e instanceof Error ? e.message : 'Failed to render page';
           setErr(message);

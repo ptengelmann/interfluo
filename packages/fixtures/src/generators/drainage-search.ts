@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 export interface DrainageInput {
   propertyAddress: string;
@@ -74,5 +74,8 @@ export async function generateDrainageSearch(input: DrainageInput): Promise<Buff
     },
   ];
 
-  return buildPdf({ title: 'CON29DW Drainage and Water Search', subject: 'Drainage and water search' }, blocks);
+  return buildPdf(
+    { title: 'CON29DW Drainage and Water Search', subject: 'Drainage and water search' },
+    blocks,
+  );
 }
