@@ -61,6 +61,41 @@ const SCENARIO_META: Record<string, ScenarioMeta> = {
     buyerName: 'Aisha Rahman',
     tenure: 'freehold',
   },
+  'freehold-clean-with-satisfied-restriction': {
+    reference: 'BENCH-CLEAN-002',
+    propertyAddress: '32 Larkfield Avenue, Newcastle upon Tyne NE3 4PG',
+    sellerName: 'Helen Foster and Daniel Foster',
+    buyerName: 'Priya Shah',
+    tenure: 'freehold',
+  },
+  'freehold-resolved-boundary-dispute': {
+    reference: 'BENCH-BND-001',
+    propertyAddress: '14 Cavendish Crescent, Nottingham NG7 1AB',
+    sellerName: 'Margaret and Peter Holland',
+    buyerName: 'Thomas Reid',
+    tenure: 'freehold',
+  },
+  'freehold-missing-building-regs-cert': {
+    reference: 'BENCH-BR-001',
+    propertyAddress: '8 Acacia Drive, Cheltenham GL52 3HF',
+    sellerName: 'Caroline and James Bennett',
+    buyerName: 'Olusegun Adeyemi',
+    tenure: 'freehold',
+  },
+  'freehold-disclosure-inconsistency-flooding': {
+    reference: 'BENCH-DISC-001',
+    propertyAddress: '6 Riverside Walk, York YO1 6DR',
+    sellerName: 'Adrian Cole',
+    buyerName: 'Beatrice Owens',
+    tenure: 'freehold',
+  },
+  'leasehold-short-lease-and-escalation': {
+    reference: 'BENCH-LH-002',
+    propertyAddress: 'Flat 7, Marlborough Court, 22 Albany Road, Reading RG1 6RJ',
+    sellerName: 'Stephen Whittle',
+    buyerName: 'Ruth Daniels',
+    tenure: 'leasehold',
+  },
 };
 
 async function main() {
