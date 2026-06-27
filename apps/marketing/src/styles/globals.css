@@ -1,0 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
+@import 'tailwindcss';
+@import '../brand/tokens.css';
+
+@theme {
+  --color-ink: #17181c;
+  --color-ink-soft: #4a4842;
+  --color-muted: #736f64;
+  --color-paper: #f5f1e9;
+  --color-paper-dim: #ece7dc;
+  --color-surface: #ffffff;
+  --color-line: #e2dccf;
+  --color-line-strong: #c9c2b2;
+  --color-accent: #2e5c46;
+  --color-accent-dark: #234a38;
+  --color-accent-on-dark: #5b9b7c;
+  --color-accent-tint: #e7efe9;
+  --color-danger: #b23b2e;
+  --color-on-ink: #f5f1e9;
+  --color-on-ink-soft: rgba(245, 241, 233, 0.6);
+  --color-on-ink-line: #33343a;
+
+  --font-display: 'Instrument Serif', Georgia, serif;
+  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 12px;
+  --radius-pill: 999px;
+
+  --shadow-card: 0 1px 2px rgba(30, 28, 24, 0.06);
+  --shadow-raised: 0 22px 50px -32px rgba(30, 28, 24, 0.45);
+
+  --tracking-wordmark: -0.015em;
+  --tracking-mark: -0.02em;
+  --tracking-label: 0.14em;
+}
+
+* {
+  border-color: var(--line);
+}
+
+html,
+body {
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.015em;
+}
+
+.label {
+  font-size: 12px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: var(--tracking-label);
+  color: var(--muted);
+}
