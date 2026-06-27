@@ -129,6 +129,12 @@ export type UpdateMatterInput = z.infer<typeof updateMatterInputSchema>;
 export const updateEnquiryInputSchema = z.object({
   status: z.enum(['suggested', 'accepted', 'rejected', 'edited']).optional(),
   editedQuestion: z.string().nullable().optional(),
+  /**
+   * Optional fee-earner reason captured when status moves to `rejected`.
+   * Stored in the audit event payload as proprietary review-intelligence
+   * signal (why was this AI draft not useful?).
+   */
+  rejectionReason: z.string().max(500).optional(),
 });
 
 export type UpdateEnquiryInput = z.infer<typeof updateEnquiryInputSchema>;

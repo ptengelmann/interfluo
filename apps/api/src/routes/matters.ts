@@ -1,5 +1,6 @@
 import { zValidator } from '@hono/zod-validator';
 import {
+  type Enquiry,
   createMatterInputSchema,
   updateDocumentInputSchema,
   updateEnquiryInputSchema,
@@ -295,7 +296,8 @@ export function buildMattersRouter(ctx: AppContext) {
         throw new ApiError('enquiry_not_found', 'Enquiry not found', 404);
       }
       const auditEventType = pickEnquiryEventType(previous?.status, updated.status, patch);
-      if (auditEventType) {
+      if (auditEventType && previous) {
+        const payload = buildEnquiryAuditPayload(auditEventType, previous, updated, patch);
         await recordAudit(ctx, {
           firmId,
           userId,
@@ -303,12 +305,7 @@ export function buildMattersRouter(ctx: AppContext) {
           matterId,
           targetType: 'enquiry',
           targetId: enquiryId,
-          payload: {
-            previousStatus: previous?.status ?? null,
-            newStatus: updated.status,
-            editedQuestion: updated.editedQuestion,
-            originalQuestion: previous?.question,
-          },
+          payload,
         });
       }
       return c.json({ enquiry: updated });
@@ -360,17 +357,18 @@ export function buildMattersRouter(ctx: AppContext) {
   return app;
 }
 
-function pickEnquiryEventType(
-  previousStatus: string | undefined,
-  newStatus: string,
-  patch: { editedQuestion?: string | null | undefined; status?: string | undefined },
-):
+type EnquiryEventType =
   | 'enquiry.accepted'
   | 'enquiry.rejected'
   | 'enquiry.suggested'
   | 'enquiry.edited'
-  | 'enquiry.reverted'
-  | null {
+  | 'enquiry.reverted';
+
+function pickEnquiryEventType(
+  previousStatus: string | undefined,
+  newStatus: string,
+  patch: { editedQuestion?: string | null | undefined; status?: string | undefined },
+): EnquiryEventType | null {
   if (patch.editedQuestion !== undefined) {
     if (patch.editedQuestion === null) return 'enquiry.reverted';
     return 'enquiry.edited';
@@ -381,6 +379,59 @@ function pickEnquiryEventType(
   if (newStatus === 'suggested') return 'enquiry.suggested';
   if (newStatus === 'edited') return 'enquiry.edited';
   return null;
+}
+
+/**
+ * Build the typed audit payload for an enquiry mutation. The payload
+ * always includes the immutable AI-original wording and the optional
+ * issue code so review-intelligence queries can group by both.
+ *
+ * For edits, captures the specific from -> to diff for this change so
+ * the full chain of edits across multiple PATCHes is reconstructible.
+ */
+function buildEnquiryAuditPayload(
+  eventType: EnquiryEventType,
+  previous: Enquiry,
+  updated: Enquiry,
+  patch: {
+    editedQuestion?: string | null | undefined;
+    status?: string | undefined;
+    rejectionReason?: string | undefined;
+  },
+): Record<string, unknown> {
+  const ctx = {
+    originalAiQuestion: previous.question,
+    ...(previous.issueCode ? { issueCode: previous.issueCode } : {}),
+    previousStatus: previous.status ?? null,
+    newStatus: updated.status,
+  };
+
+  switch (eventType) {
+    case 'enquiry.edited': {
+      const from = previous.editedQuestion ?? previous.question;
+      const to = patch.editedQuestion ?? updated.editedQuestion ?? updated.question;
+      return { ...ctx, from, to };
+    }
+    case 'enquiry.reverted': {
+      return { ...ctx, revertedFrom: previous.editedQuestion ?? previous.question };
+    }
+    case 'enquiry.accepted': {
+      return {
+        ...ctx,
+        acceptedWording: updated.editedQuestion ?? updated.question,
+        hadEdits: updated.editedQuestion !== null,
+      };
+    }
+    case 'enquiry.rejected': {
+      return {
+        ...ctx,
+        finalEditedWording: updated.editedQuestion,
+        ...(patch.rejectionReason ? { reason: patch.rejectionReason } : {}),
+      };
+    }
+    case 'enquiry.suggested':
+      return ctx;
+  }
 }
 
 function sendDocx(c: Context, artifact: DocxArtifact) {

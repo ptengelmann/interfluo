@@ -14,7 +14,7 @@ const POINTS = [
   {
     icon: IconRecord,
     title: 'Audit log for COLP defensibility',
-    body: 'Append-only record of every accept, edit, reject and export per matter. The supervising fee-earner remains the responsible professional, and has the record to prove it.',
+    body: 'Append-only record of every accept, edit, reject, and export per matter, with the original AI wording preserved alongside each fee-earner change. The supervising fee-earner remains the responsible professional, with the evidence trail to prove it.',
   },
   {
     icon: IconMap,
