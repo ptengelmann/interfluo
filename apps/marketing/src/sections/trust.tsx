@@ -9,7 +9,7 @@ const POINTS = [
   {
     icon: IconCheck,
     title: 'Severity calibrated for conveyancing',
-    body: 'A structured library of twenty-one conveyancing issue codes across seven categories, each with a calibrated severity default and named false-positive traps. Validated against six internal adversarial conveyancing benchmark scenarios with an average Matter Quality Score of 99 out of 100. "Critical" actually means deal-blocker.',
+    body: 'A structured library of twenty-one conveyancing issue codes across seven categories, each with a calibrated severity default and named false-positive traps. Validated against nine internal adversarial conveyancing benchmark scenarios with an average Matter Quality Score of 98 out of 100. "Critical" actually means deal-blocker.',
   },
   {
     icon: IconRecord,
