@@ -305,17 +305,17 @@ async function main() {
   console.log(`\nScoring ${file} against scenario "${scenario}"`);
   console.log('═══════════════════════════════════════════════════════\n');
 
-  let hits = 0;
+  let signalHits = 0;
   for (const check of checks) {
     const lower = content.toLowerCase();
     const found = check.patterns.some((p) => lower.includes(p.toLowerCase()));
-    if (found) hits += 1;
+    if (found) signalHits += 1;
     console.log(`  ${found ? '✓' : '✗'}  ${check.label}`);
   }
 
   console.log('');
   console.log(
-    `Hit rate: ${hits} / ${checks.length} (${Math.round((hits / checks.length) * 100)}%)`,
+    `Hit rate: ${signalHits} / ${checks.length} (${Math.round((signalHits / checks.length) * 100)}%)`,
   );
 
   // Severity calibration
@@ -351,6 +351,8 @@ async function main() {
   // with the right ConveyancingIssueCode and does not invent codes for
   // issues that were not seeded.
   const expectedCodes = EXPECTED_ISSUE_CODES[scenario];
+  let codeHits = 0;
+  let unexpectedCodeCount = 0;
   if (expectedCodes) {
     console.log('');
     console.log('Issue-code routing (taxonomy assertions):');
@@ -372,26 +374,139 @@ async function main() {
         (hit.size / expectedCodes.length) * 100,
       )}%). Unexpected codes: ${unexpected.length}.`,
     );
+    codeHits = hit.size;
+    unexpectedCodeCount = unexpected.length;
   }
 
   // Adversarial over-flagging check — only fires on adversarial scenarios.
   const adversarial = ADVERSARIAL_ANTIPATTERNS[scenario];
+  let overFlagged = 0;
+  let antipatternCount = 0;
   if (adversarial) {
     console.log('');
     console.log('Severity-calibration check (over-flagging routine items as CRITICAL/HIGH/P1):');
     const highSeverityBlocks = extractBlocksAroundSeverityMarkers(content);
     const allHighSeverityText = highSeverityBlocks.join('\n').toLowerCase();
-    let overFlagged = 0;
     for (const check of adversarial) {
       const found = check.patterns.some((p) => allHighSeverityText.includes(p.toLowerCase()));
       console.log(`  ${found ? '✗ OVER-FLAGGED' : '✓ correctly low-severity'}  ${check.label}`);
       if (found) overFlagged += 1;
     }
+    antipatternCount = adversarial.length;
     console.log('');
     console.log(
-      `Over-flagging count: ${overFlagged} / ${adversarial.length}  (lower is better; 0 is target)`,
+      `Over-flagging count: ${overFlagged} / ${antipatternCount}  (lower is better; 0 is target)`,
     );
   }
+
+  // Matter Quality Score: single composite metric so scenarios can be
+  // compared at a glance and a regression in any component is visible.
+  const enquiryCount = enquiriesMatch ? Number.parseInt(enquiriesMatch[1] ?? '0', 10) : 0;
+  const mqs = computeMatterQualityScore({
+    signalHits,
+    signalTotal: checks.length,
+    expectedCodeCount: expectedCodes?.length ?? 0,
+    codeHits,
+    unexpectedCodeCount,
+    overFlagged,
+    antipatternCount,
+    enquiryCount,
+  });
+
+  console.log('');
+  console.log('Matter Quality Score');
+  console.log('═══════════════════════════════════════════════════════');
+  console.log(`  ${mqs.total.toFixed(1)} / 100   (${mqs.verdict.toUpperCase()})`);
+  console.log('');
+  console.log(
+    `  Signal detection   (40%): ${Math.round(mqs.components.signalHit * 100)}%  (${signalHits}/${checks.length})`,
+  );
+  if (expectedCodes) {
+    console.log(
+      `  Taxonomy routing   (30%): ${Math.round(mqs.components.codeHit * 100)}%  (${codeHits}/${expectedCodes.length})`,
+    );
+  } else {
+    console.log('  Taxonomy routing   (30%): n/a (no expected codes for this scenario)');
+  }
+  if (adversarial) {
+    console.log(
+      `  No over-flagging   (15%): ${Math.round(mqs.components.noOverflag * 100)}%  (${overFlagged}/${antipatternCount} overflagged)`,
+    );
+  } else {
+    console.log('  No over-flagging   (15%): n/a (no antipatterns for this scenario)');
+  }
+  console.log(
+    `  No hallucination   (15%): ${Math.round(mqs.components.noHallucination * 100)}%  (${unexpectedCodeCount} unexpected codes)`,
+  );
+  if (mqs.penalties.enquiryNoise > 0) {
+    console.log('');
+    console.log(
+      `  Enquiry-noise penalty:    -${mqs.penalties.enquiryNoise.toFixed(1)} (${enquiryCount} enquiries; soft ceiling 15)`,
+    );
+  }
+}
+
+interface MqsInput {
+  signalHits: number;
+  signalTotal: number;
+  expectedCodeCount: number;
+  codeHits: number;
+  unexpectedCodeCount: number;
+  overFlagged: number;
+  antipatternCount: number;
+  enquiryCount: number;
+}
+
+interface MatterQualityScoreResult {
+  total: number;
+  verdict: 'excellent' | 'pass' | 'borderline' | 'fail';
+  components: {
+    signalHit: number;
+    codeHit: number;
+    noOverflag: number;
+    noHallucination: number;
+  };
+  penalties: {
+    enquiryNoise: number;
+  };
+}
+
+/**
+ * Composite scenario quality score (0-100). Weights chosen per the GPT
+ * review:
+ *   - signal detection 40% (does the pipeline find the planted issues?)
+ *   - taxonomy routing 30% (does each find route to the right code?)
+ *   - no over-flagging 15% (does the pipeline avoid escalating routine items?)
+ *   - no hallucination 15% (does the pipeline avoid inventing codes?)
+ *
+ * Soft enquiry-noise penalty: -1 point per enquiry over a ceiling of 15.
+ * Designed so a sharper, quieter pipeline scores higher than a louder one
+ * with the same hit rate.
+ *
+ * Verdict bands: 90+ excellent, 80-89 pass, 70-79 borderline, <70 fail.
+ */
+export function computeMatterQualityScore(input: MqsInput): MatterQualityScoreResult {
+  const signalHit = input.signalTotal === 0 ? 1 : input.signalHits / input.signalTotal;
+  const codeHit = input.expectedCodeCount === 0 ? 1 : input.codeHits / input.expectedCodeCount;
+  const noOverflag =
+    input.antipatternCount === 0 ? 1 : 1 - input.overFlagged / input.antipatternCount;
+  // Soft normalisation: 5 unexpected codes = 0 score; 0 unexpected = full marks.
+  const noHallucination = Math.max(0, 1 - input.unexpectedCodeCount / 5);
+
+  const weighted = signalHit * 0.4 + codeHit * 0.3 + noOverflag * 0.15 + noHallucination * 0.15;
+  const score0to100 = weighted * 100;
+  const enquiryNoise = Math.max(0, input.enquiryCount - 15);
+  const total = Math.max(0, Math.min(100, score0to100 - enquiryNoise));
+
+  const verdict: MatterQualityScoreResult['verdict'] =
+    total >= 90 ? 'excellent' : total >= 80 ? 'pass' : total >= 70 ? 'borderline' : 'fail';
+
+  return {
+    total: Math.round(total * 10) / 10,
+    verdict,
+    components: { signalHit, codeHit, noOverflag, noHallucination },
+    penalties: { enquiryNoise },
+  };
 }
 
 /** Collect every issue code emitted in the bench output (lines like "[CODE: XXX]"). */
