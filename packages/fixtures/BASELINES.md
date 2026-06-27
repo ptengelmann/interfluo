@@ -217,3 +217,27 @@ Regression rules:
 
 **Average: 99.0 / 100. Every planted issue detected. Every named code
 correctly routed. Zero over-flagging of routine items.**
+
+## Honest gaps in the corpus
+
+- **3 legacy scenarios** are wired into the registry but **have not been
+  re-benched** in this calibration cycle and therefore have no entry
+  above: `leasehold-flat-with-issues`, `freehold-house-clean`,
+  `freehold-house-edge-cases`. Target: 9 / 9 baselined.
+- **13 of 21** taxonomy codes appear in at least one scenario's
+  `EXPECTED_ISSUE_CODES`. The remaining **8** are not yet covered:
+  - `TITLE_OVERRIDING_INTERESTS`
+  - `TITLE_DEFECTIVE_INDEMNITY_REQUIRED`
+  - `LEASE_ALTERATIONS_CONSENT`
+  - `PLANNING_TA6_SEARCH_DISCREPANCY`
+  - `SEARCH_CONTAMINATED_LAND`
+  - `OCCUPIER_TENANCY_UNDISCLOSED`
+  - `BOUNDARY_DISPUTE_UNRESOLVED` (currently tested as a must-not-emit
+    guard in `freehold-resolved-boundary-dispute`; still needs a
+    scenario that legitimately emits it)
+  - `MORTGAGE_OFFER_EXPIRY_RISK`
+- Growth of the corpus should follow real pilot pack patterns, not
+  speculative coverage. The priority order if doing speculative
+  growth: `TITLE_DEFECTIVE_INDEMNITY_REQUIRED`, `SEARCH_CONTAMINATED_LAND`,
+  `MORTGAGE_OFFER_EXPIRY_RISK`, `LEASE_ALTERATIONS_CONSENT` - all map
+  to common lender / client concerns.
