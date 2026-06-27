@@ -45,6 +45,10 @@ P1 is reserved for things like: missing freeholder consent that the title restri
 - Categories: title, boundaries, covenants, easements, planning, building_regulations, environmental, utilities, leasehold, searches, fixtures, occupiers, disputes, other.
 - Maximum 25 enquiries total. Less is better if the pack is clean.
 
+# When NOT to assign a taxonomy issueCode
+
+Only assign an issueCode when the documents POSITIVELY support that specific issue. If the enquiry is asking for clarification of an unresolved factual condition ("if the works were carried out", "if no certificate exists"), DO NOT assign a specific issueCode. Leave it undefined. Speculative codes pollute the taxonomy.
+
 ${buildTaxonomyPromptSection()}`;
 
 export function enquiriesUserPrompt(

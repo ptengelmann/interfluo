@@ -89,10 +89,20 @@ export async function analyseRisks(
   if (rawRisks.length === 0) return [];
 
   return rawRisks.map<RiskFlag>((r) => {
-    const citations = (r.supportingFactIds ?? [])
+    const rawCitations = (r.supportingFactIds ?? [])
       .map((id) => byShort.get(id))
       .filter((f): f is ExtractedFact => Boolean(f))
       .map((f) => f.citation);
+    // Dedupe by (documentId, page set). Multiple supporting facts often
+    // cite the same document and page; one citation chip per page is the
+    // useful representation. Previously emitted 5+ chips for the same page.
+    const seen = new Set<string>();
+    const citations = rawCitations.filter((c) => {
+      const key = `${c.documentId}:${[...c.pageNumbers].sort((a, b) => a - b).join('-')}`;
+      if (seen.has(key)) return false;
+      seen.add(key);
+      return true;
+    });
     const validatedIssueCode: ConveyancingIssueCode | undefined = getIssue(r.issueCode)?.code;
     return {
       id: randomUUID(),

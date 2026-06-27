@@ -23,6 +23,7 @@ export type IssueCategory =
   | 'planning'
   | 'searches'
   | 'occupiers'
+  | 'disclosure'
   | 'disputes'
   | 'other';
 
@@ -48,6 +49,7 @@ export type ConveyancingIssueCode =
   | 'SEARCH_CONTAMINATED_LAND'
   | 'OCCUPIER_CONSENT_MISSING'
   | 'OCCUPIER_TENANCY_UNDISCLOSED'
+  | 'SELLER_DISCLOSURE_INCONSISTENCY'
   | 'BOUNDARY_DISPUTE_UNRESOLVED'
   | 'INSURANCE_CLAIM_DISCLOSED'
   | 'MORTGAGE_OFFER_EXPIRY_RISK';
@@ -403,18 +405,23 @@ export const CONVEYANCING_ISSUES: Record<ConveyancingIssueCode, ConveyancingIssu
 
   OCCUPIER_CONSENT_MISSING: {
     code: 'OCCUPIER_CONSENT_MISSING',
-    label: 'Adult occupier consent missing',
+    label: 'Adult occupier consent / waiver form missing',
     category: 'occupiers',
     defaultSeverity: 'high',
     defaultPriority: 2,
     description:
-      "The pack discloses an adult occupier other than the seller without a signed occupier's consent form on file.",
+      "An adult occupier (other than the seller) is acknowledged in the pack but no signed occupier's consent form waiving any interest is on file. The seller still intends to deliver vacant possession on completion; the issue is the missing lender form, not the existence of the occupier.",
     whyItMatters:
-      "Most lenders require all adult occupiers to sign a consent waiving any rights they may have against the lender's charge. Without this, the lender will not release funds.",
-    requiredSupportingFacts: ['identity of occupier', 'absence of signed consent'],
+      "Most lenders require all adult occupiers to sign a consent waiving any rights they may have against the lender's charge. Without this, the lender will not release funds even if vacant possession is otherwise being given.",
+    requiredSupportingFacts: [
+      'identity of the adult occupier',
+      'evidence the occupier is acknowledged (TA6 occupier section, contract, correspondence)',
+      'absence of a signed consent form in the pack',
+    ],
     falsePositiveTraps: [
       'Children under 17 are not "adult occupiers" for this purpose.',
       'A signed consent already in the pack but mislabelled may exist; check carefully.',
+      'Use OCCUPIER_TENANCY_UNDISCLOSED instead if the seller has not acknowledged the occupier at all (the issue is non-disclosure, not a missing form).',
     ],
     defaultEnquiryTemplate:
       "The pack discloses [occupier] as residing at the property. Please provide a signed occupier's consent form executed by [occupier] in favour of the buyer's lender.",
@@ -424,22 +431,55 @@ export const CONVEYANCING_ISSUES: Record<ConveyancingIssueCode, ConveyancingIssu
 
   OCCUPIER_TENANCY_UNDISCLOSED: {
     code: 'OCCUPIER_TENANCY_UNDISCLOSED',
-    label: 'Undisclosed tenancy affecting vacant possession',
+    label: 'Undisclosed tenancy or occupation putting vacant possession at risk',
     category: 'occupiers',
     defaultSeverity: 'critical',
     defaultPriority: 1,
     description:
-      'A tenancy, licence, or occupational right is disclosed or suspected which would prevent the seller delivering vacant possession on completion.',
+      "An occupational right exists that the seller has NOT acknowledged anywhere in the pack, and the documents do not establish that vacant possession can be given. The issue is the seller's non-disclosure of an occupation that could defeat completion, not the absence of a consent form.",
     whyItMatters:
-      'A buyer expecting vacant possession cannot complete against an occupied property. The transaction structure (price, lender requirements, post-completion plans) all assume vacant possession.',
-    requiredSupportingFacts: ['evidence of tenancy or right of occupation', 'identity of occupier'],
+      'A buyer expecting vacant possession cannot complete against an occupied property whose occupier has not been identified. The transaction structure (price, lender requirements, post-completion plans) all assume vacant possession, and an undisclosed occupier may have an overriding interest binding on the buyer.',
+    requiredSupportingFacts: [
+      'evidence of a tenancy, licence, or right of occupation',
+      'absence of any acknowledgement of that occupier in the seller-completed documents',
+    ],
     falsePositiveTraps: [
-      'A confirmed family-member occupier who will leave on completion and whose consent has been signed is not an undisclosed tenancy.',
+      'A family-member occupier who has been acknowledged in the pack is not "undisclosed" - use OCCUPIER_CONSENT_MISSING if the issue is just a missing consent form.',
+      'A confirmed occupier who will leave on completion and whose consent has been signed is not an undisclosed tenancy.',
+      'Where the contract states vacant possession will be given and the only gap is a missing form, prefer OCCUPIER_CONSENT_MISSING.',
     ],
     defaultEnquiryTemplate:
-      'Please clarify the basis on which [occupier] resides at the property and provide written confirmation that vacant possession will be given on completion.',
+      'Please clarify the basis on which [occupier] resides at the property, why this occupation was not disclosed on the TA6, and provide written confirmation that vacant possession will be given on completion.',
     defaultReportLanguage:
       'There is a question over whether the seller will be able to deliver vacant possession on completion. We have raised an urgent enquiry and would not advise exchange until this is fully resolved.',
+  },
+
+  /* ───────────────────────── Disclosure ───────────────────────── */
+
+  SELLER_DISCLOSURE_INCONSISTENCY: {
+    code: 'SELLER_DISCLOSURE_INCONSISTENCY',
+    label: 'Seller disclosure inconsistent with source documents',
+    category: 'disclosure',
+    defaultSeverity: 'high',
+    defaultPriority: 1,
+    description:
+      "A statement in the seller's property information form (TA6 / TA7 / TA10) is materially inconsistent with an official search result, title document, contract paper, or other source document in the pack. The inconsistency goes beyond an incomplete answer; the seller's positive statement is contradicted by the record.",
+    whyItMatters:
+      'Inconsistent seller disclosure undermines reliance on the replies, affects pre-contract enquiries and buyer advice, can engage misrepresentation under the Misrepresentation Act 1967, and may need to be reported to the lender. The supervising fee-earner must consider whether the seller can still give full title guarantee.',
+    requiredSupportingFacts: [
+      'the specific seller statement (form, question, exact wording)',
+      'the source document that contradicts it (with quote and page)',
+    ],
+    falsePositiveTraps: [
+      'Do not emit where the official record merely provides additional routine detail not asked about in the seller form.',
+      'Do not emit where the seller form answer is incomplete but not actively contradicted.',
+      'Do not emit where the inconsistency relates only to a resolved historical matter with no current material impact.',
+      'Prefer this code over PLANNING_TA6_SEARCH_DISCREPANCY when the issue is the disclosure inconsistency itself rather than the underlying planning concern (raise both codes if both are at stake).',
+    ],
+    defaultEnquiryTemplate:
+      "The seller's reply at [form, question] states [statement]. The [source document] discloses [contradictory entry]. Please explain the discrepancy, confirm whether the seller was aware of the contradicting fact at the date of the form, and confirm whether the form will be amended.",
+    defaultReportLanguage:
+      "The seller's [form] reply on [topic] is inconsistent with the [source document]. We have raised an enquiry seeking the seller's explanation, and would not advise exchange until the inconsistency is resolved.",
   },
 
   /* ───────────────────────── Disputes ───────────────────────── */
@@ -547,6 +587,7 @@ export function buildTaxonomyPromptSection(): string {
     'planning',
     'searches',
     'occupiers',
+    'disclosure',
     'disputes',
     'other',
   ];
