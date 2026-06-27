@@ -16,13 +16,21 @@
 import type { ConveyancingIssueCode } from '@interfluo/core';
 
 export const EXPECTED_ISSUE_CODES: Record<string, ConveyancingIssueCode[]> = {
+  // The original 7 codes plus 4 added on 2026-06-28 once the taxonomy grew
+  // to include them (and once the legacy scenario was re-benched and the
+  // pipeline was observed correctly emitting them). The scenario itself was
+  // not modified - the list was simply stale relative to the taxonomy.
   'leasehold-flat-with-issues': [
     'LEASE_SHORT_TERM',
     'LEASE_GROUND_RENT_ESCALATION',
     'LEASE_SECTION_20_MAJOR_WORKS',
     'LEASE_SERVICE_CHARGE_DISPUTE',
+    'LEASE_ALTERATIONS_CONSENT',
     'TITLE_RESTRICTION_CONSENT',
+    'TITLE_CHARGE_DISCHARGE_EVIDENCE',
     'PLANNING_BUILDING_REGS_MISSING',
+    'SEARCH_DRAINAGE_DISCREPANCY',
+    'SELLER_DISCLOSURE_INCONSISTENCY',
     'INSURANCE_CLAIM_DISCLOSED',
   ],
 
