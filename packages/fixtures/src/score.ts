@@ -509,10 +509,16 @@ export function computeMatterQualityScore(input: MqsInput): MatterQualityScoreRe
   };
 }
 
-/** Collect every issue code emitted in the bench output (lines like "[CODE: XXX]"). */
+/**
+ * Collect every issue code emitted in the bench output (lines like "[CODE: XXX]").
+ *
+ * Character class includes digits because codes like LEASE_SECTION_20_MAJOR_WORKS
+ * contain numbers. Previous [A-Z_]+ silently dropped any code with a digit -
+ * undercounting hits and producing false "expected code missing" failures.
+ */
 function extractEmittedIssueCodes(content: string): Set<string> {
   const codes = new Set<string>();
-  const re = /\[CODE:\s*([A-Z_]+)\]/g;
+  const re = /\[CODE:\s*([A-Z0-9_]+)\]/g;
   let match: RegExpExecArray | null = re.exec(content);
   while (match !== null) {
     if (match[1]) codes.add(match[1]);
