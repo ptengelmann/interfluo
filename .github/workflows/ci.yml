@@ -33,7 +33,15 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        # pnpm v11 ignores onlyBuiltDependencies under our current config and
+        # exits 1 on ERR_PNPM_IGNORED_BUILDS. We install with --ignore-scripts
+        # to skip the check, then run the postinstall steps we actually need.
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Run approved build scripts
+        run: |
+          pnpm --filter @interfluo/web run copy:pdf-worker || (cd apps/web && pnpm run copy:pdf-worker)
+          pnpm rebuild esbuild sharp @biomejs/biome
 
       - name: Typecheck
         run: pnpm typecheck
