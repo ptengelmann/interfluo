@@ -47,6 +47,13 @@ const SCENARIO_META: Record<string, ScenarioMeta> = {
     buyerName: 'David Okafor',
     tenure: 'freehold',
   },
+  'freehold-house-edge-cases': {
+    reference: 'BENCH-EDGE-001',
+    propertyAddress: '49 Beechwood Avenue, Wilmslow, SK9 5RG',
+    sellerName: 'Christopher and Sarah Mitchell',
+    buyerName: 'Daniel Foster',
+    tenure: 'freehold',
+  },
 };
 
 async function main() {

@@ -84,6 +84,53 @@ const SIGNALS: Record<string, SignalCheck[]> = {
       patterns: ['summer house', 'permitted development'],
     },
   ],
+  'freehold-house-edge-cases': [
+    // Genuine items the model SHOULD raise
+    {
+      label: 'Adult occupier John Wilson — Occupier\'s Consent',
+      patterns: ['john wilson', 'occupier', 'consent'],
+    },
+    {
+      label: '2024 planning permission for rear extension — clarify if built',
+      patterns: ['24/0918M', 'rear extension', 'planning permission', 'unexercised'],
+    },
+    {
+      label: 'Kitchen rewire 2022 — no NICEIC / Part P',
+      patterns: ['rewire', 'rewired', 'NICEIC', 'Part P', 'electrical certificate'],
+    },
+  ],
+};
+
+// Adversarial scenarios — phrases that, if found IN A HIGH-SEVERITY BLOCK
+// (CRITICAL / HIGH risk, or P1 enquiry), indicate over-flagging of items
+// that should be informational at most. A hit here = calibration failure.
+const ADVERSARIAL_ANTIPATTERNS: Record<string, { label: string; patterns: string[] }[]> = {
+  'freehold-house-edge-cases': [
+    {
+      label: 'Halifax charge mis-flagged as critical (already redeemed)',
+      patterns: ['halifax', 'redemption', 'DS1'],
+    },
+    {
+      label: '2019 boundary dispute mis-flagged as current (resolved 2020)',
+      patterns: ['boundary dispute', '2019'],
+    },
+    {
+      label: 'Conservation area mis-treated as binding (covers neighbour, not subject)',
+      patterns: ['conservation area'],
+    },
+    {
+      label: '1923 covenant mis-flagged as critical (likely unenforceable)',
+      patterns: ['1923', 'private dwellinghouse'],
+    },
+    {
+      label: 'Standard £55 surface water charge mis-flagged as material',
+      patterns: ['surface water drainage charge', '£55'],
+    },
+    {
+      label: 'Wilmslow Common proximity mis-flagged as a constraint',
+      patterns: ['common land', 'wilmslow common'],
+    },
+  ],
 };
 
 // Severity-calibration checks: how many times is "critical" used?
@@ -144,6 +191,37 @@ async function main() {
     console.log('');
     console.log(`Counts: risks=${risksMatch?.[1] ?? '?'} enquiries=${enquiriesMatch?.[1] ?? '?'} report-sections=${sectionsMatch?.[1] ?? '?'}`);
   }
+
+  // Adversarial over-flagging check — only fires on adversarial scenarios.
+  const adversarial = ADVERSARIAL_ANTIPATTERNS[scenario];
+  if (adversarial) {
+    console.log('');
+    console.log('Severity-calibration check (over-flagging routine items as CRITICAL/HIGH/P1):');
+    const highSeverityBlocks = extractBlocksAroundSeverityMarkers(content);
+    const allHighSeverityText = highSeverityBlocks.join('\n').toLowerCase();
+    let overFlagged = 0;
+    for (const check of adversarial) {
+      const found = check.patterns.some((p) => allHighSeverityText.includes(p.toLowerCase()));
+      console.log(`  ${found ? '✗ OVER-FLAGGED' : '✓ correctly low-severity'}  ${check.label}`);
+      if (found) overFlagged += 1;
+    }
+    console.log('');
+    console.log(`Over-flagging count: ${overFlagged} / ${adversarial.length}  (lower is better; 0 is target)`);
+  }
+}
+
+/** Pull text from CRITICAL/HIGH risk blocks and P1 enquiry blocks. */
+function extractBlocksAroundSeverityMarkers(content: string): string[] {
+  const blocks: string[] = [];
+  const lines = content.split('\n');
+  for (let i = 0; i < lines.length; i++) {
+    const line = lines[i] ?? '';
+    if (/^\[(CRITICAL|HIGH)\]/.test(line) || /^\[P1 /.test(line)) {
+      // Take the marker line and the next 6 lines (title, description, citations).
+      blocks.push(lines.slice(i, i + 7).join('\n'));
+    }
+  }
+  return blocks;
 }
 
 main().catch((err) => {
