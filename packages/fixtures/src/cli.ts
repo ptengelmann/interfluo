@@ -37,7 +37,7 @@ async function main(): Promise<void> {
   for (const f of bundle.files) {
     console.log(`    ${f.filename}  (${(f.buffer.length / 1024).toFixed(1)} KB)`);
   }
-  console.log(`✓ Wrote EXPECTED-FINDINGS.md — the yard-stick for evaluating output.`);
+  console.log('✓ Wrote EXPECTED-FINDINGS.md — the yard-stick for evaluating output.');
   console.log('');
   console.log('Next: drop these PDFs into a new matter in Interfluo and compare the');
   console.log('generated enquiries / risks against the expected findings.');

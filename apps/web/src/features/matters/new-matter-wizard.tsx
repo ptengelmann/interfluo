@@ -1,19 +1,19 @@
 'use client';
 
-import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useCallback, useState } from 'react';
-import type { Document, Matter } from '@interfluo/core';
+import { DocumentTypeLabel } from '@/components/document-type-label';
+import { IconArrowLeft, IconCheck, IconX } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody, CardFooter, CardHeader } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import { Spinner } from '@/components/ui/spinner';
 import { Dropzone } from '@/features/matters/dropzone';
-import { DocumentTypeLabel } from '@/components/document-type-label';
-import { IconArrowLeft, IconCheck, IconX } from '@/components/icons';
 import { useApi } from '@/lib/api';
 import { formatBytes, pluralise } from '@/lib/format';
+import type { Document, Matter } from '@interfluo/core';
+import Link from 'next/link';
+import { useRouter } from 'next/navigation';
+import { useCallback, useState } from 'react';
 
 type Step = 'details' | 'upload';
 
@@ -84,7 +84,11 @@ export function NewMatterWizard() {
         setItems((prev) =>
           prev.map((it) =>
             it.id === tempId
-              ? { ...it, status: 'error', error: err instanceof Error ? err.message : 'Upload failed' }
+              ? {
+                  ...it,
+                  status: 'error',
+                  error: err instanceof Error ? err.message : 'Upload failed',
+                }
               : it,
           ),
         );
@@ -111,7 +115,9 @@ export function NewMatterWizard() {
 
   const retry = (it: UploadItem) => {
     if (!matter) return;
-    setItems((prev) => prev.map((p) => (p.id === it.id ? { ...p, status: 'uploading', error: undefined } : p)));
+    setItems((prev) =>
+      prev.map((p) => (p.id === it.id ? { ...p, status: 'uploading', error: undefined } : p)),
+    );
     void uploadOne(matter.id, it.file, it.id);
   };
 

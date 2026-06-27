@@ -1,7 +1,10 @@
 import type { MatterStatus } from '@interfluo/core';
 import { Badge } from './ui/badge';
 
-const MAP: Record<MatterStatus, { tone: 'neutral' | 'accent' | 'success' | 'danger' | 'muted'; label: string }> = {
+const MAP: Record<
+  MatterStatus,
+  { tone: 'neutral' | 'accent' | 'success' | 'danger' | 'muted'; label: string }
+> = {
   draft: { tone: 'muted', label: 'Draft' },
   ingesting: { tone: 'neutral', label: 'Ingesting' },
   extracting: { tone: 'neutral', label: 'Extracting' },

@@ -1,16 +1,16 @@
 'use client';
 
-import Link from 'next/link';
-import { useCallback, useEffect, useState } from 'react';
-import type { Matter } from '@interfluo/core';
+import { IconArrowRight } from '@/components/icons';
+import { StatusBadge } from '@/components/status-badge';
 import { Button } from '@/components/ui/button';
 import { Card, CardBody } from '@/components/ui/card';
 import { EmptyState } from '@/components/ui/empty-state';
 import { Spinner } from '@/components/ui/spinner';
-import { StatusBadge } from '@/components/status-badge';
-import { IconArrowRight } from '@/components/icons';
 import { useApi } from '@/lib/api';
 import { formatDateTime } from '@/lib/format';
+import type { Matter } from '@interfluo/core';
+import Link from 'next/link';
+import { useCallback, useEffect, useState } from 'react';
 
 export function MattersDashboard() {
   const api = useApi();

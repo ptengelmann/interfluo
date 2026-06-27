@@ -1,6 +1,6 @@
 import { runPipeline } from '@interfluo/ai';
-import { extractPdfContent } from '@interfluo/pdf';
 import type { MatterPipelineStatus, PageContent } from '@interfluo/core';
+import { extractPdfContent } from '@interfluo/pdf';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';
 
@@ -44,7 +44,8 @@ export async function processMatter(ctx: AppContext, matterId: string): Promise<
   });
   await ctx.repo.updateMatter(matterId, { status: 'extracting' });
 
-  const documentsWithPages: Array<{ document: typeof documents[number]; pages: PageContent[] }> = [];
+  const documentsWithPages: Array<{ document: (typeof documents)[number]; pages: PageContent[] }> =
+    [];
   for (const doc of documents) {
     const buffer = await ctx.blobs.get(doc.storageKey);
     if (!buffer) {
@@ -64,32 +65,28 @@ export async function processMatter(ctx: AppContext, matterId: string): Promise<
   }
 
   try {
-    const result = await runPipeline(
-      ctx.ai,
-      { matter, documentsWithPages },
-      async (event) => {
-        const stageToStatus: Record<typeof event.stage, MatterPipelineStatus['status']> = {
-          extraction: 'extracting',
-          analysis: 'analysing',
-          enquiries: 'generating',
-          report: 'generating',
-          done: 'ready_for_review',
-        };
-        await setStatus(ctx, matterId, {
-          status: stageToStatus[event.stage],
-          stage:
-            event.stage === 'extraction'
-              ? 'extraction'
-              : event.stage === 'analysis'
-                ? 'analysis'
-                : event.stage === 'enquiries' || event.stage === 'report'
-                  ? 'generation'
-                  : 'done',
-          progress: event.progress,
-          message: event.message,
-        });
-      },
-    );
+    const result = await runPipeline(ctx.ai, { matter, documentsWithPages }, async (event) => {
+      const stageToStatus: Record<typeof event.stage, MatterPipelineStatus['status']> = {
+        extraction: 'extracting',
+        analysis: 'analysing',
+        enquiries: 'generating',
+        report: 'generating',
+        done: 'ready_for_review',
+      };
+      await setStatus(ctx, matterId, {
+        status: stageToStatus[event.stage],
+        stage:
+          event.stage === 'extraction'
+            ? 'extraction'
+            : event.stage === 'analysis'
+              ? 'analysis'
+              : event.stage === 'enquiries' || event.stage === 'report'
+                ? 'generation'
+                : 'done',
+        progress: event.progress,
+        message: event.message,
+      });
+    });
 
     await ctx.repo.addFacts(result.facts);
     await ctx.repo.addRisks(result.risks);

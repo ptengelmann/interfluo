@@ -1,8 +1,8 @@
 import type {
   DOCUMENT_TYPES,
-  RISK_SEVERITIES,
   ENQUIRY_CATEGORIES,
   MATTER_STATUSES,
+  RISK_SEVERITIES,
 } from '../constants';
 
 export type DocumentType = (typeof DOCUMENT_TYPES)[number];
@@ -66,9 +66,7 @@ export function formatPages(pageNumbers: number[]): string {
   if (pageNumbers.length === 0) return '';
   if (pageNumbers.length === 1) return `p. ${pageNumbers[0]}`;
   const sorted = [...pageNumbers].sort((a, b) => a - b);
-  const isContiguousRange = sorted.every(
-    (n, i) => i === 0 || n === (sorted[i - 1] ?? n) + 1,
-  );
+  const isContiguousRange = sorted.every((n, i) => i === 0 || n === (sorted[i - 1] ?? n) + 1);
   if (isContiguousRange) return `pp. ${sorted[0]}–${sorted[sorted.length - 1]}`;
   return `pp. ${sorted.join(', ')}`;
 }

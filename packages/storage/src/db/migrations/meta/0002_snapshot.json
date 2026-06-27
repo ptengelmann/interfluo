@@ -77,12 +77,8 @@
           "name": "documents_matter_id_matters_id_fk",
           "tableFrom": "documents",
           "tableTo": "matters",
-          "columnsFrom": [
-            "matter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -165,12 +161,8 @@
           "name": "enquiries_matter_id_matters_id_fk",
           "tableFrom": "enquiries",
           "tableTo": "matters",
-          "columnsFrom": [
-            "matter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -241,12 +233,8 @@
           "name": "extracted_facts_matter_id_matters_id_fk",
           "tableFrom": "extracted_facts",
           "tableTo": "matters",
-          "columnsFrom": [
-            "matter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         },
@@ -254,12 +242,8 @@
           "name": "extracted_facts_document_id_documents_id_fk",
           "tableFrom": "extracted_facts",
           "tableTo": "documents",
-          "columnsFrom": [
-            "document_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["document_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -460,12 +444,8 @@
           "name": "pipeline_status_matter_id_matters_id_fk",
           "tableFrom": "pipeline_status",
           "tableTo": "matters",
-          "columnsFrom": [
-            "matter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -524,12 +504,8 @@
           "name": "reports_matter_id_matters_id_fk",
           "tableFrom": "reports",
           "tableTo": "matters",
-          "columnsFrom": [
-            "matter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -593,12 +569,8 @@
           "name": "risk_flags_matter_id_matters_id_fk",
           "tableFrom": "risk_flags",
           "tableTo": "matters",
-          "columnsFrom": [
-            "matter_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["matter_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }

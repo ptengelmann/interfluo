@@ -1,8 +1,8 @@
 'use client';
 
 import { useAuth } from '@clerk/nextjs';
+import { type InterfluoClient, createInterfluoClient } from '@interfluo/sdk';
 import { useMemo } from 'react';
-import { createInterfluoClient, type InterfluoClient } from '@interfluo/sdk';
 
 const baseUrl = process.env.NEXT_PUBLIC_API_URL ?? 'http://localhost:4000';
 

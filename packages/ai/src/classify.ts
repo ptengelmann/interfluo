@@ -2,7 +2,7 @@ import { DOCUMENT_TYPES, type DocumentType } from '@interfluo/core';
 import type { AiClient } from './client';
 import { CLASSIFY_SYSTEM, CLASSIFY_USER } from './prompts/classify';
 import { extractToolUse } from './util/json';
-import { formatPagesForPrompt, takeFirstN, type PageChunk } from './util/page-text';
+import { type PageChunk, formatPagesForPrompt, takeFirstN } from './util/page-text';
 
 export interface ClassificationResult {
   documentType: DocumentType;

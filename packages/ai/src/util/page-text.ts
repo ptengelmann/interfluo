@@ -6,9 +6,10 @@ export interface PageChunk {
 export function formatPagesForPrompt(pages: PageChunk[], maxCharsPerPage = 6000): string {
   return pages
     .map((p) => {
-      const text = p.text.length > maxCharsPerPage
-        ? `${p.text.slice(0, maxCharsPerPage)}\n[... page truncated]`
-        : p.text;
+      const text =
+        p.text.length > maxCharsPerPage
+          ? `${p.text.slice(0, maxCharsPerPage)}\n[... page truncated]`
+          : p.text;
       return `<page n="${p.pageNumber}">\n${text}\n</page>`;
     })
     .join('\n\n');

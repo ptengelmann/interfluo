@@ -1,7 +1,7 @@
 import { randomUUID } from 'node:crypto';
 import {
-  ENQUIRY_CATEGORIES,
   type Citation,
+  ENQUIRY_CATEGORIES,
   type Enquiry,
   type EnquiryCategory,
   type ExtractedFact,
@@ -97,7 +97,9 @@ export async function generateEnquiries(
     system: ENQUIRIES_SYSTEM,
     tools: [ENQUIRIES_TOOL],
     tool_choice: { type: 'tool', name: 'record_enquiries' },
-    messages: [{ role: 'user', content: enquiriesUserPrompt(propertyAddress, factsJson, risksJson) }],
+    messages: [
+      { role: 'user', content: enquiriesUserPrompt(propertyAddress, factsJson, risksJson) },
+    ],
   });
 
   const parsed = extractToolUse<RawEnquiriesPayload>(response, 'record_enquiries');

@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 export interface TitleRegisterInput {
   titleNumber: string;
@@ -27,8 +27,7 @@ export async function generateTitleRegister(input: TitleRegisterInput): Promise<
     { kind: 'p', text: `Official copy of register of title — issued ${today}` },
     {
       kind: 'p',
-      text:
-        'This official copy shows the entries on the register of title on the day and at the time shown above. It is admissible in evidence to the same extent as the original (Land Registration Act 2002, s.67).',
+      text: 'This official copy shows the entries on the register of title on the day and at the time shown above. It is admissible in evidence to the same extent as the original (Land Registration Act 2002, s.67).',
     },
     { kind: 'rule' },
     { kind: 'kv', key: 'Title Number', value: input.titleNumber },
@@ -40,7 +39,10 @@ export async function generateTitleRegister(input: TitleRegisterInput): Promise<
       kind: 'p',
       text: `This register describes the land and estate comprised in the title. ${input.tenure.toUpperCase()}.`,
     },
-    { kind: 'p', text: `1. (${today.split(' ').slice(1).join(' ')}) The ${input.tenure.toLowerCase()} land shown edged with red on the plan of the above title filed at the Registry being ${input.propertyAddress}.` },
+    {
+      kind: 'p',
+      text: `1. (${today.split(' ').slice(1).join(' ')}) The ${input.tenure.toLowerCase()} land shown edged with red on the plan of the above title filed at the Registry being ${input.propertyAddress}.`,
+    },
   ];
 
   if (input.tenure === 'Leasehold' && input.leaseDetails && input.parentFreeholdTitle) {

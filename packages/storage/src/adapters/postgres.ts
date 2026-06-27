@@ -1,4 +1,3 @@
-import { and, asc, desc, eq } from 'drizzle-orm';
 import type {
   AuditEvent,
   AuditEventType,
@@ -18,18 +17,9 @@ import type {
   RiskFlag,
   RiskSeverity,
 } from '@interfluo/core';
-import type { MatterRepository } from '../types';
-import { createDatabase, type Database } from '../db/client';
+import { and, asc, desc, eq } from 'drizzle-orm';
+import { type Database, createDatabase } from '../db/client';
 import {
-  auditEvents as auditEventsTable,
-  documents as documentsTable,
-  enquiries as enquiriesTable,
-  extractedFacts as factsTable,
-  firmTemplates as firmTemplatesTable,
-  matters as mattersTable,
-  pipelineStatus as pipelineTable,
-  reports as reportsTable,
-  riskFlags as risksTable,
   type DbAuditEvent,
   type DbDocument,
   type DbEnquiry,
@@ -39,7 +29,17 @@ import {
   type DbPipelineStatus,
   type DbReport,
   type DbRisk,
+  auditEvents as auditEventsTable,
+  documents as documentsTable,
+  enquiries as enquiriesTable,
+  extractedFacts as factsTable,
+  firmTemplates as firmTemplatesTable,
+  matters as mattersTable,
+  pipelineStatus as pipelineTable,
+  reports as reportsTable,
+  riskFlags as risksTable,
 } from '../db/schema';
+import type { MatterRepository } from '../types';
 
 function iso(value: string | null): string | null {
   if (!value) return null;
@@ -144,7 +144,8 @@ function toEnquiry(row: DbEnquiry): Enquiry {
 }
 
 function toReport(row: DbReport): ReportOnTitle {
-  const rawSections = (row.sections as { heading: string; body: string; citations?: unknown }[]) ?? [];
+  const rawSections =
+    (row.sections as { heading: string; body: string; citations?: unknown }[]) ?? [];
   const sections: ReportSection[] = rawSections.map((s) => ({
     heading: s.heading,
     body: s.body,
@@ -380,10 +381,7 @@ function makeRepository(db: Database['db']): MatterRepository {
     },
 
     async listRisks(matterId) {
-      const rows = await db
-        .select()
-        .from(risksTable)
-        .where(eq(risksTable.matterId, matterId));
+      const rows = await db.select().from(risksTable).where(eq(risksTable.matterId, matterId));
       return rows.map(toRisk);
     },
 
@@ -422,7 +420,11 @@ function makeRepository(db: Database['db']): MatterRepository {
       if (patch.rationale !== undefined) update.rationale = patch.rationale;
       if (patch.priority !== undefined) update.priority = patch.priority;
       if (Object.keys(update).length === 0) {
-        const rows = await db.select().from(enquiriesTable).where(eq(enquiriesTable.id, id)).limit(1);
+        const rows = await db
+          .select()
+          .from(enquiriesTable)
+          .where(eq(enquiriesTable.id, id))
+          .limit(1);
         const row = rows[0];
         return row ? toEnquiry(row) : null;
       }

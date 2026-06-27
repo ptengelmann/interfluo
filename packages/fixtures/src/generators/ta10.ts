@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 interface ItemStatus {
   item: string;

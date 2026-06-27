@@ -1,7 +1,7 @@
+import { AppShell } from '@/components/layout/shell';
+import { ClerkProvider } from '@clerk/nextjs';
 import type { Metadata } from 'next';
 import type { ReactNode } from 'react';
-import { ClerkProvider } from '@clerk/nextjs';
-import { AppShell } from '@/components/layout/shell';
 import '@/styles/globals.css';
 
 export const metadata: Metadata = {
@@ -36,8 +36,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           card: 'shadow-[0_1px_2px_rgba(30,28,24,.06)] border border-[#E2DCCF]',
           headerTitle: 'font-semibold tracking-tight text-[#17181C]',
           headerSubtitle: 'text-[#4A4842]',
-          formButtonPrimary:
-            'bg-[#2E5C46] hover:bg-[#234A38] text-white normal-case font-semibold',
+          formButtonPrimary: 'bg-[#2E5C46] hover:bg-[#234A38] text-white normal-case font-semibold',
           footerActionLink: 'text-[#2E5C46] hover:text-[#234A38]',
         },
       }}

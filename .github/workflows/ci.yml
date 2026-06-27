@@ -24,8 +24,7 @@ jobs:
 
       - name: Install pnpm
         uses: pnpm/action-setup@v4
-        with:
-          version: 11
+        # pnpm version is read from package.json `packageManager` field
 
       - name: Install Node
         uses: actions/setup-node@v4
@@ -34,7 +33,15 @@ jobs:
           cache: pnpm
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile
+        # pnpm v11 ignores onlyBuiltDependencies under our current config and
+        # exits 1 on ERR_PNPM_IGNORED_BUILDS. We install with --ignore-scripts
+        # to skip the check, then run the postinstall steps we actually need.
+        run: pnpm install --frozen-lockfile --ignore-scripts
+
+      - name: Run approved build scripts
+        run: |
+          pnpm --filter @interfluo/web run copy:pdf-worker || (cd apps/web && pnpm run copy:pdf-worker)
+          pnpm rebuild esbuild sharp @biomejs/biome
 
       - name: Typecheck
         run: pnpm typecheck
@@ -43,4 +50,12 @@ jobs:
         run: pnpm exec biome check .
 
       - name: Build
+        # Placeholder env vars so prerender/SSR steps don't throw on missing
+        # third-party SDK config. Real values live in deployment env, not CI.
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2lfYnVpbGRfcGxhY2Vob2xkZXIuY2xlcmsuYWNjb3VudHMuZGV2JA
+          CLERK_SECRET_KEY: sk_test_ci_build_placeholder_not_real
+          NEXT_PUBLIC_API_URL: http://localhost:3000
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          ANTHROPIC_API_KEY: sk-ant-ci-build-placeholder
         run: pnpm build

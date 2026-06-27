@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 export interface MortgageOfferInput {
   borrower: string;
@@ -53,7 +53,7 @@ export async function generateMortgageOffer(input: MortgageOfferInput): Promise<
   blocks.push({ kind: 'rule' });
   blocks.push({
     kind: 'p',
-    text: 'This offer is made subject to the UK Finance Mortgage Lenders\' Handbook in force at the date of completion.',
+    text: "This offer is made subject to the UK Finance Mortgage Lenders' Handbook in force at the date of completion.",
   });
 
   return buildPdf({ title: 'Mortgage Offer', subject: 'Mortgage offer' }, blocks);

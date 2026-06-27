@@ -2,15 +2,18 @@ import { Hono } from 'hono';
 import { cors } from 'hono/cors';
 import { logger as honoLogger } from 'hono/logger';
 import { secureHeaders } from 'hono/secure-headers';
-import type { AppContext } from './context';
 import { authMiddleware } from './auth';
+import type { AppContext } from './context';
 import { ApiError } from './errors';
 import { buildMattersRouter } from './routes/matters';
 
 export function createApp(ctx: AppContext) {
   const app = new Hono();
 
-  app.use('*', honoLogger((message) => ctx.logger.info(message)));
+  app.use(
+    '*',
+    honoLogger((message) => ctx.logger.info(message)),
+  );
   app.use('*', secureHeaders());
   app.use(
     '*',

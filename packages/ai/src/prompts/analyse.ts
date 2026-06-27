@@ -39,10 +39,7 @@ Owner-occupier sales routinely include the items above. They are part of the con
 - Title MUST be a noun phrase (max 80 chars) — e.g. "Unexpired lease term below lender minimum", NOT a sentence.
 - Description MUST be 1–3 sentences explaining what the issue is and why it matters.`;
 
-export function analyseUserPrompt(
-  propertyAddress: string | null,
-  factsJson: string,
-): string {
+export function analyseUserPrompt(propertyAddress: string | null, factsJson: string): string {
   return `Property: ${propertyAddress ?? 'unknown'}
 
 Facts (JSON array; each fact has a short id like "F012" that you must cite):

@@ -1,10 +1,5 @@
 import { z } from 'zod';
-import {
-  DOCUMENT_TYPES,
-  RISK_SEVERITIES,
-  ENQUIRY_CATEGORIES,
-  MATTER_STATUSES,
-} from '../constants';
+import { DOCUMENT_TYPES, ENQUIRY_CATEGORIES, MATTER_STATUSES, RISK_SEVERITIES } from '../constants';
 
 export const documentTypeSchema = z.enum(DOCUMENT_TYPES);
 export const riskSeveritySchema = z.enum(RISK_SEVERITIES);

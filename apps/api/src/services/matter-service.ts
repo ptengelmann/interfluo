@@ -1,10 +1,5 @@
 import { randomUUID } from 'node:crypto';
-import type {
-  CreateMatterInput,
-  Matter,
-  MatterDetail,
-  UpdateMatterInput,
-} from '@interfluo/core';
+import type { CreateMatterInput, Matter, MatterDetail, UpdateMatterInput } from '@interfluo/core';
 import type { AppContext } from '../context';
 import { ApiError } from '../errors';
 

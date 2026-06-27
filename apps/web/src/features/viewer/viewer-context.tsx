@@ -1,14 +1,7 @@
 'use client';
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useMemo,
-  useState,
-  type ReactNode,
-} from 'react';
 import type { Citation } from '@interfluo/core';
+import { type ReactNode, createContext, useCallback, useContext, useMemo, useState } from 'react';
 
 export interface ViewerRequest {
   matterId: string;

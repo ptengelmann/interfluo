@@ -115,8 +115,7 @@ export function createInterfluoClient(opts: InterfluoClientOptions) {
         body: JSON.stringify(patch),
       }),
 
-    listFirmTemplates: () =>
-      request<{ templates: FirmTemplate[] }>('/v1/firm-templates'),
+    listFirmTemplates: () => request<{ templates: FirmTemplate[] }>('/v1/firm-templates'),
 
     uploadFirmTemplate: (kind: FirmTemplateKind, file: File) => {
       const form = new FormData();

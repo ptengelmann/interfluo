@@ -1,8 +1,8 @@
 import { generateCon29 } from '../generators/con29';
 import { generateDraftContract } from '../generators/draft-contract';
 import { generateDrainageSearch } from '../generators/drainage-search';
-import { generateTa10 } from '../generators/ta10';
 import { generateTa6 } from '../generators/ta6';
+import { generateTa10 } from '../generators/ta10';
 import { generateTitleRegister } from '../generators/title-register';
 import type { ScenarioBundle } from './index';
 
@@ -30,11 +30,13 @@ export async function freeholdHouseClean(): Promise<ScenarioBundle> {
   const ta6 = await generateTa6({
     propertyAddress,
     sellerName,
-    boundaryOwnership: 'The fence on the left is owned and maintained by the seller. The fence on the right is owned and maintained by the neighbour at 45 Beechwood Avenue.',
+    boundaryOwnership:
+      'The fence on the left is owned and maintained by the seller. The fence on the right is owned and maintained by the neighbour at 45 Beechwood Avenue.',
     disputes: 'No disputes or complaints.',
     alterationsDescription:
       'A timber summer house was installed in the rear garden in 2020. No structural alterations to the house itself.',
-    alterationsPlanningPermission: 'Planning permission not required (the summer house is below the permitted development threshold).',
+    alterationsPlanningPermission:
+      'Planning permission not required (the summer house is below the permitted development threshold).',
     alterationsBuildingRegs: 'Building Regulations not applicable.',
     drainageMains: 'Yes — the property is connected to mains foul and surface water drainage.',
     occupiersOver17: [],
@@ -69,14 +71,18 @@ export async function freeholdHouseClean(): Promise<ScenarioBundle> {
   const con29 = await generateCon29({
     propertyAddress,
     localAuthority: 'Sheffield City Council',
-    planningPermissions: ['No planning applications recorded against the property in the last 10 years.'],
-    planningEnforcement: 'No enforcement notices, stop notices, or breach of condition notices recorded.',
+    planningPermissions: [
+      'No planning applications recorded against the property in the last 10 years.',
+    ],
+    planningEnforcement:
+      'No enforcement notices, stop notices, or breach of condition notices recorded.',
     buildingRegsCertificates: [
       'Building Regulations completion certificate dated 14 June 2018 in respect of replacement windows (FENSA route).',
     ],
     listedBuilding: 'No — the property is not listed.',
     conservationArea: 'No — the property is not within a conservation area.',
-    tpoTrees: 'A single mature oak tree at the front of 49 Beechwood Avenue (the neighbour) is subject to TPO/2003/0142.',
+    tpoTrees:
+      'A single mature oak tree at the front of 49 Beechwood Avenue (the neighbour) is subject to TPO/2003/0142.',
     roadAdoption: 'Beechwood Avenue is a public highway maintainable at public expense.',
     publicRightsOfWay: 'None.',
     contaminatedLandNotice: 'No.',
@@ -120,7 +126,7 @@ export async function freeholdHouseClean(): Promise<ScenarioBundle> {
       'Standard confirmation that the FENSA / NICEIC certificates referred to in the TA6 will be handed over on completion.',
       'Confirmation that the summer house is included in the sale per TA10 and falls within permitted development.',
       'Routine confirmation of vacant possession on the contractual completion date.',
-      'The TPO on the neighbour\'s tree at 49 Beechwood Avenue should be noted in the Report on Title but does not require an enquiry — it does not bind the property being purchased.',
+      "The TPO on the neighbour's tree at 49 Beechwood Avenue should be noted in the Report on Title but does not require an enquiry — it does not bind the property being purchased.",
       'No material risks should be flagged; the pack is intentionally clean.',
     ],
     files: [

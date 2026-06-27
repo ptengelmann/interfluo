@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 export interface DraftContractInput {
   sellerName: string;
@@ -18,18 +18,33 @@ export interface DraftContractInput {
 export async function generateDraftContract(input: DraftContractInput): Promise<Buffer> {
   const blocks: Block[] = [
     { kind: 'h1', text: 'DRAFT CONTRACT FOR SALE' },
-    { kind: 'p', text: 'Incorporating the Standard Conditions of Sale (5th edition — 2018 revision).' },
+    {
+      kind: 'p',
+      text: 'Incorporating the Standard Conditions of Sale (5th edition — 2018 revision).',
+    },
     { kind: 'rule' },
 
     { kind: 'h2', text: 'PARTICULARS' },
-    { kind: 'kv', key: 'Seller', value: `${input.sellerName} (acting through ${input.sellerSolicitor})` },
-    { kind: 'kv', key: 'Buyer', value: `${input.buyerName} (acting through ${input.buyerSolicitor})` },
+    {
+      kind: 'kv',
+      key: 'Seller',
+      value: `${input.sellerName} (acting through ${input.sellerSolicitor})`,
+    },
+    {
+      kind: 'kv',
+      key: 'Buyer',
+      value: `${input.buyerName} (acting through ${input.buyerSolicitor})`,
+    },
     { kind: 'kv', key: 'Property', value: input.propertyAddress },
     { kind: 'kv', key: 'Title number', value: input.titleNumber },
     { kind: 'kv', key: 'Purchase price', value: input.purchasePrice },
     { kind: 'kv', key: 'Deposit', value: `${input.depositPercentage} of the purchase price` },
     { kind: 'kv', key: 'Title guarantee', value: input.titleGuarantee },
-    { kind: 'kv', key: 'Vacant possession', value: input.vacantPossession ? 'Yes' : 'No — subject to existing tenancies' },
+    {
+      kind: 'kv',
+      key: 'Vacant possession',
+      value: input.vacantPossession ? 'Yes' : 'No — subject to existing tenancies',
+    },
 
     { kind: 'h2', text: 'SPECIFIED INCUMBRANCES' },
     ...(input.specifiedIncumbrances.length === 0

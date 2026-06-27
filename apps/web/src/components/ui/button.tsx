@@ -1,7 +1,7 @@
 'use client';
 
-import type { ButtonHTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/lib/cn';
+import type { ButtonHTMLAttributes, ReactNode } from 'react';
 
 type Variant = 'primary' | 'secondary' | 'ghost' | 'danger';
 type Size = 'sm' | 'md' | 'lg';
@@ -19,10 +19,8 @@ const variantClasses: Record<Variant, string> = {
     'bg-accent text-white hover:bg-accent-dark active:bg-accent-dark disabled:opacity-50 disabled:cursor-not-allowed',
   secondary:
     'bg-surface text-ink border border-line hover:border-line-strong hover:bg-paper-dim/60',
-  ghost:
-    'bg-transparent text-ink-soft hover:text-ink hover:bg-paper-dim/60',
-  danger:
-    'bg-danger text-white hover:opacity-90 disabled:opacity-50',
+  ghost: 'bg-transparent text-ink-soft hover:text-ink hover:bg-paper-dim/60',
+  danger: 'bg-danger text-white hover:opacity-90 disabled:opacity-50',
 };
 
 const sizeClasses: Record<Size, string> = {

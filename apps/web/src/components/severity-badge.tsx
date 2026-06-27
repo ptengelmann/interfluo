@@ -1,13 +1,14 @@
 import type { RiskSeverity } from '@interfluo/core';
 import { Badge } from './ui/badge';
 
-const MAP: Record<RiskSeverity, { tone: 'danger' | 'warn' | 'neutral' | 'muted'; label: string }> = {
-  critical: { tone: 'danger', label: 'Critical' },
-  high: { tone: 'danger', label: 'High' },
-  medium: { tone: 'warn', label: 'Medium' },
-  low: { tone: 'neutral', label: 'Low' },
-  informational: { tone: 'muted', label: 'Info' },
-};
+const MAP: Record<RiskSeverity, { tone: 'danger' | 'warn' | 'neutral' | 'muted'; label: string }> =
+  {
+    critical: { tone: 'danger', label: 'Critical' },
+    high: { tone: 'danger', label: 'High' },
+    medium: { tone: 'warn', label: 'Medium' },
+    low: { tone: 'neutral', label: 'Low' },
+    informational: { tone: 'muted', label: 'Info' },
+  };
 
 export function SeverityBadge({ severity }: { severity: RiskSeverity }) {
   const { tone, label } = MAP[severity];

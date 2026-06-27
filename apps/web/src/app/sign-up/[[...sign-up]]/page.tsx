@@ -7,11 +7,7 @@ export default function SignUpPage() {
         <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
           Create your firm account
         </p>
-        <SignUp
-          signInUrl="/sign-in"
-          forceRedirectUrl="/"
-          fallbackRedirectUrl="/"
-        />
+        <SignUp signInUrl="/sign-in" forceRedirectUrl="/" fallbackRedirectUrl="/" />
       </div>
     </div>
   );

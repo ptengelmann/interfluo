@@ -23,10 +23,6 @@
     "typescript": "^5.7.3"
   },
   "pnpm": {
-    "onlyBuiltDependencies": [
-      "@biomejs/biome",
-      "esbuild",
-      "sharp"
-    ]
+    "onlyBuiltDependencies": ["@biomejs/biome", "@clerk/shared", "esbuild", "sharp"]
   }
 }

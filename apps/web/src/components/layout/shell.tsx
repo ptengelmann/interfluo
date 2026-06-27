@@ -1,13 +1,7 @@
+import { Logo } from '@/brand/Logo';
+import { OrganizationSwitcher, SignInButton, SignedIn, SignedOut, UserButton } from '@clerk/nextjs';
 import Link from 'next/link';
 import type { ReactNode } from 'react';
-import {
-  OrganizationSwitcher,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  UserButton,
-} from '@clerk/nextjs';
-import { Logo } from '@/brand/Logo';
 import { OrgGuard } from './org-guard';
 
 export function AppShell({ children }: { children: ReactNode }) {
@@ -45,8 +39,7 @@ export function AppShell({ children }: { children: ReactNode }) {
                     organizationSwitcherTrigger:
                       'rounded-md bg-white/5 px-3 py-1.5 text-on-ink hover:bg-white/10 transition-colors',
                     organizationSwitcherTriggerIcon: 'text-on-ink',
-                    organizationPreviewTextContainer__organizationSwitcherTrigger:
-                      'text-on-ink',
+                    organizationPreviewTextContainer__organizationSwitcherTrigger: 'text-on-ink',
                     organizationPreviewMainIdentifier__organizationSwitcherTrigger:
                       'text-on-ink font-medium',
                   },

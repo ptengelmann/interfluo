@@ -1,9 +1,9 @@
 'use client';
 
-import { useEffect, useRef, useState } from 'react';
-import { DOCUMENT_TYPES, DOCUMENT_TYPE_LABELS, type DocumentType } from '@interfluo/core';
 import { DocumentTypeLabel } from '@/components/document-type-label';
 import { useApi } from '@/lib/api';
+import { DOCUMENT_TYPES, DOCUMENT_TYPE_LABELS, type DocumentType } from '@interfluo/core';
+import { useEffect, useRef, useState } from 'react';
 
 export function DocumentTypePicker({
   matterId,

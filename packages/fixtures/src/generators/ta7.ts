@@ -1,4 +1,4 @@
-import { buildPdf, type Block } from '../pdf/builder';
+import { type Block, buildPdf } from '../pdf/builder';
 
 export interface Ta7Input {
   propertyAddress: string;
@@ -31,7 +31,11 @@ export async function generateTa7(input: Ta7Input): Promise<Buffer> {
     { kind: 'h2', text: '2. Ground rent' },
     { kind: 'qa', q: '2.1  What is the current ground rent payable?', a: input.groundRent },
     { kind: 'qa', q: '2.2  Are there any review provisions?', a: input.groundRentReview },
-    { kind: 'qa', q: '2.3  Is ground rent paid up to date?', a: 'Yes, paid up to the most recent demand.' },
+    {
+      kind: 'qa',
+      q: '2.3  Is ground rent paid up to date?',
+      a: 'Yes, paid up to the most recent demand.',
+    },
 
     { kind: 'page-break' },
 
@@ -55,7 +59,11 @@ export async function generateTa7(input: Ta7Input): Promise<Buffer> {
     { kind: 'page-break' },
 
     { kind: 'h2', text: '5. Buildings insurance' },
-    { kind: 'qa', q: '5.1  Is the building insured by the landlord or the lessee?', a: input.buildingsInsurance },
+    {
+      kind: 'qa',
+      q: '5.1  Is the building insured by the landlord or the lessee?',
+      a: input.buildingsInsurance,
+    },
     { kind: 'qa', q: '5.2  Have there been any claims in the last 3 years?', a: 'None.' },
 
     { kind: 'h2', text: '6. Disputes' },
@@ -72,5 +80,8 @@ export async function generateTa7(input: Ta7Input): Promise<Buffer> {
     },
   ];
 
-  return buildPdf({ title: 'TA7 Leasehold Information Form', subject: 'Leasehold disclosure' }, blocks);
+  return buildPdf(
+    { title: 'TA7 Leasehold Information Form', subject: 'Leasehold disclosure' },
+    blocks,
+  );
 }

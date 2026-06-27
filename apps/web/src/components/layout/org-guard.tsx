@@ -29,18 +29,13 @@ export function OrgGuard({ children }: { children: ReactNode }) {
           <p className="text-[12px] font-semibold uppercase tracking-[0.14em] text-muted">
             One last step
           </p>
-          <h1 className="font-display mt-2 text-[34px] leading-[1.1] text-ink">
-            Create your firm
-          </h1>
+          <h1 className="font-display mt-2 text-[34px] leading-[1.1] text-ink">Create your firm</h1>
           <p className="mt-2 max-w-md text-[14.5px] text-ink-soft">
-            Interfluo scopes every matter, document, and Report on Title to a firm. Name yours
-            below — you can invite colleagues from settings later.
+            Interfluo scopes every matter, document, and Report on Title to a firm. Name yours below
+            — you can invite colleagues from settings later.
           </p>
         </div>
-        <CreateOrganization
-          afterCreateOrganizationUrl="/"
-          skipInvitationScreen
-        />
+        <CreateOrganization afterCreateOrganizationUrl="/" skipInvitationScreen />
       </div>
     </div>
   );

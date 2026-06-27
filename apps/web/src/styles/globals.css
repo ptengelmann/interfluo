@@ -1,6 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap');
-@import 'tailwindcss';
-@import '../brand/tokens.css';
+@import url("https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Instrument+Serif:ital@0;1&display=swap");
+@import "tailwindcss";
+@import "../brand/tokens.css";
 
 @theme {
   --color-ink: #17181c;
@@ -20,8 +20,8 @@
   --color-on-ink-soft: rgba(245, 241, 233, 0.6);
   --color-on-ink-line: #33343a;
 
-  --font-display: 'Instrument Serif', Georgia, serif;
-  --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-sans: "Hanken Grotesk", system-ui, sans-serif;
 
   --radius-sm: 6px;
   --radius-md: 10px;

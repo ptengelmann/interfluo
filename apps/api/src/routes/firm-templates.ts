@@ -1,14 +1,10 @@
-import { Hono } from 'hono';
 import { firmTemplateKindSchema } from '@interfluo/core';
-import type { AppContext } from '../context';
+import { Hono } from 'hono';
 import { getAuth } from '../auth';
+import type { AppContext } from '../context';
 import { ApiError } from '../errors';
-import {
-  deleteTemplate,
-  listTemplates,
-  uploadTemplate,
-} from '../services/firm-template-service';
 import { recordAudit } from '../services/audit-service';
+import { deleteTemplate, listTemplates, uploadTemplate } from '../services/firm-template-service';
 
 export function buildFirmTemplatesRouter(ctx: AppContext) {
   const app = new Hono();

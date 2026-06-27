@@ -1,18 +1,17 @@
 'use client';
 
+import { IconArrowLeft, IconArrowRight, IconQuote, IconX } from '@/components/icons';
+import { Badge } from '@/components/ui/badge';
+import { API_BASE_URL } from '@/lib/api';
 import { useAuth } from '@clerk/nextjs';
+import { DOCUMENT_TYPE_LABELS, formatPages, primaryPage } from '@interfluo/core';
 import dynamic from 'next/dynamic';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { DOCUMENT_TYPE_LABELS, formatPages, primaryPage } from '@interfluo/core';
-import { Badge } from '@/components/ui/badge';
-import { IconArrowLeft, IconArrowRight, IconQuote, IconX } from '@/components/icons';
 import { useViewer } from './viewer-context';
-import { API_BASE_URL } from '@/lib/api';
 
-const PdfRenderer = dynamic(
-  () => import('./pdf-renderer').then((m) => m.PdfRenderer),
-  { ssr: false },
-);
+const PdfRenderer = dynamic(() => import('./pdf-renderer').then((m) => m.PdfRenderer), {
+  ssr: false,
+});
 
 const SCALE_OPTIONS = [
   { label: '75%', value: 0.75 },
@@ -56,7 +55,8 @@ export function DocumentViewerDrawer() {
     if (!request) return;
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') close();
-      if (e.key === 'ArrowRight') setPageNumber((n) => (pageCount ? Math.min(n + 1, pageCount) : n + 1));
+      if (e.key === 'ArrowRight')
+        setPageNumber((n) => (pageCount ? Math.min(n + 1, pageCount) : n + 1));
       if (e.key === 'ArrowLeft') setPageNumber((n) => Math.max(1, n - 1));
     };
     document.addEventListener('keydown', onKey);
@@ -68,12 +68,9 @@ export function DocumentViewerDrawer() {
     };
   }, [request, pageCount, close]);
 
-  const onLoaded = useCallback(
-    ({ pageCount: pc }: { pageCount: number; title: string | null }) => {
-      setPageCount(pc);
-    },
-    [],
-  );
+  const onLoaded = useCallback(({ pageCount: pc }: { pageCount: number; title: string | null }) => {
+    setPageCount(pc);
+  }, []);
 
   const pdfUrl = useMemo(() => {
     if (!request) return null;
@@ -157,9 +154,7 @@ export function DocumentViewerDrawer() {
             </button>
             {citedPages.length > 0 && (
               <div className="ml-3 flex items-center gap-1 border-l border-line pl-3">
-                <span className="text-[11.5px] uppercase tracking-[0.14em] text-muted">
-                  Cited:
-                </span>
+                <span className="text-[11.5px] uppercase tracking-[0.14em] text-muted">Cited:</span>
                 {citedPages.map((p) => (
                   <button
                     key={p}
@@ -206,9 +201,7 @@ export function DocumentViewerDrawer() {
                   <span className="ml-2 text-muted">· currently viewing page {showingPage}</span>
                 )}
               </p>
-              <p className="mt-1 text-[14px] italic leading-relaxed text-ink">
-                "{citation.quote}"
-              </p>
+              <p className="mt-1 text-[14px] italic leading-relaxed text-ink">"{citation.quote}"</p>
             </div>
           </div>
         </div>

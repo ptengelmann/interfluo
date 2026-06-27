@@ -1,11 +1,11 @@
 'use client';
 
-import { useState } from 'react';
-import type { Citation } from '@interfluo/core';
-import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
-import { cn } from '@/lib/cn';
 import { useCurrentMatterId } from '@/features/matters/matter-context';
 import { useViewer } from '@/features/viewer/viewer-context';
+import { cn } from '@/lib/cn';
+import type { Citation } from '@interfluo/core';
+import { DOCUMENT_TYPE_LABELS, formatPages } from '@interfluo/core';
+import { useState } from 'react';
 
 export function CitationChip({ citation }: { citation: Citation }) {
   const [hover, setHover] = useState(false);

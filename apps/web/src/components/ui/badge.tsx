@@ -1,5 +1,5 @@
-import type { HTMLAttributes, ReactNode } from 'react';
 import { cn } from '@/lib/cn';
+import type { HTMLAttributes, ReactNode } from 'react';
 
 type Tone = 'neutral' | 'ink' | 'accent' | 'success' | 'warn' | 'danger' | 'muted';
 

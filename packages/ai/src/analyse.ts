@@ -1,5 +1,10 @@
 import { randomUUID } from 'node:crypto';
-import { RISK_SEVERITIES, type ExtractedFact, type RiskFlag, type RiskSeverity } from '@interfluo/core';
+import {
+  type ExtractedFact,
+  RISK_SEVERITIES,
+  type RiskFlag,
+  type RiskSeverity,
+} from '@interfluo/core';
 import type { AiClient } from './client';
 import { ANALYSE_SYSTEM, analyseUserPrompt } from './prompts/analyse';
 import { extractToolUse, truncate } from './util/json';

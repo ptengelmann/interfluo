@@ -1,4 +1,3 @@
-import { Hono, type Context } from 'hono';
 import { zValidator } from '@hono/zod-validator';
 import {
   createMatterInputSchema,
@@ -6,9 +5,13 @@ import {
   updateEnquiryInputSchema,
   updateMatterInputSchema,
 } from '@interfluo/core';
-import type { AppContext } from '../context';
+import { type Context, Hono } from 'hono';
 import { getAuth } from '../auth';
+import type { AppContext } from '../context';
 import { ApiError } from '../errors';
+import { recordAudit } from '../services/audit-service';
+import { ingestDocument } from '../services/document-service';
+import { type DocxArtifact, exportEnquiries, exportReport } from '../services/export-service';
 import {
   createMatter,
   deleteMatter,
@@ -17,10 +20,7 @@ import {
   listMatters,
   updateMatter,
 } from '../services/matter-service';
-import { ingestDocument } from '../services/document-service';
 import { processMatter } from '../services/pipeline-service';
-import { exportEnquiries, exportReport, type DocxArtifact } from '../services/export-service';
-import { recordAudit } from '../services/audit-service';
 
 export function buildMattersRouter(ctx: AppContext) {
   const app = new Hono();
@@ -42,7 +42,11 @@ export function buildMattersRouter(ctx: AppContext) {
       matterId: matter.id,
       targetType: 'matter',
       targetId: matter.id,
-      payload: { reference: matter.reference, propertyAddress: matter.propertyAddress, tenure: matter.tenure },
+      payload: {
+        reference: matter.reference,
+        propertyAddress: matter.propertyAddress,
+        tenure: matter.tenure,
+      },
     });
     return c.json({ matter }, 201);
   });
@@ -283,9 +287,9 @@ export function buildMattersRouter(ctx: AppContext) {
       await ensureMatterInFirm(ctx, firmId, matterId);
       const enquiryId = c.req.param('enquiryId');
       const patch = c.req.valid('json');
-      const previous = await ctx.repo.listEnquiries(matterId).then((all) =>
-        all.find((e) => e.id === enquiryId),
-      );
+      const previous = await ctx.repo
+        .listEnquiries(matterId)
+        .then((all) => all.find((e) => e.id === enquiryId));
       const updated = await ctx.repo.updateEnquiry(enquiryId, patch);
       if (!updated || updated.matterId !== matterId) {
         throw new ApiError('enquiry_not_found', 'Enquiry not found', 404);
@@ -385,8 +389,7 @@ function sendDocx(c: Context, artifact: DocxArtifact) {
   const bytes = new Uint8Array(artifact.buffer.byteLength);
   bytes.set(artifact.buffer);
   return c.body(bytes, 200, {
-    'Content-Type':
-      'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+    'Content-Type': 'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
     'Content-Disposition': `attachment; filename="${ascii}"; filename*=UTF-8''${encoded}`,
     'Content-Length': String(bytes.byteLength),
     'Cache-Control': 'no-store',
