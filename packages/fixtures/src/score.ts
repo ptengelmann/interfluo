@@ -301,16 +301,35 @@ function extractEmittedIssueCodes(content: string): Set<string> {
   return codes;
 }
 
-/** Pull text from CRITICAL/HIGH risk blocks and P1 enquiry blocks. */
+/**
+ * Pull text from CRITICAL/HIGH risk blocks and P1 enquiry blocks only.
+ *
+ * Earlier version captured a fixed seven-line window after each marker,
+ * which spilled over into adjacent lower-severity blocks and falsely
+ * reported items in INFORMATIONAL/P3 sections as "over-flagged" simply
+ * because they happened to be physically close to a HIGH/P1 marker in
+ * the output. Fixed by stopping at the next severity/priority marker
+ * boundary so each block contains only its own content.
+ */
+const ANY_MARKER = /^\[(CRITICAL|HIGH|MEDIUM|LOW|INFORMATIONAL)\]|^\[P[1-5]\s/;
+const HIGH_SEVERITY_MARKER = /^\[(CRITICAL|HIGH)\]|^\[P1\s/;
+
 function extractBlocksAroundSeverityMarkers(content: string): string[] {
   const blocks: string[] = [];
   const lines = content.split('\n');
   for (let i = 0; i < lines.length; i++) {
     const line = lines[i] ?? '';
-    if (/^\[(CRITICAL|HIGH)\]/.test(line) || /^\[P1 /.test(line)) {
-      // Take the marker line and the next 6 lines (title, description, citations).
-      blocks.push(lines.slice(i, i + 7).join('\n'));
+    if (!HIGH_SEVERITY_MARKER.test(line)) continue;
+
+    const block: string[] = [line];
+    for (let j = i + 1; j < lines.length; j++) {
+      const next = lines[j] ?? '';
+      // Stop at the next marker (any severity or priority) so a HIGH block
+      // does not absorb an adjacent INFORMATIONAL/P3/P4 block.
+      if (ANY_MARKER.test(next)) break;
+      block.push(next);
     }
+    blocks.push(block.join('\n'));
   }
   return blocks;
 }
