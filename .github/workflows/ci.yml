@@ -50,4 +50,12 @@ jobs:
         run: pnpm exec biome check .
 
       - name: Build
+        # Placeholder env vars so prerender/SSR steps don't throw on missing
+        # third-party SDK config. Real values live in deployment env, not CI.
+        env:
+          NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY: pk_test_Y2lfYnVpbGRfcGxhY2Vob2xkZXIuY2xlcmsuYWNjb3VudHMuZGV2JA
+          CLERK_SECRET_KEY: sk_test_ci_build_placeholder_not_real
+          NEXT_PUBLIC_API_URL: http://localhost:3000
+          DATABASE_URL: postgres://ci:ci@localhost:5432/ci
+          ANTHROPIC_API_KEY: sk-ant-ci-build-placeholder
         run: pnpm build
