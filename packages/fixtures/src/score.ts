@@ -106,6 +106,24 @@ const SIGNALS: Record<string, SignalCheck[]> = {
       patterns: ['rewire', 'rewired', 'NICEIC', 'Part P', 'electrical certificate'],
     },
   ],
+  'freehold-enforcement-and-undisclosed-occupier': [
+    {
+      label: 'Active planning enforcement notice on garage conversion',
+      patterns: ['enforcement', 'EN/2024/0192', 'garage conversion', 'unauthorised'],
+    },
+    {
+      label: 'Undisclosed adult occupier Eleanor Whitfield (partner)',
+      patterns: ['eleanor whitfield', 'partner', 'occupier', 'vacant possession'],
+    },
+    {
+      label: 'Drainage discrepancy: TA6 mains vs CON29DW private septic',
+      patterns: ['drainage', 'discrepancy', 'septic', 'private', 'mains'],
+    },
+    {
+      label: 'Nationwide mortgage redemption noted but not escalated',
+      patterns: ['nationwide', 'redemption', 'discharge', 'DS1'],
+    },
+  ],
 };
 
 // Adversarial scenarios — phrases that, if found IN A HIGH-SEVERITY BLOCK
@@ -136,6 +154,25 @@ const ADVERSARIAL_ANTIPATTERNS: Record<string, { label: string; patterns: string
     {
       label: 'Wilmslow Common proximity mis-flagged as a constraint',
       patterns: ['common land', 'wilmslow common'],
+    },
+  ],
+  'freehold-enforcement-and-undisclosed-occupier': [
+    {
+      label: 'Nationwide mortgage redemption mis-flagged as critical (routine)',
+      patterns: ['nationwide', 'redemption'],
+    },
+    {
+      label: 'Permitted-development summer house mis-flagged as material',
+      patterns: ['summer house', 'permitted development'],
+    },
+    {
+      label: 'FENSA / NICEIC handover mis-flagged as critical (routine)',
+      patterns: ['FENSA', 'NICEIC', 'electrical installation certificate'],
+    },
+    {
+      label:
+        'Permission 21/03847/F mis-flagged as a separate critical risk (the issue is the enforcement, not the permission)',
+      patterns: ['21/03847/F', 'rear extension'],
     },
   ],
 };

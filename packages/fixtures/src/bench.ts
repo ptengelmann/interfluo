@@ -54,6 +54,13 @@ const SCENARIO_META: Record<string, ScenarioMeta> = {
     buyerName: 'Daniel Foster',
     tenure: 'freehold',
   },
+  'freehold-enforcement-and-undisclosed-occupier': {
+    reference: 'BENCH-ADV-002',
+    propertyAddress: '18 Highfield Road, Bristol BS6 7TG',
+    sellerName: 'Marcus Greene',
+    buyerName: 'Aisha Rahman',
+    tenure: 'freehold',
+  },
 };
 
 async function main() {

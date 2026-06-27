@@ -38,4 +38,16 @@ export const EXPECTED_ISSUE_CODES: Record<string, ConveyancingIssueCode[]> = {
     'PLANNING_BUILDING_REGS_MISSING',
     'TITLE_CHARGE_DISCHARGE_EVIDENCE',
   ],
+
+  // Three planted issues, all genuinely material:
+  // - active enforcement notice on garage conversion (critical)
+  // - undisclosed adult occupier in the draft contract correspondence (critical)
+  // - TA6 declares mains drainage but CON29DW shows private septic (medium)
+  // Anything else emitted as a code is over-flagging.
+  'freehold-enforcement-and-undisclosed-occupier': [
+    'PLANNING_BREACH_ENFORCEMENT',
+    'OCCUPIER_TENANCY_UNDISCLOSED',
+    'SEARCH_DRAINAGE_DISCREPANCY',
+    'TITLE_CHARGE_DISCHARGE_EVIDENCE',
+  ],
 };
