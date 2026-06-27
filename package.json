@@ -25,6 +25,7 @@
   "pnpm": {
     "onlyBuiltDependencies": [
       "@biomejs/biome",
+      "@clerk/shared",
       "esbuild",
       "sharp"
     ]
