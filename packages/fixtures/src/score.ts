@@ -169,11 +169,13 @@ const ADVERSARIAL_ANTIPATTERNS: Record<string, { label: string; patterns: string
       label: 'FENSA / NICEIC handover mis-flagged as critical (routine)',
       patterns: ['FENSA', 'NICEIC', 'electrical installation certificate'],
     },
-    {
-      label:
-        'Permission 21/03847/F mis-flagged as a separate critical risk (the issue is the enforcement, not the permission)',
-      patterns: ['21/03847/F', 'rear extension'],
-    },
+    // Removed: "Permission 21/03847/F mis-flagged as separate critical risk".
+    // The pattern fired on contextual citations of the permission inside the
+    // enforcement-notice risk (e.g. "breach of condition 4 of planning
+    // permission 21/03847/F"), which is legitimate evidence, not over-flagging.
+    // The genuine concern (model creating a separate HIGH risk for the
+    // permission) is observable from the risk titles themselves and did not
+    // materialise in the v2 calibration run. Pattern signal was net-negative.
   ],
 };
 
