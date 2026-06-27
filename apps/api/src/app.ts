@@ -5,6 +5,7 @@ import { secureHeaders } from 'hono/secure-headers';
 import { authMiddleware } from './auth';
 import type { AppContext } from './context';
 import { ApiError } from './errors';
+import { buildFirmTemplatesRouter } from './routes/firm-templates';
 import { buildMattersRouter } from './routes/matters';
 
 export function createApp(ctx: AppContext) {
@@ -36,6 +37,7 @@ export function createApp(ctx: AppContext) {
 
   app.use('/v1/*', authMiddleware(ctx.config.CLERK_SECRET_KEY));
   app.route('/v1/matters', buildMattersRouter(ctx));
+  app.route('/v1/firm-templates', buildFirmTemplatesRouter(ctx));
 
   app.onError((err, c) => {
     if (err instanceof ApiError) {
