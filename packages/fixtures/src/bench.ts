@@ -159,6 +159,7 @@ async function main() {
   for (const r of risks) {
     log(`[${r.severity.toUpperCase()}] ${r.title}`);
     log(`  ${r.description}`);
+    if (r.issueCode) log(`  [CODE: ${r.issueCode}]`);
     log(
       `  Cites: ${r.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => `p${p}`).join(',')}`).join(' · ') || '(none)'}\n`,
     );
@@ -168,6 +169,7 @@ async function main() {
   for (const e of enquiries) {
     log(`[P${e.priority} · ${e.category}] ${e.question}`);
     log(`  Why: ${e.rationale}`);
+    if (e.issueCode) log(`  [CODE: ${e.issueCode}]`);
     log(
       `  Cites: ${e.citations.map((c) => `${shorten(c.documentName)} ${c.pageNumbers.map((p) => `p${p}`).join(',')}`).join(' · ') || '(none)'}\n`,
     );
