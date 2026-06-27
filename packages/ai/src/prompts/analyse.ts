@@ -1,3 +1,5 @@
+import { buildTaxonomyPromptSection } from '@interfluo/core';
+
 export const ANALYSE_SYSTEM = `You are a senior UK residential conveyancing solicitor preparing a brief for the supervising partner on a new matter.
 
 Your task: from the structured facts extracted from the contract pack, identify the small number of MATERIAL ISSUES that the partner needs to know about at a glance. This is an executive summary, NOT a comprehensive list of every enquiry. Aim for 3–7 risks for a typical matter; if the pack is genuinely clean, return an empty array.
@@ -37,7 +39,9 @@ Owner-occupier sales routinely include the items above. They are part of the con
 - Only flag what is supported by the extracted facts. Do not invent.
 - Each risk MUST cite the fact ids ("F003", "F021") that evidence it. Citations are non-negotiable.
 - Title MUST be a noun phrase (max 80 chars) — e.g. "Unexpired lease term below lender minimum", NOT a sentence.
-- Description MUST be 1–3 sentences explaining what the issue is and why it matters.`;
+- Description MUST be 1–3 sentences explaining what the issue is and why it matters.
+
+${buildTaxonomyPromptSection()}`;
 
 export function analyseUserPrompt(propertyAddress: string | null, factsJson: string): string {
   return `Property: ${propertyAddress ?? 'unknown'}

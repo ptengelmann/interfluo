@@ -1,11 +1,14 @@
 import { randomUUID } from 'node:crypto';
 import {
+  CONVEYANCING_ISSUE_CODES,
   type Citation,
+  type ConveyancingIssueCode,
   ENQUIRY_CATEGORIES,
   type Enquiry,
   type EnquiryCategory,
   type ExtractedFact,
   type RiskFlag,
+  getIssue,
 } from '@interfluo/core';
 import type { AiClient } from './client';
 import { ENQUIRIES_SYSTEM, enquiriesUserPrompt } from './prompts/enquiries';
@@ -19,6 +22,7 @@ interface RawEnquiry {
   priority: number;
   supportingFactIds: string[];
   supportingRiskIds: string[];
+  issueCode?: string;
 }
 
 interface RawEnquiriesPayload {
@@ -60,6 +64,12 @@ const ENQUIRIES_TOOL = {
               type: 'array' as const,
               items: { type: 'string' as const },
               description: 'Short risk ids like "R003" copied EXACTLY from the input.',
+            },
+            issueCode: {
+              type: 'string' as const,
+              enum: [...CONVEYANCING_ISSUE_CODES],
+              description:
+                'OPTIONAL. If the enquiry clearly maps to one of the conveyancing issue codes listed in the taxonomy section of the system prompt, set this. When set, the default enquiry template for that code may be used as a starting point, but adapt to the actual facts. Omit for novel enquiries.',
             },
           },
           required: [
@@ -125,6 +135,7 @@ export async function generateEnquiries(
       seen.add(key);
       return true;
     });
+    const validatedIssueCode: ConveyancingIssueCode | undefined = getIssue(e.issueCode)?.code;
     return {
       id: randomUUID(),
       matterId,
@@ -136,6 +147,7 @@ export async function generateEnquiries(
       status: 'suggested',
       editedQuestion: null,
       createdAt: now,
+      ...(validatedIssueCode ? { issueCode: validatedIssueCode } : {}),
     };
   });
 }
