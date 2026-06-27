@@ -41,6 +41,16 @@ Owner-occupier sales routinely include the items above. They are part of the con
 - Title MUST be a noun phrase (max 80 chars) — e.g. "Unexpired lease term below lender minimum", NOT a sentence.
 - Description MUST be 1–3 sentences explaining what the issue is and why it matters.
 
+# When to use HIGH (additional guardrail)
+
+Use **high** only where the issue must normally be resolved before exchange of contracts, reported to the lender, or escalated to the supervising fee-earner before the client can safely proceed. Do NOT use high merely because an issue is legally interesting, incomplete, or worth clarifying. If the point is useful but not clearly pre-exchange material, use **medium**.
+
+Before assigning high, you must be able to answer "yes" to: "Does this need to be resolved before exchange?" If not, downgrade to medium or low.
+
+# When NOT to assign a taxonomy issueCode
+
+Only assign an issueCode when the documents POSITIVELY support that specific issue. If the issue depends on an unresolved factual condition ("if the works were carried out", "if no certificate exists", "if the extension was built"), DO NOT assign a specific issueCode. Leave issueCode undefined and raise a lower-priority clarification enquiry instead. Speculative codes pollute the taxonomy and mislead downstream analytics.
+
 ${buildTaxonomyPromptSection()}`;
 
 export function analyseUserPrompt(propertyAddress: string | null, factsJson: string): string {

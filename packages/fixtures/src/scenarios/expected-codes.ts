@@ -39,15 +39,22 @@ export const EXPECTED_ISSUE_CODES: Record<string, ConveyancingIssueCode[]> = {
     'TITLE_CHARGE_DISCHARGE_EVIDENCE',
   ],
 
-  // Three planted issues, all genuinely material:
-  // - active enforcement notice on garage conversion (critical)
-  // - undisclosed adult occupier in the draft contract correspondence (critical)
+  // Three planted issues plus one routine:
+  // - active enforcement notice on garage conversion (PLANNING_BREACH_ENFORCEMENT)
+  // - seller's partner acknowledged in the draft contract but not on the TA6
+  //   occupiers list (OCCUPIER_CONSENT_MISSING - the contract states vacant
+  //   possession, so the issue is the missing consent form, not an undisclosed
+  //   tenancy; the pipeline correctly picked this code after the taxonomy
+  //   descriptions were sharpened)
   // - TA6 declares mains drainage but CON29DW shows private septic (medium)
-  // Anything else emitted as a code is over-flagging.
+  // - seller's TA6 declares "no notices" but CON29 shows enforcement notice
+  //   (SELLER_DISCLOSURE_INCONSISTENCY - the cross-document misrepresentation)
+  // - Nationwide mortgage to be redeemed on completion (informational)
   'freehold-enforcement-and-undisclosed-occupier': [
     'PLANNING_BREACH_ENFORCEMENT',
-    'OCCUPIER_TENANCY_UNDISCLOSED',
+    'OCCUPIER_CONSENT_MISSING',
     'SEARCH_DRAINAGE_DISCREPANCY',
+    'SELLER_DISCLOSURE_INCONSISTENCY',
     'TITLE_CHARGE_DISCHARGE_EVIDENCE',
   ],
 };
