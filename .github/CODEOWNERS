@@ -1,0 +1,20 @@
+# Every change requires sign-off from the owner of the affected area.
+# Order matters; later patterns override earlier ones.
+
+# Default owner for everything in the repo
+*                       @ptengelmann
+
+# Brand, UI, marketing
+/apps/marketing/        @ptengelmann
+/apps/web/              @ptengelmann
+/CLAUDE.md              @ptengelmann
+
+# Backend, pipeline, data
+/apps/api/              @ptengelmann
+/packages/              @ptengelmann
+
+# Repo, CI, security
+/.github/               @ptengelmann
+/LICENSE                @ptengelmann
+/SECURITY.md            @ptengelmann
+/CONTRIBUTING.md        @ptengelmann

@@ -1,0 +1,70 @@
+name: Bug report
+description: Something broke or behaves incorrectly
+title: "fix: "
+labels: ["bug", "triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for filing a bug. Please redact any real matter data, client
+        names, addresses, or document content before pasting examples.
+
+  - type: textarea
+    id: summary
+    attributes:
+      label: What went wrong
+      description: A one or two sentence summary.
+    validations:
+      required: true
+
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps to reproduce
+      description: Numbered steps. If a specific contract pack triggers the issue, attach a synthetic or fully redacted sample.
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+    validations:
+      required: true
+
+  - type: input
+    id: commit
+    attributes:
+      label: Commit SHA or version
+      placeholder: e.g. f6bfafb
+
+  - type: dropdown
+    id: severity
+    attributes:
+      label: Severity
+      options:
+        - Critical (deal-blocker for a live pilot)
+        - High (workflow broken, no workaround)
+        - Medium (workaround exists)
+        - Low (cosmetic / annoyance)
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: data
+    attributes:
+      label: Data check
+      options:
+        - label: I have redacted or excluded any real client, matter, or document data
+          required: true

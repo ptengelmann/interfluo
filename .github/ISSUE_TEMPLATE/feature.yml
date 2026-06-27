@@ -1,0 +1,42 @@
+name: Feature request
+description: Propose a new capability or change
+title: "feat: "
+labels: ["enhancement", "triage"]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem does this solve
+      description: Be specific. Whose problem? When does it happen? Why now?
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed approach
+    validations:
+      required: true
+
+  - type: dropdown
+    id: moat
+    attributes:
+      label: Moat level
+      description: Which defensibility level does this advance?
+      options:
+        - "L1 - UI"
+        - "L2 - PDF → AI → Word export"
+        - "L3 - Citation architecture"
+        - "L4 - Risk taxonomy / severity calibration"
+        - "L5 - Benchmark suite / adversarial tests"
+        - "L6 - Fee-earner edit capture"
+        - "L7 - Firm templates / audit / trust"
+        - "L8 - Network effects across firms"
+        - "n/a - internal tooling"
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
