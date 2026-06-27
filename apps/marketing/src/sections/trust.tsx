@@ -1,4 +1,5 @@
 import { IconCheck, IconMap, IconQuote, IconRecord } from '@/components/icons';
+import Link from 'next/link';
 
 const POINTS = [
   {
@@ -46,6 +47,17 @@ export function Trust() {
             </div>
           ))}
         </div>
+
+        <p className="mt-14 text-center text-[13px] text-muted">
+          Per-scenario benchmark results and methodology:{' '}
+          <Link
+            href="/validation"
+            className="font-medium text-accent-dark underline-offset-4 hover:underline"
+          >
+            see the validation memo
+          </Link>
+          .
+        </p>
       </div>
     </section>
   );

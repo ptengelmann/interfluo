@@ -8,6 +8,7 @@ const NAV_GROUPS: { title: string; links: { href: string; label: string }[] }[] 
       { href: '/#features', label: 'Features' },
       { href: '/#built-for', label: 'Built for' },
       { href: '/#trust', label: 'Trust' },
+      { href: '/validation', label: 'Validation' },
       { href: '/#pricing', label: 'Pricing' },
       { href: '/#faq', label: 'FAQ' },
     ],
