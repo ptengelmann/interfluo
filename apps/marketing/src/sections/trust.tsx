@@ -9,7 +9,7 @@ const POINTS = [
   {
     icon: IconCheck,
     title: 'Severity calibrated for conveyancing',
-    body: 'Anti-pattern table tuned against adversarial test packs. "Critical" actually means deal-blocker. Routine items stay informational. Drift catches itself on every release.',
+    body: 'A structured library of twenty conveyancing issue codes across six categories, each with a calibrated severity default and named false-positive traps. "Critical" actually means deal-blocker. Routine items stay informational.',
   },
   {
     icon: IconRecord,

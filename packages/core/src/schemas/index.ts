@@ -1,5 +1,10 @@
 import { z } from 'zod';
 import { DOCUMENT_TYPES, ENQUIRY_CATEGORIES, MATTER_STATUSES, RISK_SEVERITIES } from '../constants';
+import { CONVEYANCING_ISSUE_CODES } from '../issues/index';
+
+export const conveyancingIssueCodeSchema = z.enum(
+  CONVEYANCING_ISSUE_CODES as unknown as [string, ...string[]],
+);
 
 export const documentTypeSchema = z.enum(DOCUMENT_TYPES);
 export const riskSeveritySchema = z.enum(RISK_SEVERITIES);
@@ -61,6 +66,7 @@ export const riskFlagSchema = z.object({
   description: z.string(),
   citations: z.array(citationSchema),
   suggestedEnquiryIds: z.array(z.string()),
+  issueCode: conveyancingIssueCodeSchema.optional(),
 });
 
 export const enquirySchema = z.object({
@@ -74,6 +80,7 @@ export const enquirySchema = z.object({
   status: z.enum(['suggested', 'accepted', 'rejected', 'edited']),
   editedQuestion: z.string().nullable(),
   createdAt: z.string(),
+  issueCode: conveyancingIssueCodeSchema.optional(),
 });
 
 export const reportSectionSchema: z.ZodType<{
