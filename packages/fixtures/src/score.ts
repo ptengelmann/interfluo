@@ -124,6 +124,84 @@ const SIGNALS: Record<string, SignalCheck[]> = {
       patterns: ['nationwide', 'redemption', 'discharge', 'DS1'],
     },
   ],
+  'freehold-clean-with-satisfied-restriction': [
+    {
+      label: 'Lloyds mortgage redemption (informational only)',
+      patterns: ['lloyds', 'redemption', 'discharge', 'DS1'],
+    },
+    {
+      label: 'Form A restriction recognised as routine joint-ownership',
+      patterns: ['Form A', 'additional trustee', 'two trustees'],
+    },
+    {
+      label: 'FENSA handover (routine confirmation)',
+      patterns: ['FENSA', 'replacement windows'],
+    },
+  ],
+  'freehold-resolved-boundary-dispute': [
+    {
+      label: 'Request a copy of the 2019 boundary agreement',
+      patterns: ['boundary agreement', '14 March 2019', 'copy', 'provide'],
+    },
+    {
+      label: 'Nationwide mortgage redemption (informational)',
+      patterns: ['nationwide', 'redemption', 'discharge'],
+    },
+  ],
+  'freehold-missing-building-regs-cert': [
+    {
+      label: 'Building regs completion certificate missing for 2020 extension',
+      patterns: ['building regulations', 'completion certificate', 'extension', '2020'],
+    },
+    {
+      label: 'Retrospective regularisation or indemnity proposed',
+      patterns: ['regularisation', 'indemnity', 'retrospective'],
+    },
+    {
+      label: 'Santander mortgage redemption (informational)',
+      patterns: ['santander', 'redemption', 'discharge'],
+    },
+  ],
+  'freehold-disclosure-inconsistency-flooding': [
+    {
+      label: 'TA6 no-flooding contradicted by 2019 drainage-search flood event',
+      patterns: ['flooding', 'discrepancy', 'contradict', '2019', 'fluvial'],
+    },
+    {
+      label: 'TA6 no-insurance-claims contradicted by 2019 Aviva claim in CON29',
+      patterns: ['aviva', 'insurance claim', '2019', 'contradict', 'discrepancy'],
+    },
+    {
+      label: 'Material flood risk - EA Flood Zone 3',
+      patterns: ['flood zone 3', 'environment agency', 'flood risk', 'flood re'],
+    },
+    {
+      label: 'HSBC mortgage redemption (informational)',
+      patterns: ['HSBC', 'redemption', 'discharge'],
+    },
+  ],
+  'leasehold-short-lease-and-escalation': [
+    {
+      label: 'Unexpired lease term below 80-year lender floor',
+      patterns: ['80 year', '80-year', 'unexpired term', 'section 42', 'lease extension'],
+    },
+    {
+      label: 'Doubling ground rent (lender-sensitive)',
+      patterns: ['doubling', 'doubles', 'ground rent', 'onerous', 'deed of variation'],
+    },
+    {
+      label: 'Service charge arrears (£3,200)',
+      patterns: ['service charge', 'arrears', '3,200', '£3,200', 'retention'],
+    },
+    {
+      label: 'Section 20 major works (£6,800 contribution)',
+      patterns: ['section 20', 's.20', 'major roof works', '6,800', '£6,800'],
+    },
+    {
+      label: 'Barclays mortgage redemption (informational)',
+      patterns: ['barclays', 'redemption', 'discharge'],
+    },
+  ],
 };
 
 // Adversarial scenarios — phrases that, if found IN A HIGH-SEVERITY BLOCK
@@ -154,6 +232,31 @@ const ADVERSARIAL_ANTIPATTERNS: Record<string, { label: string; patterns: string
     {
       label: 'Wilmslow Common proximity mis-flagged as a constraint',
       patterns: ['common land', 'wilmslow common'],
+    },
+  ],
+  'freehold-clean-with-satisfied-restriction': [
+    {
+      label: 'Lloyds mortgage mis-flagged as critical (routine redemption)',
+      patterns: ['lloyds', 'redemption'],
+    },
+    {
+      label:
+        'Form A restriction mis-flagged as critical (routine joint-ownership trust restriction)',
+      patterns: ['form a', 'additional trustee'],
+    },
+    {
+      label: 'FENSA replacement-windows mis-flagged as material',
+      patterns: ['FENSA', 'replacement windows'],
+    },
+  ],
+  'freehold-resolved-boundary-dispute': [
+    {
+      label: 'Resolved 2018 boundary dispute mis-flagged as BOUNDARY_DISPUTE_UNRESOLVED',
+      patterns: ['BOUNDARY_DISPUTE_UNRESOLVED'],
+    },
+    {
+      label: 'Nationwide mortgage mis-flagged as critical (routine redemption)',
+      patterns: ['nationwide', 'redemption'],
     },
   ],
   'freehold-enforcement-and-undisclosed-occupier': [

@@ -57,4 +57,44 @@ export const EXPECTED_ISSUE_CODES: Record<string, ConveyancingIssueCode[]> = {
     'SELLER_DISCLOSURE_INCONSISTENCY',
     'TITLE_CHARGE_DISCHARGE_EVIDENCE',
   ],
+
+  // Clean Newcastle freehold with a routine Form A restriction and a
+  // Lloyds charge. Tests that the pipeline does not invent risks.
+  'freehold-clean-with-satisfied-restriction': ['TITLE_CHARGE_DISCHARGE_EVIDENCE'],
+
+  // Historical boundary dispute (2018) formally resolved (2019 boundary
+  // agreement). Tests over-flag suppression: BOUNDARY_DISPUTE_UNRESOLVED
+  // should NOT be emitted because the dispute is resolved.
+  'freehold-resolved-boundary-dispute': ['TITLE_CHARGE_DISCHARGE_EVIDENCE'],
+
+  // Single positively-supported planted issue: 2020 extension built, no
+  // building regs certificate, seller confirms unable to locate it.
+  // Tests PLANNING_BUILDING_REGS_MISSING on real facts (not speculation).
+  'freehold-missing-building-regs-cert': [
+    'PLANNING_BUILDING_REGS_MISSING',
+    'TITLE_CHARGE_DISCHARGE_EVIDENCE',
+  ],
+
+  // Three planted disclosure issues:
+  //   - TA6 says no flooding, drainage search records 2019 fluvial flood
+  //   - TA6 says no insurance claims, CON29 records 2019 Aviva claim
+  //   - Property in EA Flood Zone 3 (material flood risk)
+  // Tests SELLER_DISCLOSURE_INCONSISTENCY outside planning + SEARCH_FLOOD_RISK
+  // + INSURANCE_CLAIM_DISCLOSED.
+  'freehold-disclosure-inconsistency-flooding': [
+    'SELLER_DISCLOSURE_INCONSISTENCY',
+    'SEARCH_FLOOD_RISK',
+    'INSURANCE_CLAIM_DISCLOSED',
+    'TITLE_CHARGE_DISCHARGE_EVIDENCE',
+  ],
+
+  // Four planted leasehold issues plus one routine. Tighter than
+  // leasehold-flat-with-issues so attribution per code is unambiguous.
+  'leasehold-short-lease-and-escalation': [
+    'LEASE_SHORT_TERM',
+    'LEASE_GROUND_RENT_ESCALATION',
+    'LEASE_SERVICE_CHARGE_DISPUTE',
+    'LEASE_SECTION_20_MAJOR_WORKS',
+    'TITLE_CHARGE_DISCHARGE_EVIDENCE',
+  ],
 };
