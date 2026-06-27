@@ -19,47 +19,43 @@ export function PilotForm() {
     const notes = String(data.get('notes') ?? '');
 
     const body = [
-      `Name: ${name}`,
-      `Firm: ${firm}`,
-      `Email: ${email}`,
-      `Role: ${role}`,
-      `Matter volume: ${volume}`,
+      `Name:   ${name}`,
+      `Firm:   ${firm}`,
+      `Email:  ${email}`,
+      `Role:   ${role}`,
+      `Volume: ${volume}`,
       '',
       'Notes:',
       notes,
     ].join('\n');
 
     const subject = `Pilot request — ${firm || name}`;
-    const mailto = `mailto:${PILOT_RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailto;
+    window.location.href = `mailto:${PILOT_RECIPIENT}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
     setSubmitted(true);
   };
 
   if (submitted) {
     return (
-      <div className="rounded-lg border border-accent/30 bg-accent-tint/40 p-8">
-        <p className="label">Thanks</p>
-        <h2 className="font-display mt-3 text-[28px] leading-tight text-ink">
+      <div className="border-l-2 border-accent pl-6">
+        <p className="smallcaps text-[10.5px] text-muted">Sent</p>
+        <p className="font-display mt-3 text-[28px] leading-snug text-ink">
           Your email client should have opened with your message.
-        </h2>
+        </p>
         <p className="mt-4 text-[14.5px] leading-relaxed text-ink-soft">
-          If it didn't, please email{' '}
-          <a href={`mailto:${PILOT_RECIPIENT}`} className="text-accent-dark underline">
+          If it didn&rsquo;t, write directly to{' '}
+          <a href={`mailto:${PILOT_RECIPIENT}`} className="border-b border-accent text-ink hover:text-accent">
             {PILOT_RECIPIENT}
-          </a>{' '}
-          directly. We'll get back to you within one working day.
+          </a>
+          . We reply within one working day.
         </p>
       </div>
     );
   }
 
   return (
-    <form
-      onSubmit={handleSubmit}
-      className="flex flex-col gap-5 rounded-lg border border-line bg-surface p-8"
-    >
+    <form onSubmit={handleSubmit} className="flex flex-col">
       <Field label="Your name" name="name" required placeholder="Anita Patel" />
-      <Field label="Firm name" name="firm" required placeholder="Patel & Co Solicitors" />
+      <Field label="Firm" name="firm" required placeholder="Patel & Co Solicitors" />
       <Field
         label="Work email"
         name="email"
@@ -67,8 +63,8 @@ export function PilotForm() {
         required
         placeholder="anita@patel-co.example"
       />
-      <Field label="Your role" name="role" placeholder="Partner, COLP, fee-earner…" />
-      <Select label="Matters per month (typical)" name="volume">
+      <Field label="Role" name="role" placeholder="Partner, COLP, fee-earner…" />
+      <Select label="Matters per month, typical" name="volume">
         <option value="">— Select —</option>
         <option value="<20">Fewer than 20</option>
         <option value="20-50">20 to 50</option>
@@ -79,15 +75,17 @@ export function PilotForm() {
         label="Anything we should know?"
         name="notes"
         multiline
-        placeholder="Type of matters, current pain points, anything else…"
+        placeholder="Type of matters, current pain points…"
       />
       <button
         type="submit"
-        className="mt-2 inline-flex h-12 items-center justify-center rounded-md bg-accent px-7 text-[15px] font-semibold text-white hover:bg-accent-dark transition-colors"
+        className="mt-8 inline-flex items-baseline justify-start gap-2 self-start text-[15px] text-ink hover:text-accent transition-colors"
       >
-        Request pilot
+        <span>Send pilot request</span>
+        <span aria-hidden>→</span>
       </button>
-      <p className="text-[12.5px] text-muted">
+      <span className="mt-2 block h-px w-32 bg-line-strong" />
+      <p className="mt-4 text-[12px] italic text-muted">
         We use your email to reply about your pilot only. No marketing list. No third parties.
       </p>
     </form>
@@ -110,10 +108,10 @@ function Field({
   multiline?: boolean;
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={name} className="label">
+    <div className="flex flex-col border-b border-line py-4">
+      <label htmlFor={name} className="smallcaps text-[10.5px] text-muted">
         {label}
-        {required && <span className="ml-1 text-accent-dark">*</span>}
+        {required && <span className="ml-1 text-accent">·</span>}
       </label>
       {multiline ? (
         <textarea
@@ -122,7 +120,7 @@ function Field({
           rows={4}
           required={required}
           placeholder={placeholder}
-          className="rounded-md border border-line bg-surface px-3.5 py-3 text-[14px] text-ink placeholder:text-muted/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:border-transparent"
+          className="mt-2 resize-none bg-transparent text-[16px] leading-[1.6] text-ink placeholder:text-muted/60 focus-visible:outline-none"
         />
       ) : (
         <input
@@ -131,7 +129,7 @@ function Field({
           type={type}
           required={required}
           placeholder={placeholder}
-          className="h-11 rounded-md border border-line bg-surface px-3.5 text-[14px] text-ink placeholder:text-muted/70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:border-transparent"
+          className="mt-2 h-9 bg-transparent text-[16px] text-ink placeholder:text-muted/60 focus-visible:outline-none"
         />
       )}
     </div>
@@ -148,14 +146,14 @@ function Select({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex flex-col gap-2">
-      <label htmlFor={name} className="label">
+    <div className="flex flex-col border-b border-line py-4">
+      <label htmlFor={name} className="smallcaps text-[10.5px] text-muted">
         {label}
       </label>
       <select
         id={name}
         name={name}
-        className="h-11 rounded-md border border-line bg-surface px-3.5 text-[14px] text-ink focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:border-transparent"
+        className="mt-2 h-9 bg-transparent text-[16px] text-ink focus-visible:outline-none"
       >
         {children}
       </select>

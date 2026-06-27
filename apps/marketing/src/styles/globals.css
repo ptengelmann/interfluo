@@ -18,46 +18,84 @@
   --color-danger: #b23b2e;
   --color-on-ink: #f5f1e9;
   --color-on-ink-soft: rgba(245, 241, 233, 0.6);
-  --color-on-ink-line: #33343a;
 
   --font-display: 'Instrument Serif', Georgia, serif;
   --font-sans: 'Hanken Grotesk', system-ui, sans-serif;
-
-  --radius-sm: 6px;
-  --radius-md: 10px;
-  --radius-lg: 12px;
-  --radius-pill: 999px;
-
-  --shadow-card: 0 1px 2px rgba(30, 28, 24, 0.06);
-  --shadow-raised: 0 22px 50px -32px rgba(30, 28, 24, 0.45);
-
-  --tracking-wordmark: -0.015em;
-  --tracking-mark: -0.02em;
-  --tracking-label: 0.14em;
 }
 
 * {
   border-color: var(--line);
 }
 
-html,
+html {
+  background: var(--paper);
+}
+
 body {
   background: var(--paper);
   color: var(--ink);
   font-family: var(--font-sans);
+  font-feature-settings: 'ss01' 1, 'cv11' 1, 'lnum' 1;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
 }
 
 .font-display {
   font-family: var(--font-display);
+  font-feature-settings: 'lnum' 1, 'ss01' 1;
   letter-spacing: -0.015em;
 }
 
-.label {
-  font-size: 12px;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: var(--tracking-label);
-  color: var(--muted);
+/* Editorial helpers — used sparingly across the page */
+
+.smallcaps {
+  font-variant-caps: all-small-caps;
+  letter-spacing: 0.16em;
+  font-feature-settings: 'c2sc' 1, 'smcp' 1;
+}
+
+.hairline {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--line);
+}
+
+.hairline-strong {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--line-strong);
+}
+
+.section-marker {
+  font-family: var(--font-display);
+  font-style: italic;
+  font-weight: 400;
+  color: var(--accent);
+  letter-spacing: 0.04em;
+}
+
+.dropcap::first-letter {
+  font-family: var(--font-display);
+  font-weight: 400;
+  float: left;
+  font-size: 4.6em;
+  line-height: 0.86;
+  padding: 0.06em 0.14em 0 0;
+  color: var(--ink);
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+.fig {
+  font-feature-settings: 'lnum' 1, 'tnum' 1;
+}
+
+/* Selection inherits brand colour, not browser default. */
+::selection {
+  background: var(--accent);
+  color: var(--paper);
 }
