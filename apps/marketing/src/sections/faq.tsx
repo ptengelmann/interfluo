@@ -1,7 +1,7 @@
 const QA = [
   {
     q: 'Are you just another AI wrapper?',
-    a: 'The language model is commodity. The calibration to UK conveyancing is not. Seventeen document-type extractors that drop any fact they cannot ground in a verbatim quote. A structured library of twenty-one conveyancing issue codes across seven categories, each with a calibrated severity default, named false-positive traps, and a default enquiry template that the pipeline can adapt. A benchmark scorer that asserts the pipeline routes seeded issues to the right codes and flags any unexpected ones. An append-only audit log that preserves the original AI wording alongside every fee-earner edit, built for SRA file inspection. An integration roadmap for LEAP and Actionstep. Wiring a model up takes a weekend; the conveyancing-specific work behind Interfluo does not.',
+    a: 'The language model is commodity. The calibration to UK conveyancing is not. Seventeen document-type extractors that drop any fact they cannot ground in a verbatim quote. A structured library of twenty-one conveyancing issue codes across seven categories, each with a calibrated severity default, named false-positive traps, and a default enquiry template that the pipeline can adapt. A benchmark scorer with a composite Matter Quality Score (signal detection, taxonomy routing, over-flagging, hallucination, enquiry density) that runs against every prompt or model change. An append-only audit log that preserves the original AI wording alongside every fee-earner edit, built for SRA file inspection. An integration roadmap for LEAP and Actionstep. Wiring a model up takes a weekend; the conveyancing-specific work behind Interfluo does not.',
   },
   {
     q: 'Is this legal advice?',
