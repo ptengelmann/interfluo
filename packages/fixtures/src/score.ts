@@ -1,11 +1,18 @@
 #!/usr/bin/env tsx
 /**
- * Read a bench output file and a scenario name, score the output against
- * a hardcoded checklist of "key signals" we expect to see in the enquiries
- * or report for that scenario. Pure substring/keyword matching — not a
- * semantic eval. Just a quick consistency check.
+ * Read a bench output file and a scenario name, score the output against:
+ *
+ *   1. A checklist of "key signals" we expect to see in the enquiries or
+ *      report for that scenario (pattern matching, kept for transition).
+ *   2. The scenario's expected ConveyancingIssueCode set, asserting the
+ *      pipeline routed each seeded issue to the right named code (hit),
+ *      and flagging any emitted codes that were not seeded (over-flag).
+ *   3. Severity-calibration anti-patterns: routine items appearing in
+ *      CRITICAL/HIGH/P1 blocks (over-flagging).
  */
 import { readFile } from 'node:fs/promises';
+import type { ConveyancingIssueCode } from '@interfluo/core';
+import { EXPECTED_ISSUE_CODES } from './scenarios/expected-codes';
 
 interface SignalCheck {
   label: string;
@@ -198,6 +205,33 @@ async function main() {
     );
   }
 
+  // Issue-code routing check: assert the pipeline tags seeded issues
+  // with the right ConveyancingIssueCode and does not invent codes for
+  // issues that were not seeded.
+  const expectedCodes = EXPECTED_ISSUE_CODES[scenario];
+  if (expectedCodes) {
+    console.log('');
+    console.log('Issue-code routing (taxonomy assertions):');
+    const emittedCodes = extractEmittedIssueCodes(content);
+    const hit = new Set<ConveyancingIssueCode>();
+    for (const code of expectedCodes) {
+      if (emittedCodes.has(code)) hit.add(code);
+      console.log(`  ${emittedCodes.has(code) ? '✓' : '✗'}  expected ${code}`);
+    }
+    const unexpected = [...emittedCodes].filter(
+      (c) => !expectedCodes.includes(c as ConveyancingIssueCode),
+    );
+    for (const code of unexpected) {
+      console.log(`  ?  unexpected ${code} - investigate (may indicate over-flagging)`);
+    }
+    console.log('');
+    console.log(
+      `Code hit rate: ${hit.size} / ${expectedCodes.length} (${Math.round(
+        (hit.size / expectedCodes.length) * 100,
+      )}%). Unexpected codes: ${unexpected.length}.`,
+    );
+  }
+
   // Adversarial over-flagging check — only fires on adversarial scenarios.
   const adversarial = ADVERSARIAL_ANTIPATTERNS[scenario];
   if (adversarial) {
@@ -216,6 +250,18 @@ async function main() {
       `Over-flagging count: ${overFlagged} / ${adversarial.length}  (lower is better; 0 is target)`,
     );
   }
+}
+
+/** Collect every issue code emitted in the bench output (lines like "[CODE: XXX]"). */
+function extractEmittedIssueCodes(content: string): Set<string> {
+  const codes = new Set<string>();
+  const re = /\[CODE:\s*([A-Z_]+)\]/g;
+  let match: RegExpExecArray | null = re.exec(content);
+  while (match !== null) {
+    if (match[1]) codes.add(match[1]);
+    match = re.exec(content);
+  }
+  return codes;
 }
 
 /** Pull text from CRITICAL/HIGH risk blocks and P1 enquiry blocks. */
