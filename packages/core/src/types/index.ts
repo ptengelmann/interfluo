@@ -90,6 +90,12 @@ export interface RiskFlag {
   description: string;
   citations: Citation[];
   suggestedEnquiryIds: string[];
+  /**
+   * Optional reference into the Conveyancing Issue Taxonomy. Populated where
+   * the pipeline can confidently match a flag to a known issue code; left
+   * undefined for novel cases that do not yet have a code.
+   */
+  issueCode?: import('../issues/index').ConveyancingIssueCode;
 }
 
 export interface Enquiry {
@@ -103,6 +109,11 @@ export interface Enquiry {
   status: 'suggested' | 'accepted' | 'rejected' | 'edited';
   editedQuestion: string | null;
   createdAt: string;
+  /**
+   * Optional reference into the Conveyancing Issue Taxonomy. Populated where
+   * the pipeline can confidently match an enquiry to a known issue code.
+   */
+  issueCode?: import('../issues/index').ConveyancingIssueCode;
 }
 
 export interface ReportSection {
