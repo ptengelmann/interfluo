@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@clerk/backend": "^1.21.0",
-    "@hono/node-server": "^1.13.7",
+    "@hono/node-server": "^2.0.6",
     "@hono/zod-validator": "^0.4.2",
     "@interfluo/ai": "workspace:*",
     "@interfluo/core": "workspace:*",
