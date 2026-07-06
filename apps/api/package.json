@@ -15,7 +15,7 @@
   "dependencies": {
     "@clerk/backend": "^1.21.0",
     "@hono/node-server": "^1.13.7",
-    "@hono/zod-validator": "^0.4.2",
+    "@hono/zod-validator": "^0.8.0",
     "@interfluo/ai": "workspace:*",
     "@interfluo/core": "workspace:*",
     "@interfluo/pdf": "workspace:*",
@@ -32,7 +32,7 @@
   "devDependencies": {
     "@interfluo/tsconfig": "workspace:*",
     "@types/node": "^22.10.5",
-    "tsx": "^4.19.2",
+    "tsx": "^4.23.0",
     "typescript": "^5.7.3"
   }
 }
