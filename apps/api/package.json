@@ -21,10 +21,10 @@
     "@interfluo/pdf": "workspace:*",
     "@interfluo/storage": "workspace:*",
     "docx": "^9.1.1",
-    "docxtemplater": "^3.55.2",
+    "docxtemplater": "^3.69.3",
     "dotenv": "^16.4.7",
     "pizzip": "^3.1.7",
-    "hono": "^4.6.16",
+    "hono": "^4.12.32",
     "pino": "^9.6.0",
     "pino-pretty": "^13.0.0",
     "zod": "^3.24.1"
